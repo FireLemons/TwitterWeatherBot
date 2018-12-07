@@ -1,0 +1,45 @@
+{
+    'open_weather_map': {
+        'location': {
+            <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            There are many key value pairs for specifying
+            a location. Each one is based on the 
+            OpenWeatherMap api for 5 day forecasts.
+            
+            As of December 2018 valid key value pairs are:
+            ==============================================
+            City & Country Combination
+            Based on api call: api.openweathermap.org/data/2.5/forecast?q={city name},{country code}
+            
+            'q': 'CITY_NAME,ISO_3166_COUNTRY_CODE'
+            ======================OR======================
+            City ID
+            Based on api call: api.openweathermap.org/data/2.5/forecast?id={city ID}
+            
+            'id': 'CITY_ID'
+            ======================OR======================
+            Geographic Coordinates
+            Based on api call: api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}
+            
+            'lat': 'LATITIUDE',
+            'lon': 'LONGITUDE'
+            ======================OR======================
+            Zip Code
+            Based on api call: api.openweathermap.org/data/2.5/forecast?zip={zip code},{country code}
+            
+            'zip': 'ZIP_CODE,ISO_3166_COUNTRY_CODE'
+            ==============================================
+            
+            See https://openweathermap.org/forecast5 for 
+            more details.
+            >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        },
+        'key': 'YOUR OPEN WEATHER MAP API KEY'
+    },
+    'twitter': {
+        'consumer_key': 'YOUR CONSUMER KEY',
+        'consumer_secret': 'YOUR CONSUMER SECRET',
+        'access_token_key': 'YOUR ACCESS TOKEN KEY',
+        'access_token_secret': 'YOUR ACCESS TOKEN SECRET'
+    }
+}
