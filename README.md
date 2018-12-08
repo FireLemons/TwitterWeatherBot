@@ -8,7 +8,10 @@ You'll need api keys from Twitter and OpenWeatherMap which both come with signin
 + [Register for a Twitter developer account](https://developer.twitter.com/en/apply)
 
 If you haven't installed [Node.js](https://nodejs.org/en/download/) already, go ahead and do so.
-After cloning the project, run `npm install` where `package.json` is which should be the root project directory.
+After cloning the project, run `npm install` where `package.json` is which should be the root project directory.  
+Configure `config.json` with your location and api keys.  
+
+__❗❗❗Make sure `config.json` is not tracked by git. If `git status` shows your config as `modified`, use `git update-index --assume-unchanged config.json` to untrack it. Having the file tracked may expose your API keys.__
 
 ## Included Node Packages
 [Node Schedule](https://www.npmjs.com/package/node-schedule)  
