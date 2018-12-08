@@ -11,8 +11,8 @@ If you haven't installed [Node.js](https://nodejs.org/en/download/) already, go 
 After cloning the project, run `npm install` where `package.json` is which should be the root project directory.
 
 ## Deployment
-Running `node index.js` will start up the bot.
-Running `node `
+Running `node index.js` will start up the bot.  
+Running `node windowsInstall.js` will install the bot as a service so it automatically starts when booting your windows machine.
 
 ## Contributing
 A description with your pull request is fine.
