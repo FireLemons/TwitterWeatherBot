@@ -11,8 +11,8 @@ If you haven't installed [Node.js](https://nodejs.org/en/download/) already, go 
 After cloning the project, run `npm install` where `package.json` is which should be the root project directory.
 
 ## Included Node Packages
-[Node Schedule](https://www.npmjs.com/package/node-schedule)
-[Node Windows](https://www.npmjs.com/package/node-windows)
+[Node Schedule](https://www.npmjs.com/package/node-schedule)  
+[Node Windows](https://www.npmjs.com/package/node-windows)  
 [Twitter for Node.js](https://www.npmjs.com/package/twitter)
 
 ## Deployment
