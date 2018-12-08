@@ -10,6 +10,11 @@ You'll need api keys from Twitter and OpenWeatherMap which both come with signin
 If you haven't installed [Node.js](https://nodejs.org/en/download/) already, go ahead and do so.
 After cloning the project, run `npm install` where `package.json` is which should be the root project directory.
 
+## Included Node Packages
+[Node Schedule](https://www.npmjs.com/package/node-schedule)
+[Node Windows](https://www.npmjs.com/package/node-windows)
+[Twitter for Node.js](https://www.npmjs.com/package/twitter)
+
 ## Deployment
 Running `node index.js` will start up the bot.  
 Running `node windowsInstall.js` will install the bot as a service so it automatically starts when booting your windows machine.
