@@ -10,10 +10,10 @@ const winston = require('winston');
  * Set up logging
  */
 
+//Function to make readable timestamps
 const dateFormat = {month: 'long', day: '2-digit', hour12: false, hour: 'numeric', minute: 'numeric', second: 'numeric'},
       formatDate = new Intl.DateTimeFormat('en-US', dateFormat).format
  
-//Function to make readable dates
 function getCurrentTimeFormatted(){
     var date = new Date(),
         formattedDate = formatDate(date);
@@ -27,24 +27,24 @@ function getCurrentTimeFormatted(){
     return formattedDate.replace(',', '');
 }
 
-// Create the logging directory if it doesn't exist
-
+//Create the log directory if it doesn't exist
 var {log: {logDir}} = config;
 
 if(!fs.existsSync(logDir)){
     fs.mkdirSync(logDir);
 }
 
+//Init logger 
 const logger = winston.createLogger({
     level: 'info',
     format: winston.format.json(),
     transports: [
-        new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-        new winston.transports.File({ filename: 'logs/combined.log' })
+        new winston.transports.File({ filename: path.join(logDir, 'error.log'), level: 'error' }),
+        new winston.transports.File({ filename: path.join(logDir, 'combined.log') })
     ]
 });
 
-logger.log({time:'' level: 'info', message: 'test'});
+logger.log({time: getCurrentTimeFormatted(), level: 'info', message: 'test'});
 
 /*
  * Prepare weather get request URL from config
