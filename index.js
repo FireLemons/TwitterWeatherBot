@@ -1,14 +1,56 @@
 const config = require('./config.json');
 const https = require('https');
-const winston = require('winston');
+const fs = require( 'fs' );
+const path = require('path');
 const schedule = require('node-schedule');
 const twitter = require('twitter');
+const winston = require('winston');
+
+/*
+ * Set up logging
+ */
+
+const dateFormat = {month: 'long', day: '2-digit', hour12: false, hour: 'numeric', minute: 'numeric', second: 'numeric'},
+      formatDate = new Intl.DateTimeFormat('en-US', dateFormat).format
  
+//Function to make readable dates
+function getCurrentTimeFormatted(){
+    var date = new Date(),
+        formattedDate = formatDate(date);
+    
+    if(formattedDate.length < 22){
+        var spaceIndex = formattedDate.indexOf(' ');
+        
+        formattedDate = formattedDate.substr(0, spaceIndex).padEnd(10) + formattedDate.substr(spaceIndex + 1);
+    }
+    
+    return formattedDate.replace(',', '');
+}
+
+// Create the logging directory if it doesn't exist
+
+var {log: {logDir}} = config;
+
+if(!fs.existsSync(logDir)){
+    fs.mkdirSync(logDir);
+}
+
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    transports: [
+        new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+        new winston.transports.File({ filename: 'logs/combined.log' })
+    ]
+});
+
+logger.log({time:'' level: 'info', message: 'test'});
+
 /*
  * Prepare weather get request URL from config
  */
  
-var location = config.open_weather_map.location,
+var {open_weather_map: {location}} = config,
     locationParams = '';
 
 for(var paramName in location){
@@ -22,7 +64,7 @@ const weatherRequestURL = `https://api.openweathermap.org/data/2.5/forecast?${lo
 /*
  * 
  */
-function loadWeather(onLoad){
+/*function loadWeather(onLoad){
     https.get(weatherRequestURL, (res) => {
         const { statusCode } = res;
         const contentType = res.headers['content-type'];
@@ -61,4 +103,4 @@ function loadWeather(onLoad){
     }).on('error', (e) => {
         console.error(`Got error: ${e.message}`);
     });
-}
+}*/
