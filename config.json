@@ -1,6 +1,6 @@
 {
     "log": {
-        "logDir": "A SUBDIRECTORY"
+        "logDir": "logs"
     },
     "open_weather_map": {
         "location": {
