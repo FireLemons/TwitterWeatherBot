@@ -12,8 +12,8 @@ const winston = require('winston');
 
 //Function to make readable timestamps
 const dateFormat = {month: 'long', day: '2-digit', hour12: false, hour: 'numeric', minute: 'numeric', second: 'numeric'},
-      formatDate = new Intl.DateTimeFormat('en-US', dateFormat).format
- 
+      formatDate = new Intl.DateTimeFormat('en-US', dateFormat).format;
+
 function getCurrentTimeFormatted(){
     var date = new Date(),
         formattedDate = formatDate(date);
@@ -34,17 +34,28 @@ if(!fs.existsSync(logDir)){
     fs.mkdirSync(logDir);
 }
 
+//Log entry formatter that includes timestamps
+const MESSAGE = Symbol.for('message');
+const timestampFormatter = (logEntry) => {
+    const base = {
+        time: getCurrentTimeFormatted()
+    };
+    const logAsJSON = Object.assign(base, logEntry);
+    
+    logEntry[MESSAGE] = JSON.stringify(logAsJSON);
+
+    return logEntry;
+}
+
 //Init logger 
 const logger = winston.createLogger({
     level: 'info',
-    format: winston.format.json(),
+    format: winston.format(timestampFormatter)(),
     transports: [
         new winston.transports.File({ filename: path.join(logDir, 'error.log'), level: 'error' }),
         new winston.transports.File({ filename: path.join(logDir, 'combined.log') })
     ]
 });
-
-logger.log({time: getCurrentTimeFormatted(), level: 'info', message: 'test'});
 
 /*
  * Prepare weather get request URL from config
