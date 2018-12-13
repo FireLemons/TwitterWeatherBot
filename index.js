@@ -58,9 +58,10 @@ const logger = winston.createLogger({
 });
 
 /*
- * Prepare weather get request URL from config
+ * Get Weather Data
  */
- 
+
+//Prepare weather get request URL from config 
 var {open_weather_map: {location}} = config,
     locationParams = '';
 
@@ -72,10 +73,13 @@ for(var paramName in location){
 
 const weatherRequestURL = `https://api.openweathermap.org/data/2.5/forecast?${locationParams}&APPID=${config.open_weather_map.key}`;
 
-/*
- * 
- */
-/*function loadWeather(onLoad){
+//Sends the get request for weather data.
+//  param function onDataLoaded(parsedWeatherData): The callback to run on the weather data after it has been loaded and parsed as an Object
+//      param parsedWeatherData: The weather data recieved as an Object. See https://openweathermap.org/forecast5#parameter
+//                               for details about keys and values in the Object.
+function loadWeather(onDataLoaded){
+    logger.info('Attempt fetch weather data');
+    
     https.get(weatherRequestURL, (res) => {
         const { statusCode } = res;
         const contentType = res.headers['content-type'];
@@ -89,7 +93,7 @@ const weatherRequestURL = `https://api.openweathermap.org/data/2.5/forecast?${lo
         }
         
         if (error) {
-            console.error(error.message);
+            logger.error(error.message);
             
             res.resume();
             return;
@@ -105,13 +109,23 @@ const weatherRequestURL = `https://api.openweathermap.org/data/2.5/forecast?${lo
         
         res.on('end', () => {
             try {
-                const parsedData = JSON.parse(rawData);
-                console.log(parsedData);
+                const parsedWeatherData = JSON.parse(rawData);
+                
+                if(typeof onDataLoaded === 'function'){
+                    onDataLoaded(parsedWeatherData);
+                }else{
+                    logger.error('Weather data loaded callback parameter "onDataLoaded" not a function.');
+                    logger.error('Type of "onDataLoaded" is ' + typeof onDataLoaded);
+                }
             } catch (e) {
-                console.error(e.message);
+                logger.error(e.message);
             }
         });
     }).on('error', (e) => {
-        console.error(`Got error: ${e.message}`);
+        logger.error(`Got error: ${e.message}`);
     });
-}*/
+}
+
+loadWeather(function(parsedWeatherData){
+    console.log(parsedWeatherData);
+});
