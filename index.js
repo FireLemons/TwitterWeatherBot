@@ -11,7 +11,14 @@ const winston = require('winston');
  */
 
 //Function to make readable timestamps
-const dateFormat = {month: 'long', day: '2-digit', hour12: false, hour: 'numeric', minute: 'numeric', second: 'numeric'},
+const dateFormat = {
+    month: 'long',
+    day: '2-digit',
+    hour12: false,
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric'
+},
       formatDate = new Intl.DateTimeFormat('en-US', dateFormat).format;
 
 function getCurrentTimeFormatted(){
@@ -71,7 +78,7 @@ for(var paramName in location){
     }
 }
 
-const weatherRequestURL = `https://api.openweathermap.org/data/2.5/forecast?${locationParams}&APPID=${config.open_weather_map.key}`;
+const weatherRequestURL = `https://api.openweathermap.org/data/2.5/forecast?${locationParams}&units=metric&APPID=${config.open_weather_map.key}`;
 
 //Sends the get request for weather data.
 //  param function onDataLoaded(parsedWeatherData): The callback to run on the weather data after it has been loaded and parsed as an Object
@@ -117,15 +124,44 @@ function loadWeather(onDataLoaded){
                     logger.error('Weather data loaded callback parameter "onDataLoaded" not a function.');
                     logger.error('Type of "onDataLoaded" is ' + typeof onDataLoaded);
                 }
-            } catch (e) {
+            } catch(e) {
                 logger.error(e.message);
             }
         });
     }).on('error', (e) => {
-        logger.error(`Got error: ${e.message}`);
+        logger.error('Failed to load weather data.');
+        logger.error(`${e.message}`);
     });
 }
 
-loadWeather(function(parsedWeatherData){
-    console.log(parsedWeatherData);
-});
+/*
+ * Convert weather data into a twitter status
+ */
+
+//Shortened descriptions and symbols for weather condition codes
+//See https://openweathermap.org/weather-conditions for full code information
+const weatherStatusCodeMap = require('./statusCodeMap.json');
+
+//Get periodic update message
+//  param parsedWeatherData The weather data Object recieved from OpenWeatherMap
+//  returns A weather update message to be posted to twitter.
+function getStatusMessage(parsedWeatherData){
+    try{
+        return getDefaultForecast(parsedWeatherData);
+    }catch(e){
+        if(/^Cannot read property '.+' of undefined$/.test(e.message)){
+            logger.error('Weather data Object in unexpected format');
+        }
+    }
+}
+
+//Get the default forecast message. 
+//  param parsedWeatherData The weather data Object recieved from OpenWeatherMap
+//  returns A message describing the condition, temperature, and wind for the next 9 hours. Max 142 characters.
+function getDefaultForecast(parsedWeatherData){
+    
+}
+
+/*loadWeather((parsedWeatherData) => {
+    console.log(getsStatusMessage(parsedWeatherData));
+});*/
