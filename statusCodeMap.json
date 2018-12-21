@@ -1,0 +1,218 @@
+{
+    "200": {
+        "desc": "Rainy thunderstorm",
+        "symbol": "⛈️"
+    },
+    "201": {
+        "desc": "Rainy thunderstorm",
+        "symbol": "⛈️"
+    },
+    "202": {
+        "desc": "Heavy rain thunderstorm",
+        "symbol": "⛈️"
+    },
+    "210": {
+        "desc": "Thunderstorm",
+        "symbol": "🌩️"
+    },
+    "211": {
+        "desc": "Thunderstorm",
+        "symbol": "🌩️"
+    },
+    "212": {
+        "desc": "Heavy thunderstorm",
+        "symbol": "🌩️"
+    },
+    "221": {
+        "desc": "Ragged thunderstorm",
+        "symbol": "🌩️"
+    },
+    "230": {
+        "desc": "Drizzling thunderstorm",
+        "symbol": "️🌩️+⛈️"
+    },
+    "231": {
+        "desc": "Drizzling thunderstorm",
+        "symbol": "🌩️+⛈️"
+    },
+    "232": {
+        "desc": "Heavy drizzle thunderstorm",
+        "symbol": "🌩️+⛈️"
+    },
+    "300": {
+        "desc": "Drizzle",
+        "symbol": "🌦️"
+    },
+    "301":{
+        "desc": "Drizzle",
+        "symbol": "🌦️"
+    },
+    "302": {
+        "desc": "Heavy drizzle",
+        "symbol": "🌦️"
+    },
+    "310": {
+        "desc": "Rain",
+        "symbol": "🌦️"
+    },
+    "311": {
+        "desc": "Rain",
+        "symbol": "🌦️"
+    },
+    "312": {
+        "desc": "Heavy rain",
+        "symbol": "🌦️"
+    },
+    "313": {
+        "desc": "Rain showers and drizzle",
+        "symbol": "🌦️+🌧️"
+    },
+    "314": {
+        "desc": "Heavy rain showers and drizzle",
+        "symbol": "🌦️+🌧️"
+    },
+    "321": {
+        "desc": "Drizzle showers",
+        "symbol": "🌦️+🌧️"
+    },
+    "500": {
+        "desc": "Rain",
+        "symbol": "🌧️"
+    },
+    "501": {
+        "desc": "Rain",
+        "symbol": "🌧️"
+    },
+    "502": {
+        "desc": "Heavy rain",
+        "symbol": "🌧️"
+    },
+    "503": {
+        "desc": "Heavy rain",
+        "symbol": "🌧️"
+    },
+    "504": {
+        "desc": "Extreme rain",
+        "symbol": "🌧️"
+    },
+    "511": {
+        "desc": "Freezing rain",
+        "symbol": "🌧➜❄️"
+    },
+    "520": {
+        "desc": "Rain showers",
+        "symbol": "🚿"
+    },
+    "521": {
+        "desc": "Rain showers",
+        "symbol": "🚿"
+    },
+    "522": {
+        "desc": "Heavy shower rain",
+        "symbol": "🚿"
+    },
+    "531": {
+        "desc": "Ragged shower rain",
+        "symbol": "🚿"
+    },
+    "600": {
+        "desc": "Light snow",
+        "symbol": "🌨️"
+    },
+    "601": {
+        "desc": "Snow",
+        "symbol": "🌨️"
+    },
+    "602": {
+        "desc": "Heavy snow",
+        "symbol": "🌨️"
+    },
+    "611": {
+        "desc": "Sleet",
+        "symbol": "☄️"
+    },
+    "612": {
+        "desc": "Sleet showers",
+        "symbol": "🚿+☄️"
+    },
+    "615": {
+        "desc": "Rain and snow",
+        "symbol": "🌧️+🌨️"
+    },
+    "616": {
+        "desc": "Rain and snow",
+        "symbol": "🌧️+🌨️"
+    },
+    "620": {
+        "desc": "Snow showers",
+        "symbol": "🚿+🌨️"
+    },
+    "621": {
+        "desc": "Snow showers",
+        "symbol": "🚿+🌨️"
+    },
+    "622": {
+        "desc": "Heavy snow showers",
+        "symbol": "🚿+🌨️"
+    },
+    "701": {
+        "desc": "Mist",
+        "symbol": "🌫️"
+    },
+    "711": {
+        "desc": "Smoke",
+        "symbol": "🔥➜🌫️"
+    },
+    "721": {
+        "desc": "Haze",
+        "symbol": "🌫️Haze"
+    },
+    "731": {
+        "desc": "Sand or dust swirls",
+        "symbol": "🌪️Sand"
+    },
+    "741": {
+        "desc": "Fog",
+        "symbol": "🌫️"
+    },
+    "751": {
+        "desc": "Sand",
+        "symbol": "🌫️Sand"
+    },
+    "761": {
+        "desc": "Dust",
+        "symbol": "🌫️Dust"
+    },
+    "762": {
+        "desc": "Volcanic ash",
+        "symbol": "🌋➜🌨️"
+    },
+    "771": {
+        "desc": "Squalls",
+        "symbol": "💨"
+    },
+    "781": {
+        "desc": "Tornado",
+        "symbol": "🌪️"
+    },
+    "800": {
+        "desc": "Clear sky",
+        "symbol": "☀️"
+    },
+    "801": {
+        "desc": "Few clouds",
+        "symbol": "🌥️"
+    },
+    "802": {
+        "desc": "Cloudy",
+        "symbol": "🌥️"
+    },
+    "803": {
+        "desc": "Cloudy",
+        "symbol": "☁️"
+    },
+    "804": {
+        "desc": "Overcast",
+        "symbol": "☁️"
+    }
+}
