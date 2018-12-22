@@ -6,7 +6,7 @@ const schedule = require('node-schedule');
 const twitter = require('twitter');
 const winston = require('winston');
 
-//const testData = require('./test/sampleData.json');
+const testData = require('./test/sampleData.json');
 
 /*
  * Set up logging
@@ -162,6 +162,14 @@ function getStatusMessage(parsedWeatherData){
     }catch(e){
         if(/^Cannot read property '.+' of undefined$/.test(e.message)){
             logger.error(`Weather data Object in unexpected format: ${e.message}`);
+        } else {
+            let keyPath = /^Member (.+) of object is undefined|NaN|null$/.exec(e.message)[1];
+
+            if(keyPath){
+                logger.error(`Failed to collect ${keyPath} from openWeatherMap object. `);
+            } else {
+                logger.error(e.message);
+            }
         }
     }
 }
@@ -188,6 +196,8 @@ function getDefaultForecast(parsedWeatherData){
             }
         };
         
+        validateNotNull(conditions);
+        
         defaultForecast += '\n';
         defaultForecast += `${conditions.time}: ${conditions.symbol}, [${conditions.temp.min},${conditions.temp.max}]°C, 💨 ${conditions.wind.speed} m/s ${conditions.wind.direction}`;
     }
@@ -197,6 +207,26 @@ function getDefaultForecast(parsedWeatherData){
     return defaultForecast;
 }
 
+//Validate each member of an object is not null
+//  param object The javascript object to be validated
+//  param path The key path up to object. Used for recursive calls. Initially ''
+//  throws An error on discovering a member of an object has value NaN null or undefined.
+function validateNotNull(object, path){
+    for(let key in object){
+        const value = object[key];
+        
+        if(typeof value === 'object'){
+            let newPath = (`${path}.${key}`[0] === '.') ? key : `${path}.${key}`;
+            validateNotNull(value, newPath);
+        } else if(value === undefined || value === null || value === NaN){
+            throw new Error(`Member ${path}.${key} of object is ${value}`);
+        }
+    }
+}
+
+//Get wind direction as cardinal direction
+//  param azimuth A number representing an angle in the range [0, 360)
+//  return A character representing a cardinal direction or 2 character representing an intercardinal direction
 function getWindDirectionAsCardinal(azimuth){
     switch(Math.round(azimuth / 45)){
         case 0:
@@ -217,6 +247,7 @@ function getWindDirectionAsCardinal(azimuth){
             return 'NW';
     }
 }
-loadWeather((parsedWeatherData) => {
+
+//loadWeather((parsedWeatherData) => {
     console.log(getStatusMessage(testData));
-});
+//});
