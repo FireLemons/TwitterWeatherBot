@@ -61,16 +61,25 @@ const logger = winston.createLogger({
     level: 'info',
     format: winston.format(timestampFormatter)(),
     exceptionHandlers: [
-        new winston.transports.File({ 
-            filename: path.join(logDir, 'error.log') 
+        new winston.transports.Console(),
+        new winston.transports.File({
+            filename: path.join(logDir, 'error.log'), 
+            maxsize: 1000000
         })
     ],
+    exitOnError: false, //Needed to save crashes to a file
     transports: [
-        new winston.transports.File({
-            filename: path.join(logDir, 'error.log'), level: 'error'
+        new winston.transports.Console({
+            level: 'error'
         }),
         new winston.transports.File({
-            filename: path.join(logDir, 'combined.log')
+            filename: path.join(logDir, 'error.log'),
+            level: 'error',
+            maxsize: 1000000
+        }),
+        new winston.transports.File({
+            filename: path.join(logDir, 'combined.log'),
+            maxsize: 1000000
         })
     ]
 });
@@ -249,5 +258,5 @@ function getWindDirectionAsCardinal(azimuth){
 }
 
 //loadWeather((parsedWeatherData) => {
-    console.log(getStatusMessage(testData));
+    //console.log(getStatusMessage(parsedWeatherData));//testData));
 //});
