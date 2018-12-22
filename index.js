@@ -6,6 +6,8 @@ const schedule = require('node-schedule');
 const twitter = require('twitter');
 const winston = require('winston');
 
+//const testData = require('./test/sampleData.json');
+
 /*
  * Set up logging
  */
@@ -58,9 +60,18 @@ const timestampFormatter = (logEntry) => {
 const logger = winston.createLogger({
     level: 'info',
     format: winston.format(timestampFormatter)(),
+    exceptionHandlers: [
+        new winston.transports.File({ 
+            filename: path.join(logDir, 'error.log') 
+        })
+    ],
     transports: [
-        new winston.transports.File({ filename: path.join(logDir, 'error.log'), level: 'error' }),
-        new winston.transports.File({ filename: path.join(logDir, 'combined.log') })
+        new winston.transports.File({
+            filename: path.join(logDir, 'error.log'), level: 'error'
+        }),
+        new winston.transports.File({
+            filename: path.join(logDir, 'combined.log')
+        })
     ]
 });
 
@@ -150,7 +161,7 @@ function getStatusMessage(parsedWeatherData){
         return getDefaultForecast(parsedWeatherData);
     }catch(e){
         if(/^Cannot read property '.+' of undefined$/.test(e.message)){
-            logger.error('Weather data Object in unexpected format');
+            logger.error(`Weather data Object in unexpected format: ${e.message}`);
         }
     }
 }
@@ -159,9 +170,53 @@ function getStatusMessage(parsedWeatherData){
 //  param parsedWeatherData The weather data Object recieved from OpenWeatherMap
 //  returns A message describing the condition, temperature, and wind for the next 9 hours. Max 142 characters.
 function getDefaultForecast(parsedWeatherData){
+
+    const forecastData = parsedWeatherData.list.slice(0, 3);
+    var defaultForecast = (Math.random() > 0.000228310502) ? 'Forecast' : 'Fourcast';
     
+    for(let {dt_txt, main, weather, wind: {deg, speed}} of forecastData){
+        let conditions = {
+            symbol: weatherStatusCodeMap[weather[0].id].symbol,
+            temp: {
+                max: Math.round(main.temp_max),            
+                min: Math.round(main.temp_min)
+            },
+            time: dt_txt.substr(11, 5),
+            wind: {
+                direction: getWindDirectionAsCardinal(deg),
+                speed: speed.toPrecision(2)
+            }
+        };
+        
+        defaultForecast += '\n';
+        defaultForecast += `${conditions.time}: ${conditions.symbol}, [${conditions.temp.min},${conditions.temp.max}]°C, 💨 ${conditions.wind.speed} m/s ${conditions.wind.direction}`;
+    }
+    
+    defaultForecast += '\n\n';
+    
+    return defaultForecast;
 }
 
-/*loadWeather((parsedWeatherData) => {
-    console.log(getsStatusMessage(parsedWeatherData));
-});*/
+function getWindDirectionAsCardinal(azimuth){
+    switch(Math.round(azimuth / 45)){
+        case 0:
+            return 'N';
+        case 1:
+            return 'NE';
+        case 2:
+            return 'E';
+        case 3:
+            return 'SE';
+        case 4:
+            return 'S';
+        case 5:
+            return 'SW';
+        case 6:
+            return 'W';
+        case 7:
+            return 'NW';
+    }
+}
+loadWeather((parsedWeatherData) => {
+    console.log(getStatusMessage(testData));
+});
