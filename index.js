@@ -3,6 +3,7 @@ const https = require('https');
 const fs = require( 'fs' );
 const path = require('path');
 const schedule = require('node-schedule');
+//const stats = require('./stats.json');
 const twitter = require('twitter');
 const winston = require('winston');
 
@@ -84,6 +85,15 @@ const logger = winston.createLogger({
     ]
 });
 
+//Listen for some process disruptions
+var disruptHandler = (signal) => {
+    logger.error("Weather bot process killed unexpectedly. " + signal);
+    process.exit(1);
+}
+
+process.on('SIGINT', disruptHandler);
+process.on('SIGHUP', disruptHandler);
+
 /*
  * Get Weather Data
  */
@@ -114,9 +124,9 @@ function loadWeather(onDataLoaded){
         let error;
         
         if(statusCode !== 200){
-            error = new Error('Request Failed.\n' + `Status Code: ${statusCode}`);
+            error = new Error(`Request Failed. Status Code: ${statusCode}`);
         } else if (!/^application\/json/.test(contentType)) {
-            error = new Error('Invalid content-type.\n' + `Expected application/json but received ${contentType}`);
+            error = new Error(`Invalid content-type. Expected application/json but received ${contentType}`);
         }
         
         if (error) {
@@ -167,7 +177,9 @@ const weatherStatusCodeMap = require('./statusCodeMap.json');
 //  returns A weather update message to be posted to twitter.
 function getStatusMessage(parsedWeatherData){
     try{
-        return getDefaultForecast(parsedWeatherData);
+        let forecast = getForecast(parsedWeatherData);
+        logger.info("Created forecast");
+        return forecast;
     }catch(e){
         if(/^Cannot read property '.+' of undefined$/.test(e.message)){
             logger.error(`Weather data Object in unexpected format: ${e.message}`);
@@ -186,7 +198,7 @@ function getStatusMessage(parsedWeatherData){
 //Get the default forecast message. 
 //  param parsedWeatherData The weather data Object recieved from OpenWeatherMap
 //  returns A message describing the condition, temperature, and wind for the next 9 hours. Max 142 characters.
-function getDefaultForecast(parsedWeatherData){
+function getForecast(parsedWeatherData){
 
     const forecastData = parsedWeatherData.list.slice(0, 3);
     var defaultForecast = (Math.random() > 0.000228310502) ? 'Forecast' : 'Fourcast';
@@ -198,7 +210,7 @@ function getDefaultForecast(parsedWeatherData){
                 max: Math.round(main.temp_max),            
                 min: Math.round(main.temp_min)
             },
-            time: dt_txt.substr(11, 5),
+            time: getCST(dt_txt.substr(11, 2)),
             wind: {
                 direction: getWindDirectionAsCardinal(deg),
                 speed: speed.toPrecision(2)
@@ -208,7 +220,7 @@ function getDefaultForecast(parsedWeatherData){
         validateNotNull(conditions);
         
         defaultForecast += '\n';
-        defaultForecast += `${conditions.time}: ${conditions.symbol}, [${conditions.temp.min},${conditions.temp.max}]°C, 💨 ${conditions.wind.speed} m/s ${conditions.wind.direction}`;
+        defaultForecast += `${conditions.time}:00:${conditions.symbol}, [${conditions.temp.min},${conditions.temp.max}]°C, 💨 ${conditions.wind.speed} m/s ${conditions.wind.direction}`;
     }
     
     defaultForecast += '\n\n';
@@ -239,24 +251,49 @@ function validateNotNull(object, path){
 function getWindDirectionAsCardinal(azimuth){
     switch(Math.round(azimuth / 45)){
         case 0:
-            return 'N';
+            return '⬇️';
         case 1:
-            return 'NE';
+            return '↙️';
         case 2:
-            return 'E';
+            return '⬅️';
         case 3:
-            return 'SE';
+            return '↖️';
         case 4:
-            return 'S';
+            return '⬆️';
         case 5:
-            return 'SW';
+            return '↗️';
         case 6:
-            return 'W';
+            return '➡️';
         case 7:
-            return 'NW';
+            return '↘️';
     }
 }
 
-//loadWeather((parsedWeatherData) => {
-    //console.log(getStatusMessage(parsedWeatherData));//testData));
-//});
+function getCST(UTC){
+    let offsetHour = parseInt(UTC) - 6;
+    let CST = offsetHour >= 0 ? offsetHour : offsetHour + 24;
+    
+    return ('0' + CST).substr(-2);
+}
+
+/*
+ *  Schedule forecasts to go out every 2 hours.
+ */
+var lastUpdate = new Date();
+ 
+var updates = schedule.scheduleJob('0 */2 * * *', function(){
+    //Detect if computer fell asleep
+    if(new Date() - lastUpdate > 7620000){//7620000ms = 2 hours 7 minutes
+        lastUpdate.setHours(lastUpdate.getHours() + 2);
+        logger.warn('Missed scheduled twitter update. Presumably by waking from sleep.');
+    } else {
+        lastUpdate = new Date();
+        
+        loadWeather((parsedWeatherData) => {
+            console.log(getStatusMessage(parsedWeatherData));//testData));
+        });
+    }
+    
+});
+
+logger.info('Bot process started.');
