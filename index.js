@@ -13,7 +13,6 @@ const testData = require('./test/sampleData.json');
  * Set up logging
  */
 
-//Function to make readable timestamps
 const dateFormat = {
     month: 'long',
     day: '2-digit',
@@ -22,8 +21,8 @@ const dateFormat = {
     minute: 'numeric',
     second: 'numeric'
 },
-      formatDate = new Intl.DateTimeFormat('en-US', dateFormat).format;
-
+    formatDate = new Intl.DateTimeFormat('en-US', dateFormat).format;
+//Makes human readable timestamps
 function getCurrentTimeFormatted(){
     var date = new Date(),
         formattedDate = formatDate(date);
@@ -50,7 +49,9 @@ const timestampFormatter = (logEntry) => {
     const base = {
         time: getCurrentTimeFormatted()
     };
-    const logAsJSON = Object.assign(base, logEntry);
+    let logAsJSON = Object.assign(base, logEntry);
+    
+    console.log(logAsJSON);
     
     logEntry[MESSAGE] = JSON.stringify(logAsJSON);
 
@@ -111,9 +112,9 @@ for(var paramName in location){
 const weatherRequestURL = `https://api.openweathermap.org/data/2.5/forecast?${locationParams}&units=metric&APPID=${config.open_weather_map.key}`;
 
 //Sends the get request for weather data.
-//  param function onDataLoaded(parsedWeatherData): The callback to run on the weather data after it has been loaded and parsed as an Object
-//      param parsedWeatherData: The weather data recieved as an Object. See https://openweathermap.org/forecast5#parameter
-//                               for details about keys and values in the Object.
+//  @param {Function} onDataLoaded(parsedWeatherData): The callback to run on the weather data after it has been loaded and parsed as an Object
+//      @param {Object} parsedWeatherData: The weather data recieved as an Object. See https://openweathermap.org/forecast5#parameter
+//                                         for details about keys and values in the Object.
 function loadWeather(onDataLoaded){
     logger.info('Attempt fetch weather data');
     
@@ -173,8 +174,8 @@ function loadWeather(onDataLoaded){
 const weatherStatusCodeMap = require('./statusCodeMap.json');
 
 //Get periodic update message
-//  param parsedWeatherData The weather data Object recieved from OpenWeatherMap
-//  returns A weather update message to be posted to twitter.
+//  @param {Object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
+//  @returns {String} A weather update message to be posted to twitter.
 function getStatusMessage(parsedWeatherData){
     try{
         let forecast = getForecast(parsedWeatherData);
@@ -195,9 +196,9 @@ function getStatusMessage(parsedWeatherData){
     }
 }
 
-//Get the default forecast message. 
-//  param parsedWeatherData The weather data Object recieved from OpenWeatherMap
-//  returns A message describing the condition, temperature, and wind for the next 9 hours. Max 142 characters.
+//Gets the default forecast message. 
+//  @param {Object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
+//  @returns {String} A message describing the condition, temperature, and wind for the next 9 hours. Max 142 characters.
 function getForecast(parsedWeatherData){
 
     const forecastData = parsedWeatherData.list.slice(0, 3);
@@ -228,10 +229,10 @@ function getForecast(parsedWeatherData){
     return defaultForecast;
 }
 
-//Validate each member of an object is not null
-//  param object The javascript object to be validated
-//  param path The key path up to object. Used for recursive calls. Initially ''
-//  throws An error on discovering a member of an object has value NaN null or undefined.
+//Validates that each member of an object isn't null
+//  @param {Object} object The javascript object to be validated
+//  @param {String} path The key path up to object. Used for recursive calls. Initially ''
+//  @throws {Error} An error on discovering a member of an object has value NaN null or undefined.
 function validateNotNull(object, path){
     for(let key in object){
         const value = object[key];
@@ -245,9 +246,9 @@ function validateNotNull(object, path){
     }
 }
 
-//Get wind direction as cardinal direction
-//  param azimuth A number representing an angle in the range [0, 360)
-//  return A character representing a cardinal direction or 2 character representing an intercardinal direction
+//Converts an angle into cardinal direction
+//  @param {Number} azimuth A number representing an angle in the range [0, 360)
+//  @return {String} A character representing a cardinal direction or 2 character representing an intercardinal direction
 function getWindDirectionAsCardinal(azimuth){
     switch(Math.round(azimuth / 45)){
         case 0:
@@ -269,6 +270,9 @@ function getWindDirectionAsCardinal(azimuth){
     }
 }
 
+//Converts UTC hours into CST hours
+//  @param {String} UTC A 2 digit number representing hours at UTC time
+//  @return {String} A 2 digit number representing the input UTC hours converted to central time
 function getCST(UTC){
     let offsetHour = parseInt(UTC) - 6;
     let CST = offsetHour >= 0 ? offsetHour : offsetHour + 24;
@@ -293,7 +297,6 @@ var updates = schedule.scheduleJob('0 */2 * * *', function(){
             console.log(getStatusMessage(parsedWeatherData));//testData));
         });
     }
-    
 });
 
 logger.info('Bot process started.');
