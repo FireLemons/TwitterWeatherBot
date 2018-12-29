@@ -13,6 +13,14 @@ const testData = require('./test/sampleData.json');
  * Set up logging
  */
 
+//A log entry with a hard coded line number
+class LineLogEntry{
+    constructor(message, lineNo){
+        this.message = message;
+        this.lineNumber = (typeof lineNo === 'undefined') ? '' : lineNumber;
+    }
+}
+ 
 const dateFormat = {
     month: 'long',
     day: '2-digit',
@@ -22,7 +30,9 @@ const dateFormat = {
     second: 'numeric'
 },
     formatDate = new Intl.DateTimeFormat('en-US', dateFormat).format;
+
 //Makes human readable timestamps
+//  @return {String} A timestamp in the form: FULL_MONTH_NAME DAY HH:MM:SS
 function getCurrentTimeFormatted(){
     var date = new Date(),
         formattedDate = formatDate(date);
@@ -45,11 +55,20 @@ if(!fs.existsSync(logDir)){
 
 //Log entry formatter that includes timestamps
 const MESSAGE = Symbol.for('message');
-const timestampFormatter = (logEntry) => {
-    const base = {
+
+//Formats log entries
+//  @param {Object} logEntry The log entry to be formatted
+const logEntryFormatter = (logEntry) => {
+    const timestamp = {
         time: getCurrentTimeFormatted()
     };
-    let logAsJSON = Object.assign(base, logEntry);
+    
+    if(logEntry.message instanceof LineLogEntry){
+        logEntry['lineNumber'] = logEntry.message.lineNo;
+        logEntry.message = logEntry.message.message;
+    }
+    
+    let logAsJSON = Object.assign(timestamp, logEntry);
     
     console.log(logAsJSON);
     
@@ -61,7 +80,7 @@ const timestampFormatter = (logEntry) => {
 //Init logger 
 const logger = winston.createLogger({
     level: 'info',
-    format: winston.format(timestampFormatter)(),
+    format: winston.format(logEntryFormatter)(),
     exceptionHandlers: [
         new winston.transports.Console(),
         new winston.transports.File({
@@ -86,9 +105,10 @@ const logger = winston.createLogger({
     ]
 });
 
-//Listen for some process disruptions
+//Logs errors for some process disruptions
+//  @param {String} The name of the signal that triggered the disruption
 var disruptHandler = (signal) => {
-    logger.error("Weather bot process killed unexpectedly. " + signal);
+    logger.error(new LineLogEntry("Weather bot process killed unexpectedly. " + signal, 111));
     process.exit(1);
 }
 
@@ -131,7 +151,7 @@ function loadWeather(onDataLoaded){
         }
         
         if (error) {
-            logger.error(error.message);
+            logger.error(new LineLogEntry(error.message, 154));
             
             res.resume();
             return;
@@ -152,16 +172,16 @@ function loadWeather(onDataLoaded){
                 if(typeof onDataLoaded === 'function'){
                     onDataLoaded(parsedWeatherData);
                 }else{
-                    logger.error('Weather data loaded callback parameter "onDataLoaded" not a function.');
-                    logger.error('Type of "onDataLoaded" is ' + typeof onDataLoaded);
+                    logger.error(new LineLogEntry('Weather data loaded callback parameter "onDataLoaded" not a function.', 175));
+                    logger.error(new LineLogEntry('Type of "onDataLoaded" is ' + typeof onDataLoaded, 176));
                 }
             } catch(e) {
-                logger.error(e.message);
+                logger.error(new LineLogEntry(e.message, 179));
             }
         });
     }).on('error', (e) => {
-        logger.error('Failed to load weather data.');
-        logger.error(`${e.message}`);
+        logger.error(new LineLogEntry('Failed to load weather data.', 183));
+        logger.error(new LineLogEntry(`${e.message}`, 184));
     });
 }
 
@@ -183,14 +203,14 @@ function getStatusMessage(parsedWeatherData){
         return forecast;
     }catch(e){
         if(/^Cannot read property '.+' of undefined$/.test(e.message)){
-            logger.error(`Weather data Object in unexpected format: ${e.message}`);
+            logger.error(new LineLogEntry(`Weather data Object in unexpected format: ${e.message}`, 206));
         } else {
             let keyPath = /^Member (.+) of object is undefined|NaN|null$/.exec(e.message)[1];
 
             if(keyPath){
-                logger.error(`Failed to collect ${keyPath} from openWeatherMap object. `);
+                logger.error(new LineLogEntry(`Failed to collect ${keyPath} from openWeatherMap object. `, 211));
             } else {
-                logger.error(e.message);
+                logger.error(new LineLogEntry(e.message, 213));
             }
         }
     }
@@ -289,7 +309,7 @@ var updates = schedule.scheduleJob('0 */2 * * *', function(){
     //Detect if computer fell asleep
     if(new Date() - lastUpdate > 7620000){//7620000ms = 2 hours 7 minutes
         lastUpdate.setHours(lastUpdate.getHours() + 2);
-        logger.warn('Missed scheduled twitter update. Presumably by waking from sleep.');
+        logger.warn(new LineLogEntry('Missed scheduled twitter update. Presumably by waking from sleep.', 312));
     } else {
         lastUpdate = new Date();
         
