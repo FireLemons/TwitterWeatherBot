@@ -12,15 +12,6 @@ const testData = require('./test/sampleData.json');
 /*
  * Set up logging
  */
-
-//A log entry with a hard coded line number
-class LineLogEntry{
-    constructor(message, lineNo){
-        this.message = message;
-        this.lineNumber = (typeof lineNo === 'undefined') ? '' : lineNumber;
-    }
-}
- 
 const dateFormat = {
     month: 'long',
     day: '2-digit',
@@ -46,11 +37,38 @@ function getCurrentTimeFormatted(){
     return formattedDate.replace(',', '');
 }
 
+//Gets the line number of an Error
+//  @param {Error} An Error object
+//  @return {Number} The line number where the Error occurred 
+function getLineNumber(error){
+    var { stack } = error;
+    
+    for(var firstNewLineIndex = 0; firstNewLineIndex < stack.length && stack[firstNewLineIndex] !== '\n'; firstNewLineIndex++){
+    }
+  
+    for(var secondNewLineIndex = firstNewLineIndex + 1; secondNewLineIndex < stack.length && stack[secondNewLineIndex] !== '\n'; secondNewLineIndex++){
+    }
+    
+    return parseInt(stack.substr(firstNewLineIndex, secondNewLineIndex - firstNewLineIndex).match(/\.js:([\d]+):[\d]+\)$/)[1]);
+}
+
 //Create the log directory if it doesn't exist
 var {log: {logDir}} = config;
 
 if(!fs.existsSync(logDir)){
     fs.mkdirSync(logDir);
+}
+
+//Holds an error message and a line number
+class LineNumberError{
+    constructor(error){
+        if(error instanceof Error){
+            this.lineNumber = getLineNumber(error);
+            this.message = error.message;
+        } else {
+            throw new Error('Could not instantiate LineNumberError from non Error object');
+        }
+    }
 }
 
 //Log entry formatter that includes timestamps
@@ -63,14 +81,7 @@ const logEntryFormatter = (logEntry) => {
         time: getCurrentTimeFormatted()
     };
     
-    if(logEntry.message instanceof LineLogEntry){
-        logEntry['lineNumber'] = logEntry.message.lineNo;
-        logEntry.message = logEntry.message.message;
-    }
-    
     let logAsJSON = Object.assign(timestamp, logEntry);
-    
-    console.log(logAsJSON);
     
     logEntry[MESSAGE] = JSON.stringify(logAsJSON);
 
@@ -108,7 +119,7 @@ const logger = winston.createLogger({
 //Logs errors for some process disruptions
 //  @param {String} The name of the signal that triggered the disruption
 var disruptHandler = (signal) => {
-    logger.error(new LineLogEntry("Weather bot process killed unexpectedly. " + signal, 111));
+    logger.error(new LineNumberError(new Error("Weather bot process killed unexpectedly. " + signal)));
     process.exit(1);
 }
 
@@ -151,7 +162,7 @@ function loadWeather(onDataLoaded){
         }
         
         if (error) {
-            logger.error(new LineLogEntry(error.message, 154));
+            logger.error(new LineNumberError(error));
             
             res.resume();
             return;
@@ -172,16 +183,16 @@ function loadWeather(onDataLoaded){
                 if(typeof onDataLoaded === 'function'){
                     onDataLoaded(parsedWeatherData);
                 }else{
-                    logger.error(new LineLogEntry('Weather data loaded callback parameter "onDataLoaded" not a function.', 175));
-                    logger.error(new LineLogEntry('Type of "onDataLoaded" is ' + typeof onDataLoaded, 176));
+                    logger.error(new LineNumberError(new Error('Weather data loaded callback parameter "onDataLoaded" not a function.')));
+                    logger.error(new LineNumberError(new Error('Type of "onDataLoaded" is ' + typeof onDataLoaded)));
                 }
             } catch(e) {
-                logger.error(new LineLogEntry(e.message, 179));
+                logger.error(e);
             }
         });
     }).on('error', (e) => {
-        logger.error(new LineLogEntry('Failed to load weather data.', 183));
-        logger.error(new LineLogEntry(`${e.message}`, 184));
+        logger.error(new LineNumberError(new Error('Failed to load weather data.')));
+        logger.error(new LineNumberError(e));
     });
 }
 
@@ -203,14 +214,14 @@ function getStatusMessage(parsedWeatherData){
         return forecast;
     }catch(e){
         if(/^Cannot read property '.+' of undefined$/.test(e.message)){
-            logger.error(new LineLogEntry(`Weather data Object in unexpected format: ${e.message}`, 206));
+            logger.error(new LineNumberError(new Error(`Weather data Object in unexpected format: ${e.message}`)));
         } else {
             let keyPath = /^Member (.+) of object is undefined|NaN|null$/.exec(e.message)[1];
 
             if(keyPath){
-                logger.error(new LineLogEntry(`Failed to collect ${keyPath} from openWeatherMap object. `, 211));
+                logger.error(new LineNumberError(new Error(`Failed to collect ${keyPath} from openWeatherMap object. `)));
             } else {
-                logger.error(new LineLogEntry(e.message, 213));
+                logger.error(new LineNumberError(e));
             }
         }
     }
@@ -309,7 +320,7 @@ var updates = schedule.scheduleJob('0 */2 * * *', function(){
     //Detect if computer fell asleep
     if(new Date() - lastUpdate > 7620000){//7620000ms = 2 hours 7 minutes
         lastUpdate.setHours(lastUpdate.getHours() + 2);
-        logger.warn(new LineLogEntry('Missed scheduled twitter update. Presumably by waking from sleep.', 312));
+        logger.warn(new LineNumberError(new Error('Missed scheduled twitter update. Presumably by waking from sleep.')));
     } else {
         lastUpdate = new Date();
         
