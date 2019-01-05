@@ -99,7 +99,30 @@ const logger = winston.createLogger({
             maxsize: 1000000
         })
     ],
-    exitOnError: false, //Needed to save crashes to a file
+    //Starts a delayed process shutdown so the logger has time to write exceptions to files.
+    //  @param {Object} err An error describing the reason for shutting down
+    exitOnError: function(err){
+        function* exitNotifier(){
+            yield `Process encountered a fatal error.${(err.code) ? ' Code: ' + err.code : ''} Exiting in...`;
+            yield 3;
+            yield 2;
+            yield 1;
+        }
+        
+        let exitMessage = exitNotifier();
+        
+        let exitSequence = setInterval(function(){
+            let message = exitMessage.next().value;
+            
+            if(message){
+                console.log(message);
+            } else {
+                process.exit(1);
+            }
+        }, 1000);
+        
+        return false;
+    }, //Needed to save crashes to a file
     transports: [
         new winston.transports.Console({
             level: 'error'
