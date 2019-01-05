@@ -59,10 +59,14 @@ if(!fs.existsSync(logDir)){
     fs.mkdirSync(logDir);
 }
 
+const MESSAGE = Symbol.for('message');
+const LEVEL = Symbol.for('level');
+
 //Holds an error message and a line number
 class LineNumberError{
     constructor(error){
         if(error instanceof Error){
+            Object.assign(this, error);
             this.lineNumber = getLineNumber(error);
             this.message = error.message;
         } else {
@@ -71,15 +75,20 @@ class LineNumberError{
     }
 }
 
-//Log entry formatter that includes timestamps
-const MESSAGE = Symbol.for('message');
-
-//Formats log entries
+//Formats log entries with timestamps and sometimes line numbers
 //  @param {Object} logEntry The log entry to be formatted
 const logEntryFormatter = (logEntry) => {
     const timestamp = {
         time: getCurrentTimeFormatted()
     };
+    
+    console.log(logEntry);
+    
+    if(logEntry instanceof Error){
+        logEntry = new LineNumberError(logEntry);
+    }
+    
+    console.log(logEntry);
     
     let logAsJSON = Object.assign(timestamp, logEntry);
     
@@ -122,7 +131,7 @@ const logger = winston.createLogger({
         }, 1000);
         
         return false;
-    }, //Needed to save crashes to a file
+    },
     transports: [
         new winston.transports.Console({
             level: 'error'
@@ -142,7 +151,7 @@ const logger = winston.createLogger({
 //Logs errors for some process disruptions
 //  @param {String} The name of the signal that triggered the disruption
 var disruptHandler = (signal) => {
-    logger.error(new LineNumberError(new Error("Weather bot process killed unexpectedly. " + signal)));
+    logger.error(new Error("Weather bot process killed unexpectedly. " + signal));
     process.exit(1);
 }
 
@@ -185,7 +194,7 @@ function loadWeather(onDataLoaded){
         }
         
         if (error) {
-            logger.error(new LineNumberError(error));
+            logger.error(error);
             
             res.resume();
             return;
@@ -206,16 +215,16 @@ function loadWeather(onDataLoaded){
                 if(typeof onDataLoaded === 'function'){
                     onDataLoaded(parsedWeatherData);
                 }else{
-                    logger.error(new LineNumberError(new Error('Weather data loaded callback parameter "onDataLoaded" not a function.')));
-                    logger.error(new LineNumberError(new Error('Type of "onDataLoaded" is ' + typeof onDataLoaded)));
+                    logger.error(new Error('Weather data loaded callback parameter "onDataLoaded" not a function.'));
+                    logger.error(new Error('Type of "onDataLoaded" is ' + typeof onDataLoaded));
                 }
             } catch(e) {
                 logger.error(e);
             }
         });
     }).on('error', (e) => {
-        logger.error(new LineNumberError(new Error('Failed to load weather data.')));
-        logger.error(new LineNumberError(e));
+        logger.error(new Error('Failed to load weather data.'));
+        logger.error(e);
     });
 }
 
@@ -237,14 +246,14 @@ function getStatusMessage(parsedWeatherData){
         return forecast;
     }catch(e){
         if(/^Cannot read property '.+' of undefined$/.test(e.message)){
-            logger.error(new LineNumberError(new Error(`Weather data Object in unexpected format: ${e.message}`)));
+            logger.error(new Error(`Weather data Object in unexpected format: ${e.message}`));
         } else {
             let keyPath = /^Member (.+) of object is undefined|NaN|null$/.exec(e.message)[1];
 
             if(keyPath){
-                logger.error(new LineNumberError(new Error(`Failed to collect ${keyPath} from openWeatherMap object. `)));
+                logger.error(new Error(`Failed to collect ${keyPath} from openWeatherMap object. `));
             } else {
-                logger.error(new LineNumberError(e));
+                logger.error(e);
             }
         }
     }
@@ -343,7 +352,7 @@ var updates = schedule.scheduleJob('0 */2 * * *', function(){
     //Detect if computer fell asleep
     if(new Date() - lastUpdate > 7620000){//7620000ms = 2 hours 7 minutes
         lastUpdate.setHours(lastUpdate.getHours() + 2);
-        logger.warn(new LineNumberError(new Error('Missed scheduled twitter update. Presumably by waking from sleep.')));
+        logger.warn(new Error('Missed scheduled twitter update. Presumably by waking from sleep.'));
     } else {
         lastUpdate = new Date();
         
