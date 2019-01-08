@@ -82,13 +82,9 @@ const logEntryFormatter = (logEntry) => {
         time: getCurrentTimeFormatted()
     };
     
-    console.log(logEntry);
-    
     if(logEntry instanceof Error){
         logEntry = new LineNumberError(logEntry);
     }
-    
-    console.log(logEntry);
     
     let logAsJSON = Object.assign(timestamp, logEntry);
     
@@ -134,7 +130,7 @@ const logger = winston.createLogger({
     },
     transports: [
         new winston.transports.Console({
-            level: 'error'
+            level: 'warn'
         }),
         new winston.transports.File({
             filename: path.join(logDir, 'error.log'),
@@ -151,7 +147,7 @@ const logger = winston.createLogger({
 //Logs errors for some process disruptions
 //  @param {String} The name of the signal that triggered the disruption
 var disruptHandler = (signal) => {
-    logger.error(new Error("Weather bot process killed unexpectedly. " + signal));
+    logger.error(new Error("Weather bot process killed unexpectedly by " + signal));
     process.exit(1);
 }
 
@@ -176,9 +172,10 @@ const weatherRequestURL = `https://api.openweathermap.org/data/2.5/forecast?${lo
 
 //Sends the get request for weather data.
 //  @param {Function} onDataLoaded(parsedWeatherData): The callback to run on the weather data after it has been loaded and parsed as an Object
-//      @param {Object} parsedWeatherData: The weather data recieved as an Object. See https://openweathermap.org/forecast5#parameter
-//                                         for details about keys and values in the Object.
-function loadWeather(onDataLoaded){
+//      @param {Object} parsedWeatherData: The weather data. See https://openweathermap.org/forecast5#parameter for details about the structure of the Object.
+//  @param {Function} onFailure(errors) The callback to run if there is a problem with loading the data
+//      @param {Error[]} errors The error(s) causing the failure
+function loadWeather(onDataLoaded, onFailure){
     logger.info('Attempt fetch weather data');
     
     https.get(weatherRequestURL, (res) => {
@@ -194,7 +191,9 @@ function loadWeather(onDataLoaded){
         }
         
         if (error) {
-            logger.error(error);
+            onFailure([
+                error
+            ]);
             
             res.resume();
             return;
@@ -204,7 +203,7 @@ function loadWeather(onDataLoaded){
         
         let rawData = '';
         
-        res.on('data', (chunk) => { 
+        res.on('data', (chunk) => {
             rawData += chunk;
         });
         
@@ -215,16 +214,17 @@ function loadWeather(onDataLoaded){
                 if(typeof onDataLoaded === 'function'){
                     onDataLoaded(parsedWeatherData);
                 }else{
-                    logger.error(new Error('Weather data loaded callback parameter "onDataLoaded" not a function.'));
-                    logger.error(new Error('Type of "onDataLoaded" is ' + typeof onDataLoaded));
+                    onFailure([
+                        new Error('Weather data loaded callback parameter "onDataLoaded" not a function.'),
+                        new Error('Type of "onDataLoaded" is ' + typeof onDataLoaded)
+                    ]);
                 }
             } catch(e) {
-                logger.error(e);
+                onFailure([e]);
             }
         });
     }).on('error', (e) => {
-        logger.error(new Error('Failed to load weather data.'));
-        logger.error(e);
+        onFailure([e]);
     });
 }
 
@@ -347,18 +347,52 @@ function getCST(UTC){
  *  Schedule forecasts to go out every 2 hours.
  */
 var lastUpdate = new Date();
- 
+
+//Turns weather data into a twitter status and tweets it
+//  @param {Object} parsedWeatherData The weather data.
+const onWeatherLoaded = (parsedWeatherData) => {
+    lastUpdate = new Date();
+    
+    console.log(getStatusMessage(parsedWeatherData));//testData));
+}
+
 var updates = schedule.scheduleJob('0 */2 * * *', function(){
     //Detect if computer fell asleep
     if(new Date() - lastUpdate > 7620000){//7620000ms = 2 hours 7 minutes
         lastUpdate.setHours(lastUpdate.getHours() + 2);
         logger.warn(new Error('Missed scheduled twitter update. Presumably by waking from sleep.'));
     } else {
-        lastUpdate = new Date();
+        let retryTimeout = 0;
         
-        loadWeather((parsedWeatherData) => {
-            console.log(getStatusMessage(parsedWeatherData));//testData));
-        });
+        //Logs errors and retries the request up to three times
+        //  @param {Error[]} A list of errors describing why the failure occurred
+        const onFailLoadWeather = (errors) => {
+            logger.error(new Error('Failed to load weather data.'));
+            
+            if(Array.isArray(errors)){
+                if(retryTimeout <= 262144){
+                    for(let error of errors){
+                        logger.warn(error);
+                    }
+                    
+                    logger.info(`Retrying fetching weather data in ${retryTimeout}ms. Retry ${(retryTimeout / 131072) + 1} of 3`);
+                    
+                    setTimeout(() => {
+                        loadWeather(onWeatherLoaded, onFailLoadWeather);
+                    }, retryTimeout);
+                    
+                    retryTimeout += 131072;
+                } else {
+                    for(let error of errors){
+                        logger.error(error);
+                    }
+                }
+            } else {
+                logger.error(new Error(`Expected param 'errors' to be array of Error objects. Got ${typeof errors} instead.`));
+            }
+        }
+        
+        loadWeather(onWeatherLoaded, onFailLoadWeather);
     }
 });
 
