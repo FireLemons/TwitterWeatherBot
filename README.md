@@ -1,3 +1,4 @@
+# WORK IN PROGRESS
 # ColumbiaMOWeatherTweetBot
 
 Tweets weather forecasts twice daily for Columbia MO. Location can be changed in `config.json` for use in other cities. As a side note, I can't imagine why anyone would want this. Seeing as most people have a weather app on their smartphone that shows the weather on the lock screen. Why would anyone check twitter for the weather?
