@@ -1,6 +1,10 @@
 #Copied from the github gitignore repo
 #Find it here https://github.com/github/gitignore/blob/master/Node.gitignore
 
+# Config
+# DELETING THE LINE BELOW MAY EXPOSE YOUR API KEYS
+config.json*
+
 # Logs
 logs
 *.log
@@ -38,6 +42,9 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
+
+# Testing folder
+test/
 
 # TypeScript v1 declaration files
 typings/
@@ -79,8 +86,4 @@ typings/
 .fusebox/
 
 # DynamoDB Local files 
-.dynamodb/ 
-
-# Config
-# DELETING THE LINE BELOW MAY EXPOSE YOUR API KEYS
-config.json*
+.dynamodb/
