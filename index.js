@@ -7,7 +7,7 @@ const schedule = require('node-schedule');
 const twitter = require('twitter');
 const winston = require('winston');
 
-const testData = require('./test/sampleData.json');
+const testData = require('./test/sampleData1.json');
 
 /*
  * Set up logging
@@ -243,15 +243,21 @@ function getStatusMessage(parsedWeatherData){
     try{
         let forecast = getForecast(parsedWeatherData);
         logger.info("Created forecast");
-        return forecast;
+        let message = forecast;
+        
+        if(message.length > 280){
+            throw new Error(`Message too long: ${message}`);
+        }
+        
+        return message;
     }catch(e){
         if(/^Cannot read property '.+' of undefined$/.test(e.message)){
             logger.error(new Error(`Weather data Object in unexpected format: ${e.message}`));
         } else {
-            let keyPath = /^Member (.+) of object is undefined|NaN|null$/.exec(e.message)[1];
-
-            if(keyPath){
-                logger.error(new Error(`Failed to collect ${keyPath} from openWeatherMap object. `));
+            let keyPathCheck = /^Member (.+) of object is undefined|NaN|null$/.exec(e.message);
+            
+            if(keyPathCheck && keyPathCheck.length > 1){
+                logger.error(new Error(`Failed to read ${keyPathCheck[1]} from openWeatherMap object. `));
             } else {
                 logger.error(e);
             }
