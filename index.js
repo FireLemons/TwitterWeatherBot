@@ -42,8 +42,8 @@ function getCurrentTimeFormatted(){
 //Gets the line number of an Error
 //  @param {Error} An Error object
 //  @return {Number} The line number where the Error occurred 
-function getLineNumber(error){
-    var { stack } = error;
+function getErrorSource(error){
+    let { stack } = error;
     
     for(var firstNewLineIndex = 0; firstNewLineIndex < stack.length && stack[firstNewLineIndex] !== '\n'; firstNewLineIndex++){
     }
@@ -51,7 +51,12 @@ function getLineNumber(error){
     for(var secondNewLineIndex = firstNewLineIndex + 1; secondNewLineIndex < stack.length && stack[secondNewLineIndex] !== '\n'; secondNewLineIndex++){
     }
     
-    return parseInt(stack.substr(firstNewLineIndex, secondNewLineIndex - firstNewLineIndex).match(/\.js:([\d]+):[\d]+\)$/)[1]);
+    let errorSourceData = stack.substr(firstNewLineIndex, secondNewLineIndex - firstNewLineIndex).match(/([\w]+\.js):([\d]+):[\d]+\)$/);
+    
+    return {
+        fileName: errorSourceData[1],
+        lineNumber: parseInt(errorSourceData[2])
+    };
 }
 
 //Create the log directory if it doesn't exist
@@ -65,11 +70,11 @@ const MESSAGE = Symbol.for('message');
 const LEVEL = Symbol.for('level');
 
 //Holds an error message and a line number
-class LineNumberError{
+class TrackedError{
     constructor(error){
         if(error instanceof Error){
             Object.assign(this, error);
-            this.lineNumber = getLineNumber(error);
+            Object.assign(this, getErrorSource(error));
             this.message = error.message;
         } else {
             throw new Error('Could not instantiate LineNumberError from non Error object');
@@ -85,7 +90,7 @@ const logEntryFormatter = (logEntry) => {
     };
     
     if(logEntry instanceof Error){
-        logEntry = new LineNumberError(logEntry);
+        logEntry = new TrackedError(logEntry);
     }
     
     let logAsJSON = Object.assign(timestamp, logEntry);
