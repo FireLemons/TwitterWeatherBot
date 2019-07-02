@@ -6,7 +6,7 @@ const util = require('./util.js');
 const weatherStatusCodeMap = require('./statusCodeMap.json');
 
 module.exports = class Weather{
-    constructor(logger, config){
+    constructor(config, logger){
         //Prepare weather get request URL from config 
         var {location} = config,
             locationParams = '';

@@ -1,0 +1,37 @@
+const twitter = require('twitter');
+
+module.exports = class TweetWeather{
+    constructor(config, logger, weatherTools){
+        this.weatherTools = weatherTools;
+        this.logger = logger;
+    }
+    
+    //Get periodic update message
+    //  @param {Object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
+    //  @returns {String} A weather update message to be posted to twitter.
+    getStatusMessage(parsedWeatherData){
+        try{
+            let forecast = this.weatherTools.getForecast(parsedWeatherData);
+            this.logger.info('Created forecast');
+            let message = forecast;
+            
+            if(message.length > 280){
+                throw new Error(`Message too long: ${message}`);
+            }
+            
+            return message;
+        }catch(e){
+            if(/^Cannot read property '.+' of undefined$/.test(e.message)){
+                this.logger.error(new Error(`Weather data Object in unexpected format: ${e.message}`));
+            } else {
+                let keyPathCheck = /^Member (.+) of object is undefined|NaN|null$/.exec(e.message);
+                
+                if(keyPathCheck && keyPathCheck.length > 1){
+                    this.logger.error(new Error(`Failed to read ${keyPathCheck[1]} from openWeatherMap object. `));
+                } else {
+                    this.logger.error(e);
+                }
+            }
+        }
+    }
+}

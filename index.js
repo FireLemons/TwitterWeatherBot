@@ -3,7 +3,7 @@ const fs = require( 'fs' );
 const path = require('path');
 const schedule = require('node-schedule');
 //const stats = require('./stats.json');
-const twitter = require('twitter');
+const twitterManager = require('./tweetWeather.js');
 const weatherManager = require('./weather.js');
 const winston = require('winston');
 const util = require('./util.js');
@@ -160,44 +160,11 @@ var disruptHandler = (signal) => {
 process.on('SIGINT', disruptHandler);
 process.on('SIGHUP', disruptHandler);
 
-/*
- * Init Weather Data Handler
- */
+//Init Weather Data Object
+const weatherTools = new weatherManager(config.open_weather_map, logger);
 
-const weatherTools = new weatherManager(logger, config.open_weather_map);
-
-/*
- * Convert weather data into a twitter status
- */
-
-//Get periodic update message
-//  @param {Object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
-//  @returns {String} A weather update message to be posted to twitter.
-function getStatusMessage(parsedWeatherData){
-    try{
-        let forecast = weatherTools.getForecast(parsedWeatherData);
-        logger.info('Created forecast');
-        let message = forecast;
-        
-        if(message.length > 280){
-            throw new Error(`Message too long: ${message}`);
-        }
-        
-        return message;
-    }catch(e){
-        if(/^Cannot read property '.+' of undefined$/.test(e.message)){
-            logger.error(new Error(`Weather data Object in unexpected format: ${e.message}`));
-        } else {
-            let keyPathCheck = /^Member (.+) of object is undefined|NaN|null$/.exec(e.message);
-            
-            if(keyPathCheck && keyPathCheck.length > 1){
-                logger.error(new Error(`Failed to read ${keyPathCheck[1]} from openWeatherMap object. `));
-            } else {
-                logger.error(e);
-            }
-        }
-    }
-}
+//Init Twitter Data Object
+const tweetWeather = new twitterManager(config.twitter, logger, weatherTools);
 
 /*
  *  Schedule forecasts to go out every 2 hours.
@@ -209,7 +176,7 @@ var lastUpdate = new Date();
 const onWeatherLoaded = (parsedWeatherData) => {
     lastUpdate = new Date();
     
-    console.log(getStatusMessage(parsedWeatherData));//testData));
+    console.log(tweetWeather.getStatusMessage(parsedWeatherData));//testData));
 }
 
 //var updates = schedule.scheduleJob('0 */2 * * *', function(){
