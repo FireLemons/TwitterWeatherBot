@@ -176,7 +176,7 @@ var lastUpdate = new Date();
 const onWeatherLoaded = (parsedWeatherData) => {
     lastUpdate = new Date();
     
-    console.log(tweetWeather.getStatusMessage(parsedWeatherData));//testData));
+    tweetWeather.sendTweet(tweetWeather.getStatusMessage(parsedWeatherData));
 }
 
 //var updates = schedule.scheduleJob('0 */2 * * *', function(){

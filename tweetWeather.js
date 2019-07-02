@@ -2,8 +2,14 @@ const twitter = require('twitter');
 
 module.exports = class TweetWeather{
     constructor(config, logger, weatherTools){
-        this.weatherTools = weatherTools;
         this.logger = logger;
+        this.weatherTools = weatherTools;
+        this.twitterClient = new twitter({
+            consumer_key: config.consumer_key,
+            consumer_secret: config.consumer_secret,
+            access_token_key: config.access_token_key,
+            access_token_secret: config.access_token_secret
+        });
     }
     
     //Get periodic update message
@@ -33,5 +39,19 @@ module.exports = class TweetWeather{
                 }
             }
         }
+    }
+    
+    //Tweet the weather
+    sendTweet(message){
+        const tweetWeatherObject = this;
+        
+        this.twitterClient.post('statuses/update', {status: message},  function(error, tweet, response) {
+            if(error){
+                tweetWeatherObject.logger.error(error);
+            }
+            
+            tweetWeatherObject.logger.info('Sent tweet.');
+            tweetWeatherObject.logger.info(`Recieved ${response}`);
+        });
     }
 }
