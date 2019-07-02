@@ -5,7 +5,9 @@ const path = require('path');
 const schedule = require('node-schedule');
 //const stats = require('./stats.json');
 const twitter = require('twitter');
+const weatherManager = require('./weather.js');
 const winston = require('winston');
+const util = require('./util.js');
 
 const testData = require('./test/sampleData1.json');
 
@@ -147,7 +149,7 @@ const logger = winston.createLogger({
 //Logs errors for some process disruptions
 //  @param {String} The name of the signal that triggered the disruption
 var disruptHandler = (signal) => {
-    logger.error(new Error("Weather bot process killed unexpectedly by " + signal));
+    logger.error(new Error('Weather bot process killed unexpectedly by ' + signal));
     process.exit(1);
 }
 
@@ -155,8 +157,10 @@ process.on('SIGINT', disruptHandler);
 process.on('SIGHUP', disruptHandler);
 
 /*
- * Get Weather Data
+ * Init Weather Data Handler
  */
+
+const weatherTools = new weatherManager(logger, config.open_weather_map);
 
 //Prepare weather get request URL from config 
 var {open_weather_map: {location}} = config,
@@ -164,7 +168,7 @@ var {open_weather_map: {location}} = config,
 
 for(var paramName in location){
     if (location.hasOwnProperty(paramName)) {
-        locationParams += paramName + "=" + location[paramName];
+        locationParams += paramName + '=' + location[paramName];
     }
 }
 
@@ -232,17 +236,13 @@ function loadWeather(onDataLoaded, onFailure){
  * Convert weather data into a twitter status
  */
 
-//Shortened descriptions and symbols for weather condition codes
-//See https://openweathermap.org/weather-conditions for full code information
-const weatherStatusCodeMap = require('./statusCodeMap.json');
-
 //Get periodic update message
 //  @param {Object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
 //  @returns {String} A weather update message to be posted to twitter.
 function getStatusMessage(parsedWeatherData){
     try{
-        let forecast = getForecast(parsedWeatherData);
-        logger.info("Created forecast");
+        let forecast = weatherTools.getForecast(parsedWeatherData);
+        logger.info('Created forecast');
         let message = forecast;
         
         if(message.length > 280){
@@ -265,90 +265,6 @@ function getStatusMessage(parsedWeatherData){
     }
 }
 
-//Gets the default forecast message. 
-//  @param {Object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
-//  @returns {String} A message describing the condition, temperature, and wind for the next 9 hours. Max 142 characters.
-function getForecast(parsedWeatherData){
-
-    const forecastData = parsedWeatherData.list.slice(0, 3);
-    var defaultForecast = (Math.random() > 0.000228310502) ? 'Forecast' : 'Fourcast';
-    
-    for(let {dt_txt, main, weather, wind: {deg, speed}} of forecastData){
-        let conditions = {
-            symbol: weatherStatusCodeMap[weather[0].id].symbol,
-            temp: {
-                max: Math.round(main.temp_max),            
-                min: Math.round(main.temp_min)
-            },
-            time: getCST(dt_txt.substr(11, 2)),
-            wind: {
-                direction: getWindDirectionAsCardinal(deg),
-                speed: speed.toPrecision(2)
-            }
-        };
-        
-        validateNotNull(conditions);
-        
-        defaultForecast += '\n';
-        defaultForecast += `${conditions.time}:00:${conditions.symbol}, [${conditions.temp.min},${conditions.temp.max}]°C, 💨 ${conditions.wind.speed} m/s ${conditions.wind.direction}`;
-    }
-    
-    defaultForecast += '\n\n';
-    
-    return defaultForecast;
-}
-
-//Validates that each member of an object isn't null
-//  @param {Object} object The javascript object to be validated
-//  @param {String} path The key path up to object. Used for recursive calls. Initially ''
-//  @throws {Error} An error on discovering a member of an object has value NaN null or undefined.
-function validateNotNull(object, path){
-    for(let key in object){
-        const value = object[key];
-        
-        if(typeof value === 'object'){
-            let newPath = (`${path}.${key}`[0] === '.') ? key : `${path}.${key}`;
-            validateNotNull(value, newPath);
-        } else if(value === undefined || value === null || value === NaN){
-            throw new Error(`Member ${path}.${key} of object is ${value}`);
-        }
-    }
-}
-
-//Converts an angle into cardinal direction
-//  @param {Number} azimuth A number representing an angle in the range [0, 360)
-//  @return {String} A character representing a cardinal direction or 2 character representing an intercardinal direction
-function getWindDirectionAsCardinal(azimuth){
-    switch(Math.round(azimuth / 45)){
-        case 0:
-            return '⬇️';
-        case 1:
-            return '↙️';
-        case 2:
-            return '⬅️';
-        case 3:
-            return '↖️';
-        case 4:
-            return '⬆️';
-        case 5:
-            return '↗️';
-        case 6:
-            return '➡️';
-        case 7:
-            return '↘️';
-    }
-}
-
-//Converts UTC hours into CST hours
-//  @param {String} UTC A 2 digit number representing hours at UTC time
-//  @return {String} A 2 digit number representing the input UTC hours converted to central time
-function getCST(UTC){
-    let offsetHour = parseInt(UTC) - 6;
-    let CST = offsetHour >= 0 ? offsetHour : offsetHour + 24;
-    
-    return ('0' + CST).substr(-2);
-}
-
 /*
  *  Schedule forecasts to go out every 2 hours.
  */
@@ -362,9 +278,9 @@ const onWeatherLoaded = (parsedWeatherData) => {
     console.log(getStatusMessage(parsedWeatherData));//testData));
 }
 
-var updates = schedule.scheduleJob('0 */2 * * *', function(){
+//var updates = schedule.scheduleJob('0 */2 * * *', function(){
     //Detect if computer fell asleep
-    if(new Date() - lastUpdate > 7620000){//7620000ms = 2 hours 7 minutes
+    /*if(new Date() - lastUpdate > 7620000){//7620000ms = 2 hours 7 minutes
         lastUpdate.setHours(lastUpdate.getHours() + 2);
         logger.warn(new Error('Missed scheduled twitter update. Presumably by waking from sleep.'));
     } else {
@@ -400,6 +316,8 @@ var updates = schedule.scheduleJob('0 */2 * * *', function(){
         
         loadWeather(onWeatherLoaded, onFailLoadWeather);
     }
-});
+});*/
 
 logger.info('Bot process started.');
+
+console.log(getStatusMessage(testData));
