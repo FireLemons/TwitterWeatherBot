@@ -1,5 +1,4 @@
 const config = require('./config.json');
-const https = require('https');
 const fs = require( 'fs' );
 const path = require('path');
 const schedule = require('node-schedule');
@@ -167,76 +166,6 @@ process.on('SIGHUP', disruptHandler);
 
 const weatherTools = new weatherManager(logger, config.open_weather_map);
 
-//Prepare weather get request URL from config 
-var {open_weather_map: {location}} = config,
-    locationParams = '';
-
-for(var paramName in location){
-    if (location.hasOwnProperty(paramName)) {
-        locationParams += paramName + '=' + location[paramName];
-    }
-}
-
-const weatherRequestURL = `https://api.openweathermap.org/data/2.5/forecast?${locationParams}&units=metric&APPID=${config.open_weather_map.key}`;
-
-//Sends the get request for weather data.
-//  @param {Function} onDataLoaded(parsedWeatherData): The callback to run on the weather data after it has been loaded and parsed as an Object
-//      @param {Object} parsedWeatherData: The weather data. See https://openweathermap.org/forecast5#parameter for details about the structure of the Object.
-//  @param {Function} onFailure(errors) The callback to run if there is a problem with loading the data
-//      @param {Error[]} errors The error(s) causing the failure
-function loadWeather(onDataLoaded, onFailure){
-    logger.info('Attempt fetch weather data');
-    
-    https.get(weatherRequestURL, (res) => {
-        const { statusCode } = res;
-        const contentType = res.headers['content-type'];
-        
-        let error;
-        
-        if(statusCode !== 200){
-            error = new Error(`Request Failed. Status Code: ${statusCode}`);
-        } else if (!/^application\/json/.test(contentType)) {
-            error = new Error(`Invalid content-type. Expected application/json but received ${contentType}`);
-        }
-        
-        if (error) {
-            onFailure([
-                error
-            ]);
-            
-            res.resume();
-            return;
-        }
-
-        res.setEncoding('utf8');
-        
-        let rawData = '';
-        
-        res.on('data', (chunk) => {
-            rawData += chunk;
-        });
-        
-        res.on('end', () => {
-            try {
-                const parsedWeatherData = JSON.parse(rawData);
-                
-                if(typeof onDataLoaded === 'function'){
-                    onDataLoaded(parsedWeatherData);
-                }else{
-                    onFailure([
-                        new Error('Weather data loaded callback parameter "onDataLoaded" not a function.'),
-                        new Error('Type of "onDataLoaded" is ' + typeof onDataLoaded)
-                    ]);
-                }
-            } catch(e) {
-                onFailure([e]);
-            }
-        });
-    }).on('error', (e) => {
-        onFailure([e]);
-    });
-}
-
 /*
  * Convert weather data into a twitter status
  */
@@ -285,13 +214,13 @@ const onWeatherLoaded = (parsedWeatherData) => {
 
 //var updates = schedule.scheduleJob('0 */2 * * *', function(){
     //Detect if computer fell asleep
-    /*if(new Date() - lastUpdate > 7620000){//7620000ms = 2 hours 7 minutes
+    if(new Date() - lastUpdate > 7620000){//7620000ms = 2 hours 7 minutes
         lastUpdate.setHours(lastUpdate.getHours() + 2);
         logger.warn(new Error('Missed scheduled twitter update. Presumably by waking from sleep.'));
     } else {
         let retryTimeout = 0;
         
-        //Logs errors and retries the request up to three times
+        //Retries the request up to three times
         //  @param {Error[]} A list of errors describing why the failure occurred
         const onFailLoadWeather = (errors) => {
             logger.error(new Error('Failed to load weather data.'));
@@ -305,7 +234,7 @@ const onWeatherLoaded = (parsedWeatherData) => {
                     logger.info(`Retrying fetching weather data in ${retryTimeout}ms. Retry ${(retryTimeout / 131072) + 1} of 3`);
                     
                     setTimeout(() => {
-                        loadWeather(onWeatherLoaded, onFailLoadWeather);
+                        weatherTools.loadWeather(onWeatherLoaded, onFailLoadWeather);
                     }, retryTimeout);
                     
                     retryTimeout += 131072;
@@ -319,10 +248,8 @@ const onWeatherLoaded = (parsedWeatherData) => {
             }
         }
         
-        loadWeather(onWeatherLoaded, onFailLoadWeather);
+        weatherTools.loadWeather(onWeatherLoaded, onFailLoadWeather);
     }
-});*/
+//});
 
 logger.info('Bot process started.');
-
-console.log(getStatusMessage(testData));

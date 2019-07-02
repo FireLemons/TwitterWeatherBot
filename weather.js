@@ -1,3 +1,4 @@
+const https = require('https');
 const util = require('./util.js');
 
 //Shortened descriptions and symbols for weather condition codes
@@ -16,6 +17,7 @@ module.exports = class Weather{
             }
         }
 
+        this.logger = logger;
         this.weatherRequestURL = `https://api.openweathermap.org/data/2.5/forecast?${locationParams}&units=metric&APPID=${config.key}`;
     }
     
@@ -74,5 +76,63 @@ module.exports = class Weather{
         defaultForecast += '\n\n';
         
         return defaultForecast;
+    }
+    
+    //Sends the get request for weather data.
+    //  @param {Function} onDataLoaded(parsedWeatherData): The callback to run on the weather data after it has been loaded and parsed as an Object
+    //      @param {Object} parsedWeatherData: The weather data. See https://openweathermap.org/forecast5#parameter for details about the structure of the Object.
+    //  @param {Function} onFailure(errors) The callback to run if there is a problem with loading the data
+    //      @param {Error[]} errors The error(s) causing the failure
+    loadWeather(onDataLoaded, onFailure){
+        this.logger.info('Attempt fetch weather data');
+        
+        https.get(this.weatherRequestURL, (res) => {
+            const { statusCode } = res;
+            const contentType = res.headers['content-type'];
+            
+            let error;
+            
+            if(statusCode !== 200){
+                error = new Error(`Request Failed. Status Code: ${statusCode}`);
+            } else if (!/^application\/json/.test(contentType)) {
+                error = new Error(`Invalid content-type. Expected application/json but received ${contentType}`);
+            }
+            
+            if (error) {
+                onFailure([
+                    error
+                ]);
+                
+                res.resume();
+                return;
+            }
+
+            res.setEncoding('utf8');
+            
+            let rawData = '';
+            
+            res.on('data', (chunk) => {
+                rawData += chunk;
+            });
+            
+            res.on('end', () => {
+                try {
+                    const parsedWeatherData = JSON.parse(rawData);
+                    
+                    if(typeof onDataLoaded === 'function'){
+                        onDataLoaded(parsedWeatherData);
+                    }else{
+                        onFailure([
+                            new Error('Weather data loaded callback parameter "onDataLoaded" not a function.'),
+                            new Error('Type of "onDataLoaded" is ' + typeof onDataLoaded)
+                        ]);
+                    }
+                } catch(e) {
+                    onFailure([e]);
+                }
+            });
+        }).on('error', (e) => {
+            onFailure([e]);
+        });
     }
 }
