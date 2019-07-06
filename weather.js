@@ -50,7 +50,7 @@ module.exports = class Weather{
             beaufort['fact'] = 'Large branches in motion; umbrellas used with difficulty.';
         } else if(windSpeed < 17.2) {
             beaufort['description'] = 'near gale';
-            beaufort['fact'] = 'Whole trees in motion; walking against the wind is inconvenient.';
+            beaufort['fact'] = 'Whole trees in motion; resistance felt walking against the wind.';
         } else if(windSpeed < 20.8) {
             beaufort['description'] = 'gale';
             beaufort['fact'] = 'Twigs break off trees; generally impedes progress.';
