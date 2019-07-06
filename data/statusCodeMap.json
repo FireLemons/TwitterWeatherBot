@@ -29,15 +29,15 @@
     },
     "230": {
         "desc": "Drizzling thunderstorm",
-        "symbol": "🌩️+⛈️"
+        "symbol": "🌩️+🌦️"
     },
     "231": {
         "desc": "Drizzling thunderstorm",
-        "symbol": "🌩️+⛈️"
+        "symbol": "🌩️+🌦️"
     },
     "232": {
         "desc": "Heavy drizzle thunderstorm",
-        "symbol": "🌩️+⛈️"
+        "symbol": "🌩️+🌦️"
     },
     "300": {
         "desc": "Drizzle",
@@ -65,15 +65,15 @@
     },
     "313": {
         "desc": "Rain showers and drizzle",
-        "symbol": "🌦️+🌧️"
+        "symbol": "🚿+🌧️"
     },
     "314": {
         "desc": "Heavy rain showers and drizzle",
-        "symbol": "🌦️+🌧️"
+        "symbol": "🚿+🌧️"
     },
     "321": {
         "desc": "Drizzle showers",
-        "symbol": "🌦️+🌧️"
+        "symbol": "🚿+🌧️"
     },
     "500": {
         "desc": "Rain",

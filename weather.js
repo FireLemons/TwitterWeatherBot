@@ -3,7 +3,7 @@ const util = require('./util.js');
 
 //Shortened descriptions and symbols for weather condition codes
 //See https://openweathermap.org/weather-conditions for full code information
-const weatherStatusCodeMap = require('./statusCodeMap.json');
+const weatherStatusCodeMap = require('./data/statusCodeMap.json');
 
 module.exports = class Weather{
     constructor(config, logger){
@@ -21,31 +21,84 @@ module.exports = class Weather{
         this.weatherRequestURL = `https://api.openweathermap.org/data/2.5/forecast?${locationParams}&units=metric&APPID=${config.key}`;
     }
     
-    //Converts an angle into cardinal direction
-    //  @param {Number} azimuth A number representing an angle in the range [0, 360)
-    //  @return {String} A character representing a cardinal direction or 2 character representing an intercardinal direction
-    getWindDirectionAsCardinal(azimuth){
-        switch(Math.round(azimuth / 45)){
-            case 0:
-                return '⬇️';
-            case 1:
-                return '↙️';
-            case 2:
-                return '⬅️';
-            case 3:
-                return '↖️';
-            case 4:
-                return '⬆️';
-            case 5:
-                return '↗️';
-            case 6:
-                return '➡️';
-            case 7:
-                return '↘️';
+    //Gets a statement about the current wind speed using the beaufort scale
+    //  @param {Number} windSpeed The windSpeed in m/s
+    //  @returns {String} A statement about how the current wind speed scores on the beaufort scale
+    getBeaufort(windSpeed){
+        let beaufort = {};
+        
+        if(windSpeed < .5){
+            beaufort['description'] = 'calm';
+            beaufort['fact'] = 'Smoke rises vertically.';
+        } else if(windSpeed < 1.6) {
+            beaufort['description'] = 'light air';
+            beaufort['fact'] = 'Direction shown by smoke drift but not by wind vanes.';
+        } else if(windSpeed < 3.4) {
+            beaufort['description'] = 'light breeze';
+            beaufort['fact'] = 'Wind felt on face; leaves rustle; wind vane moved by wind.';
+        } else if(windSpeed < 5.6) {
+            beaufort['description'] = 'gentle breeze';
+            beaufort['fact'] = 'Leaves and small twigs in motion; light flags extended.';
+        } else if(windSpeed < 8) {
+            beaufort['description'] = 'moderate breeze';
+            beaufort['fact'] = 'Raises dust and loose paper; small branches moved.';
+        } else if(windSpeed < 10.8) {
+            beaufort['description'] = 'fresh breeze';
+            beaufort['fact'] = 'Small trees sway; crested wavelets form on inland waters.';
+        } else if(windSpeed < 13.9) {
+            beaufort['description'] = 'strong breeze';
+            beaufort['fact'] = 'Large branches in motion; umbrellas used with difficulty.';
+        } else if(windSpeed < 17.2) {
+            beaufort['description'] = 'near gale';
+            beaufort['fact'] = 'Whole trees in motion; walking against the wind is inconvenient.';
+        } else if(windSpeed < 20.8) {
+            beaufort['description'] = 'gale';
+            beaufort['fact'] = 'Twigs break off trees; generally impedes progress.';
+        } else if(windSpeed < 24.5) {
+            beaufort['description'] = 'strong gale';
+            beaufort['fact'] = 'Slight structural damage (chimney pots and slates removed).';
+        } else if(windSpeed < 28.5) {
+            beaufort['description'] = 'storm';
+            beaufort['fact'] = 'trees uprooted; considerable structural damage.';
+        } else if(windSpeed < 32.7) {
+            beaufort['description'] = 'violent storm';
+            beaufort['fact'] = 'Very rarely experienced; accompanied by widespread damage.';
+        } else {
+            beaufort['description'] = 'hurricane force';
+            beaufort['fact'] = 'Devastation.';
+        }
+        
+        return `${windSpeed}m/s wind is a "${beaufort.description}" on the beaufort scale. Wind effects include:${beaufort.fact}`;
+    }
+    
+    //Gets a random extra message to append to each update.
+    //  @param {Object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
+    //  @returns {String} A random extra message to append to each update
+    getExtra(parsedWeatherData){
+        let messageRoll = Math.random();
+        
+        if(messageRoll < .05){//joke
+            let jokes = require('./data/jokes.json');
+            
+            return util.pickRandom(jokes);
+        } else if (messageRoll < .1) {//tutorials
+        } else if (messageRoll < .4) {//celestial event
+            //equinox, solstice, moon phase & high tide
+        } else if (messageRoll < .7) {//trivia
+            //beaufort scale
+            return getBeaufort(parsedWeatherData.list[0].wind.speed.toPrecision(2));
+        } else {//random extra stat
+            const forecastData = parsedWeatherData.list.slice(0, 3);
+            
+            
+            
+            for(data of forecastData){
+                
+            }
         }
     }
     
-    //Gets the default forecast message. 
+    //Gets the default forecast message.
     //  @param {Object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
     //  @returns {String} A message describing the condition, temperature, and wind for the next 9 hours. Max 142 characters.
     getForecast(parsedWeatherData){
@@ -76,6 +129,30 @@ module.exports = class Weather{
         defaultForecast += '\n\n';
         
         return defaultForecast;
+    }
+    
+    //Converts an angle into cardinal direction
+    //  @param {Number} azimuth A number representing an angle in the range [0, 360)
+    //  @return {String} A character representing a cardinal direction or 2 character representing an intercardinal direction
+    getWindDirectionAsCardinal(azimuth){
+        switch(Math.round(azimuth / 45)){
+            case 0:
+                return '⬇️';
+            case 1:
+                return '↙️';
+            case 2:
+                return '⬅️';
+            case 3:
+                return '↖️';
+            case 4:
+                return '⬆️';
+            case 5:
+                return '↗️';
+            case 6:
+                return '➡️';
+            case 7:
+                return '↘️';
+        }
     }
     
     //Sends the get request for weather data.

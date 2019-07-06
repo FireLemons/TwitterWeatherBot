@@ -10,6 +10,17 @@ module.exports = {
         return ('0' + CST).substr(-2);
     },
     
+    //Picks a random element out of an array
+    //  @param {Array} arr An array to pick random elements from
+    //  @return {Object} The element from arr chosen at random
+    pickRandom(arr){
+        if(arr.length === 0){
+            throw new Error('Cannot pick random member of empty array');
+        }
+        
+        return arr[Math.floor(Math.random() * arr.length)];
+    },
+    
     //Validates that each member of an object isn't null
     //  @param {Object} object The javascript object to be validated
     //  @param {String} path The key path up to object. Used for recursive calls. Initially ''
