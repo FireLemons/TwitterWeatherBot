@@ -90,11 +90,59 @@ module.exports = class Weather{
         } else {//random extra stat
             const forecastData = parsedWeatherData.list.slice(0, 3);
             
+            let stat = util.pickRandom(['precipitation', 'precipitation', 'precipitation', 'pressure', 'humidity', 'cloudiness']);
+            return getExtraStat(stat);
+        }
+    }
+    
+    //Gets an extended forecast for 3 extra stats not usually presesnt in the main forecast
+    //  @param  {String} stat The name of the extra stat to feature.
+    //  @param {Object} forecastData The object containing the weather data
+    //  @returns {String} A forecast message displaying the given stat
+    getExtraStat(stat, forecastData){
+        if(stat === 'precipitation'){
+            let precipitationStats = forecastData.map((elem) => {
+                return {
+                    time: util.getCST(elem.dt_txt.substr(11, 2)),
+                    rain: (typeof elem.rain === 'object') ? elem.rain['3h'] : undefined,
+                    snow: (typeof elem.snow === 'object') ? elem.snow['3h'] : undefined
+                }
+            });
             
+            console.log(precipitationStats);
+            console.log(precipitationStats.reduce((acc, elem) => acc || elem.rain || elem.snow, 0));
             
-            for(data of forecastData){
+            if(precipitationStats.reduce((acc, elem) => acc || elem.rain || elem.snow, 0)){
+                let precipitation = 'Expected Precipitation:\n';
                 
+                for(let i = 0; i < 3; i++){
+                    let pStat = precipitationStats[i],
+                        rain = pStat.rain,
+                        snow = pStat.snow;
+                    
+                    if(rain || snow){
+                        precipitation += `${pStat.time}:00:`;
+                        precipitation += (rain) ? `${rain} mm rain` : '';
+                        precipitation += (snow) ? `, ${snow} mm snow.` : '.';
+                        precipitation += '\n';
+                    }
+                }
+                
+                return precipitation;
+            } else {
+                stat = util.pickRandom(['pressure', 'humidity', 'cloudiness']);
             }
+        }
+        
+        switch(stat){
+            case 'pressure':
+                break;
+            case 'humidity':
+                break;
+            case 'cloudiness':
+                break;
+            default:
+                throw new Error(`Could not get extra stat "${stat}"`);
         }
     }
     
