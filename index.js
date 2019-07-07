@@ -82,7 +82,7 @@ class TrackedError{
 }
 
 //Formats log entries with timestamps and sometimes line numbers
-//  @param {Object} logEntry The log entry to be formatted
+//  @param {object} logEntry The log entry to be formatted
 const logEntryFormatter = (logEntry) => {
     const timestamp = {
         time: getCurrentTimeFormatted()
@@ -111,7 +111,7 @@ const logger = winston.createLogger({
         })
     ],
     //Starts a delayed process shutdown so the logger has time to write exceptions to files.
-    //  @param {Object} err An error describing the reason for shutting down
+    //  @param {object} err An error describing the reason for shutting down
     exitOnError: function(err){
         function* exitNotifier(){
             yield `Process encountered a fatal error.${(err.code) ? ' Code: ' + err.code : ''} Exiting in...`;
@@ -151,7 +151,7 @@ const logger = winston.createLogger({
 });
 
 //Logs errors for some process disruptions
-//  @param {String} The name of the signal that triggered the disruption
+//  @param {string} The name of the signal that triggered the disruption
 var disruptHandler = (signal) => {
     logger.error(new Error('Weather bot process killed unexpectedly by ' + signal));
     process.exit(1);
@@ -172,7 +172,7 @@ const tweetWeather = new twitterManager(config.twitter, logger, weatherTools);
 var lastUpdate = new Date();
 
 //Turns weather data into a twitter status and tweets it
-//  @param {Object} parsedWeatherData The weather data.
+//  @param {object} parsedWeatherData The weather data.
 const onWeatherLoaded = (parsedWeatherData) => {
     lastUpdate = new Date();
     
@@ -209,6 +209,8 @@ const onWeatherLoaded = (parsedWeatherData) => {
                     for(let error of errors){
                         logger.error(error);
                     }
+                    
+                    //send Error joke
                 }
             } else {
                 logger.error(new Error(`Expected param 'errors' to be array of Error objects. Got ${typeof errors} instead.`));

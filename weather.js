@@ -22,8 +22,8 @@ module.exports = class Weather{
     }
     
     //Gets a statement about the current wind speed using the beaufort scale
-    //  @param {Number} windSpeed The windSpeed in m/s
-    //  @returns {String} A statement about how the current wind speed scores on the beaufort scale
+    //  @param {number} windSpeed The windSpeed in m/s
+    //  @returns {string} A statement about how the current wind speed scores on the beaufort scale
     getBeaufort(windSpeed){
         let beaufort = {};
         
@@ -72,16 +72,17 @@ module.exports = class Weather{
     }
     
     //Gets a random extra message to append to each update.
-    //  @param {Object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
-    //  @returns {String} A random extra message to append to each update
+    //  @param {object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
+    //  @returns {string} A random extra message to append to each update
     getExtra(parsedWeatherData){
         let messageRoll = Math.random();
         
-        if(messageRoll < .05){//joke
+        if(messageRoll < .01){//joke
             let jokes = require('./data/jokes.json');
             
             return util.pickRandom(jokes);
         } else if (messageRoll < .1) {//tutorials
+            
         } else if (messageRoll < .4) {//celestial event
             //equinox, solstice, moon phase & high tide
         } else if (messageRoll < .7) {//trivia
@@ -96,9 +97,9 @@ module.exports = class Weather{
     }
     
     //Gets an extended forecast for 3 extra stats not usually presesnt in the main forecast
-    //  @param  {String} stat The name of the extra stat to feature.
-    //  @param {Array} forecastData An array of 3 objects containing weather data
-    //  @returns {String} A forecast message displaying the given stat
+    //  @param  {string} stat The name of the extra stat to feature.
+    //  @param {object} forecastData An array of 3 objects containing weather data
+    //  @returns {string} A forecast message displaying the given stat
     getExtraStat(stat, forecastData){
         if(stat === 'precipitation'){
             let precipitationStats = forecastData.map((elem) => {
@@ -109,7 +110,7 @@ module.exports = class Weather{
                 }
             });
             
-            if(precipitationStats.reduce((acc, elem) => acc || elem.rain || elem.snow, 0)){
+            if(precipitationStats.reduce((acc, elem) => acc || elem.rain || elem.snow, 0)){//check if any precipitation is present
                 let precipitation = 'Expected Precipitation:\n';
                 
                 for(let i = 0; i < 3; i++){
@@ -162,8 +163,8 @@ module.exports = class Weather{
     }
     
     //Gets the default forecast message.
-    //  @param {Object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
-    //  @returns {String} A message describing the condition, temperature, and wind for the next 9 hours. Max 142 characters.
+    //  @param {object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
+    //  @returns {string} A message describing the condition, temperature, and wind for the next 9 hours. Max 142 characters.
     getForecast(parsedWeatherData){
 
         const forecastData = parsedWeatherData.list.slice(0, 3);
@@ -195,8 +196,8 @@ module.exports = class Weather{
     }
     
     //Converts an angle into cardinal direction
-    //  @param {Number} azimuth A number representing an angle in the range [0, 360)
-    //  @return {String} A character representing a cardinal direction or 2 character representing an intercardinal direction
+    //  @param {number} azimuth A number representing an angle in the range [0, 360)
+    //  @return {string} A character representing a cardinal direction or 2 character representing an intercardinal direction
     getWindDirectionAsCardinal(azimuth){
         switch(Math.round(azimuth / 45)){
             case 0:
@@ -218,10 +219,17 @@ module.exports = class Weather{
         }
     }
     
+    //Generates a random message explaining some of the messages the bot displays.
+    //  @param {number=} id The id of the specified tutorial.
+    //  @return {string} If an id is given, the tutorial message with the given id otherwise a random explanation message.
+    getTutorial(id){
+        
+    }
+    
     //Sends the get request for weather data.
-    //  @param {Function} onDataLoaded(parsedWeatherData): The callback to run on the weather data after it has been loaded and parsed as an Object
-    //      @param {Object} parsedWeatherData: The weather data. See https://openweathermap.org/forecast5#parameter for details about the structure of the Object.
-    //  @param {Function} onFailure(errors) The callback to run if there is a problem with loading the data
+    //  @param {function} onDataLoaded(parsedWeatherData): The callback to run on the weather data after it has been loaded and parsed as an Object
+    //      @param {object} parsedWeatherData: The weather data. See https://openweathermap.org/forecast5#parameter for details about the structure of the Object.
+    //  @param {function} onFailure(errors) The callback to run if there is a problem with loading the data
     //      @param {Error[]} errors The error(s) causing the failure
     loadWeather(onDataLoaded, onFailure){
         this.logger.info('Attempt fetch weather data');

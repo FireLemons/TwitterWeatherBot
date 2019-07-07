@@ -13,8 +13,8 @@ module.exports = class TweetWeather{
     }
     
     //Get periodic update message
-    //  @param {Object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
-    //  @returns {String} A weather update message to be posted to twitter.
+    //  @param {object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
+    //  @returns {string} A weather update message to be posted to twitter.
     getStatusMessage(parsedWeatherData){
         try{
             let forecast = this.weatherTools.getForecast(parsedWeatherData);
@@ -41,7 +41,8 @@ module.exports = class TweetWeather{
         }
     }
     
-    //Tweet the weather
+    //Tweets weather messages
+    //  @param {string} message The message to be sent(max length 280).
     sendTweet(message){
         const tweetWeatherObject = this;
         

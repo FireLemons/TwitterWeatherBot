@@ -1,8 +1,8 @@
 /** @fileoverview A collection of utility functions. */
 module.exports = {
     //Converts UTC hours into CST hours
-    //  @param {String} UTC A 2 digit number representing hours at UTC time
-    //  @return {String} A 2 digit number representing the input UTC hours converted to central time
+    //  @param {string} UTC A 2 digit number representing hours at UTC time
+    //  @return {string} A 2 digit number representing the input UTC hours converted to central time
     getCST: function(UTC){
         let offsetHour = parseInt(UTC) - 6;
         let CST = offsetHour >= 0 ? offsetHour : offsetHour + 24;
@@ -11,8 +11,8 @@ module.exports = {
     },
     
     //Picks a random element out of an array
-    //  @param {Array} arr An array to pick random elements from
-    //  @return {Object} The element from arr chosen at random
+    //  @param {array} arr An array to pick random elements from
+    //  @return {object} The element from arr chosen at random
     pickRandom(arr){
         if(arr.length === 0){
             throw new Error('Cannot pick random member of empty array');
@@ -22,8 +22,8 @@ module.exports = {
     },
     
     //Validates that each member of an object isn't null
-    //  @param {Object} object The javascript object to be validated
-    //  @param {String} path The key path up to object. Used for recursive calls. Initially ''
+    //  @param {object} object The javascript object to be validated
+    //  @param {string} path The key path up to object. Used for recursive calls. Initially ''
     //  @throws {Error} An error on discovering a member of an object has value NaN null or undefined.
     validateNotNull: function(object, path){
         for(let key in object){
