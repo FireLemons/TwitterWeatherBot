@@ -97,7 +97,7 @@ module.exports = class Weather{
     
     //Gets an extended forecast for 3 extra stats not usually presesnt in the main forecast
     //  @param  {String} stat The name of the extra stat to feature.
-    //  @param {Object} forecastData The object containing the weather data
+    //  @param {Array} forecastData An array of 3 objects containing weather data
     //  @returns {String} A forecast message displaying the given stat
     getExtraStat(stat, forecastData){
         if(stat === 'precipitation'){
@@ -108,9 +108,6 @@ module.exports = class Weather{
                     snow: (typeof elem.snow === 'object') ? elem.snow['3h'] : undefined
                 }
             });
-            
-            console.log(precipitationStats);
-            console.log(precipitationStats.reduce((acc, elem) => acc || elem.rain || elem.snow, 0));
             
             if(precipitationStats.reduce((acc, elem) => acc || elem.rain || elem.snow, 0)){
                 let precipitation = 'Expected Precipitation:\n';
@@ -128,7 +125,7 @@ module.exports = class Weather{
                     }
                 }
                 
-                return precipitation;
+                return precipitation.substr(0, precipitation.length - 1);
             } else {
                 stat = util.pickRandom(['pressure', 'humidity', 'cloudiness']);
             }
@@ -136,11 +133,29 @@ module.exports = class Weather{
         
         switch(stat){
             case 'pressure':
-                break;
+                let pressure = 'Expected Pressure:\n';
+            
+                forecastData.forEach((elem) => {
+                    pressure += `${util.getCST(elem.dt_txt.substr(11, 2))}:00: ${elem.main.grnd_level}hPa\n`;
+                });
+                
+                return pressure.substr(0, pressure.length - 1);
             case 'humidity':
-                break;
+                let humidity = 'Expected Humidity:\n';
+            
+                forecastData.forEach((elem) => {
+                    humidity += `${util.getCST(elem.dt_txt.substr(11, 2))}:00: ${elem.main.humidity}%\n`;
+                });
+                
+                return humidity.substr(0, humidity.length - 1);
             case 'cloudiness':
-                break;
+                let cloudiness = 'Expected Cloud Coverage:\n';
+            
+                forecastData.forEach((elem) => {
+                    cloudiness += `${util.getCST(elem.dt_txt.substr(11, 2))}:00: ${elem.clouds.all}%\n`;
+                });
+                
+                return cloudiness.substr(0, cloudiness.length - 1);
             default:
                 throw new Error(`Could not get extra stat "${stat}"`);
         }
