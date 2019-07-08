@@ -15,6 +15,7 @@ Configure `config.json` with your location and api keys.
 __❗❗❗Make sure `config.json` is not tracked by git. If `git status` shows your config as `modified`, use `git update-index --assume-unchanged config.json` to untrack it. Having the file tracked may expose your API keys.__
 
 ## Included Node Packages
+[lune](https://www.npmjs.com/package/lune/v/0.4.0) calculates moon phases.  
 [Node Schedule](https://www.npmjs.com/package/node-schedule) like cron.  
 [Node Windows](https://www.npmjs.com/package/node-windows)  
 [Twitter for Node.js](https://www.npmjs.com/package/twitter)  
