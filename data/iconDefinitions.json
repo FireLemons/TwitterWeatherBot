@@ -1,0 +1,102 @@
+[
+    {
+        "icon": "☀️",
+        "conditions": "clear skies"
+    },
+    {
+        "icon": "🌥️",
+        "conditions": "a few clouds, scattered clouds"
+    },
+    {
+        "icon": "☁️",
+        "conditions": "broken clouds, overcast clouds"
+    },
+    {
+        "icon": "⛈️",
+        "conditions": "a rainy thunderstorm"
+    },
+    {
+        "icon": "🌩️",
+        "conditions": "a thunderstorm"
+    },
+    {
+        "icon": "🌩️+🌦️",
+        "conditions": "a thunderstorm with drizzle"
+    },
+    {
+        "icon": "🌦️",
+        "conditions": "drizzle"
+    },
+    {
+        "icon": "🚿+🌧️",
+        "conditions": "shower rain with drizzle, shower drizzle"
+    },
+    {
+        "icon": "🌧️",
+        "conditions": "rain"
+    },
+    {
+        "icon": "🌧➜❄️",
+        "conditions": "freezing rain"
+    },
+    {
+        "icon": "🚿",
+        "conditions": "shower rain"
+    },
+    {
+        "icon": "💨",
+        "conditions": "squalls"
+    },
+    {
+        "icon": "🌪️",
+        "conditions": "one or more tornados"
+    },
+    {
+        "icon": "🌨️",
+        "conditions": "snow"
+    },
+    {
+        "icon": "☄️",
+        "conditions": "sleet"
+    },
+    {
+        "icon": "🚿+☄️",
+        "conditions": "shower sleet"
+    },
+    {
+        "icon": "🌧️+🌨️",
+        "conditions": "rain and snow"
+    },
+    {
+        "icon": "🚿+🌨️",
+        "conditions": "shower snow"
+    },
+    {
+        "icon": "🌫️",
+        "conditions": "mist, fog"
+    },
+    {
+        "icon": "🔥➜🌫️",
+        "conditions": "smoke"
+    },
+    {
+        "icon": "🌫️Haze",
+        "conditions": "haze"
+    },
+    {
+        "icon": "🌪️Sand",
+        "conditions": "sand whirls, dust whirls"
+    },
+    {
+        "icon": "🌫️Sand",
+        "conditions": "sand"
+    },
+    {
+        "icon": "🌫️Dust",
+        "conditions": "dust"
+    },
+    {
+        "icon": "🌋➜🌨️",
+        "conditions": "volcanic ash"
+    }
+]

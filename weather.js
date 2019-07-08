@@ -1,4 +1,5 @@
 const https = require('https');
+const lune = require('lune');
 const util = require('./util.js');
 
 //Shortened descriptions and symbols for weather condition codes
@@ -223,7 +224,21 @@ module.exports = class Weather{
     //  @param {number=} id The id of the specified tutorial.
     //  @return {string} If an id is given, the tutorial message with the given id otherwise a random explanation message.
     getTutorial(id){
+        let iconDefinitions = require('./data/iconDefinitions.json');
         
+        if(!id){
+            id = Math.floor(Math.random() * (2 + iconDefinitions.length));
+        }
+        
+        switch(id){
+            case 0:
+                return 'The beaufort scale is a way of measuring wind speed based on observing things blown by the wind rather than using instruments.';
+            case 1:
+                return 'The pressure displayed is at ground level. Columbia is 758ft(231m) above sea level.';
+            default: //Icon Definitions
+                let iconDefinition = iconDefinitions[id - 2];
+                return `${iconDefinition.icon} indicates ${iconDefinition.conditions.replace(',', ' or')}`;
+        }
     }
     
     //Sends the get request for weather data.
