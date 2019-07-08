@@ -18,20 +18,21 @@ module.exports = {
     //    @param {object} elem2 The second element to be compared
     //    @return {number} A negative value if elem1 comes before elem2 otherwise a positive value
     //  @param {object} lastComparison Only used in recursive calls
-    //  @return {object} The most similar element in list to elem
-    getClosest(elem, list, compare, lastComparison = {"comparison": Infinity, "value": null}){
+    //  @param {number} offset Only used in recursive calls
+    //  @return {object} The index of the most similar element in list to elem
+    getClosestIndex(elem, list, compare, lastComparison = {"comparison": Infinity, "idx": null, "offset": 0}, offset = 0){
         if(!list.length){
             throw new Error('Cannot find closest element from empty list.');
         }
         
-        
         let midpoint = Math.floor(list.length / 2), currentComparison = {
             "comparison": compare(elem, list[midpoint]),
-            "value": list[midpoint]
+            "idx": midpoint,
+            "offset": offset
         }
         
         if(Math.abs(lastComparison.comparison) < Math.abs(currentComparison.comparison)){
-            return lastComparison.value;
+            return lastComparison.idx + lastComparison.offset;
         }
         
         let newList;
@@ -39,14 +40,15 @@ module.exports = {
         if(currentComparison.comparison < 0){
             newList = list.slice(0, midpoint);
         } else {
+            offset += midpoint + 1;
             newList = list.slice(midpoint + 1, list.length);
         }
         
         if(!newList.length){
-            return list[midpoint];
+            return midpoint + offset - 1;
         }
         
-        return this.getClosest(elem, newList, compare, currentComparison);
+        return this.getClosestIndex(elem, newList, compare, currentComparison, offset);
     },
     
     //Picks a random element out of an array
