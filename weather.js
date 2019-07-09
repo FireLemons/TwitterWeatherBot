@@ -99,7 +99,7 @@ module.exports = class Weather{
             if(eventRoll < .5){
                 return this.getLunarPhase();
             } else {
-                //equinox, solstice,
+                return this.getSeasonProgress();
             }
         } else if (messageRoll < .7) {//trivia
             this.logger.info('Generating trivia.');
@@ -277,26 +277,111 @@ module.exports = class Weather{
     }
     
     //Generates a statement stating the days between the last solstice or equinox until now and days until the next solstice or equinox
+    //  @param {Date=} A date to test the season progress for.
     //  @return {String} A statement stating the days between the last solstice or equinox until now and days until the next solstice or equinox
-    getSeasonProgress(){
-        let now = new Date(),
+    getSeasonProgress(date){
+        let now = date ? date : new Date(),
             seasonData = require('./data/seasons.json'),
-            currentYearDates = Object.values(seasonData[now.getFullYear()]).map((elem) => new Date(elem)),
+            currentYear = now.getFullYear(),
+            currentYearDates = Object.values(seasonData[currentYear]).map((elem) => new Date(elem)),
             nearestEvent = util.getClosestIndex(now, currentYearDates, (date1, date2) => date1 - date2),
-            proximityNearestDate = util.getDaysBetween(now, );
+            proximityNearestDate = Math.floor(util.getDaysBetween(now, currentYearDates[nearestEvent])),
+            closeEvent = {
+                "days": proximityNearestDate
+            },
             previousEvent,
             nextEvent;
         
         switch(nearestEvent){
-            default:
-                if(nearestEvent){
+            case 0:
+                closeEvent.event = "vernal equinox";
+                
+                if(proximityNearestDate < 0){
+                    closeEvent.days *= -1;
                     
+                    previousEvent = closeEvent;
+                    nextEvent = {
+                        "days": Math.floor(util.getDaysBetween(now, currentYearDates[nearestEvent + 1])),
+                        "event": "summer solstice"
+                    };
                 } else {
-                    
+                    previousEvent = {
+                        "days": Math.floor(util.getDaysBetween(new Date(seasonData[currentYear - 1]['winter_solstice']), now)),
+                        "event": "winter_solstice"
+                    };
+                    nextEvent = closeEvent;
                 }
+                
+                break;
             case 1:
+                closeEvent.event = "summer solstice";
+                
+                if(proximityNearestDate < 0){
+                    closeEvent.days *= -1;
+                    
+                    previousEvent = closeEvent;
+                    nextEvent = {
+                        "days": Math.floor(util.getDaysBetween(now, currentYearDates[nearestEvent + 1])),
+                        "event": "autumnal equinox"
+                    };
+                } else {
+                    previousEvent = {
+                        "days": Math.floor(util.getDaysBetween(currentYearDates[nearestEvent - 1], now)),
+                        "event": "vernal equinox"
+                    };
+                    nextEvent = closeEvent;
+                }
+                
+                break;
             case 2:
+                closeEvent.event = "autumnal equinox";
+                
+                if(proximityNearestDate < 0){
+                    closeEvent.days *= -1;
+                    
+                    previousEvent = closeEvent;
+                    nextEvent = {
+                        "days": Math.floor(util.getDaysBetween(now, currentYearDates[nearestEvent + 1])),
+                        "event": "winter equinox"
+                    };
+                } else {
+                    previousEvent = {
+                        "days": Math.floor(util.getDaysBetween(currentYearDates[nearestEvent - 1], now)),
+                        "event": "summer solstice"
+                    };
+                    nextEvent = closeEvent;
+                }
+                
+                break;
+            case 3:
+                closeEvent.event = "winter solstice";
+            
+                if(proximityNearestDate < 0){
+                    let proximityNext = util.getDaysBetween(now, new Date(seasonData[currentYear + 1]['vernal_equinox']));
+                    
+                    closeEvent.days *= -1;
+                    
+                    previousEvent = closeEvent;
+                    nextEvent = {
+                        "days" : Math.floor(proximityNext),
+                        "event": "vernal equinox"
+                    };
+                } else {
+                    previousEvent = {
+                        "days": Math.floor(util.getDaysBetween(currentYearDates[nearestEvent - 1], now)),
+                        "event": "autumnal equinox"
+                    };
+                    nextEvent = closeEvent;
+                }
+                
+                break;
         }
+        
+        if(!proximityNearestDate){
+            return `Today is the ${previousEvent.event}.`;
+        }
+        
+        return `Today is ${previousEvent.days} days from the ${previousEvent.event} and ${nextEvent.days} days until the ${nextEvent.event}.`;
     }
     
     //Generates a random message explaining some of the messages the bot displays.
