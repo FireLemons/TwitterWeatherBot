@@ -29,47 +29,47 @@ module.exports = class Weather{
         let beaufort = {};
         
         if(windSpeed < .5){
-            beaufort['description'] = 'calm';
+            beaufort['description'] = '"calm"';
             beaufort['fact'] = 'Smoke rises vertically.';
         } else if(windSpeed < 1.6) {
-            beaufort['description'] = 'light air';
-            beaufort['fact'] = 'Direction shown by smoke drift but not by wind vanes.';
+            beaufort['description'] = '"light air"';
+            beaufort['fact'] = 'Wind direction is shown by smoke drift but not by wind vanes.';
         } else if(windSpeed < 3.4) {
-            beaufort['description'] = 'light breeze';
-            beaufort['fact'] = 'Wind felt on face; leaves rustle; wind vane moved by wind.';
+            beaufort['description'] = 'a "light breeze"';
+            beaufort['fact'] = 'Wind is felt on the face and leaves rustle.';
         } else if(windSpeed < 5.6) {
-            beaufort['description'] = 'gentle breeze';
-            beaufort['fact'] = 'Leaves and small twigs in motion; light flags extended.';
+            beaufort['description'] = 'a "gentle breeze"';
+            beaufort['fact'] = 'Leaves and small twigs are moved. Light flags are extended.';
         } else if(windSpeed < 8) {
-            beaufort['description'] = 'moderate breeze';
-            beaufort['fact'] = 'Raises dust and loose paper; small branches moved.';
+            beaufort['description'] = 'a "moderate breeze"';
+            beaufort['fact'] = 'Dust and loose paper are raised. Small branches are moved.';
         } else if(windSpeed < 10.8) {
-            beaufort['description'] = 'fresh breeze';
-            beaufort['fact'] = 'Small trees sway; crested wavelets form on inland waters.';
+            beaufort['description'] = 'a "fresh breeze"';
+            beaufort['fact'] = 'Small trees are swayed. Crested wavelets form on inland waters.';
         } else if(windSpeed < 13.9) {
-            beaufort['description'] = 'strong breeze';
-            beaufort['fact'] = 'Large branches in motion; umbrellas used with difficulty.';
+            beaufort['description'] = 'a "strong breeze"';
+            beaufort['fact'] = 'Large branches are moved. Umbrellas are used with difficulty.';
         } else if(windSpeed < 17.2) {
-            beaufort['description'] = 'near gale';
-            beaufort['fact'] = 'Whole trees in motion; resistance felt walking against the wind.';
+            beaufort['description'] = 'a "near gale"';
+            beaufort['fact'] = 'Whole trees are moved. There is resistance when walking against the wind.';
         } else if(windSpeed < 20.8) {
-            beaufort['description'] = 'gale';
-            beaufort['fact'] = 'Twigs break off trees; generally impedes progress.';
+            beaufort['description'] = 'a "gale"';
+            beaufort['fact'] = 'Twigs are broken off trees. The wind impedes progress.';
         } else if(windSpeed < 24.5) {
-            beaufort['description'] = 'strong gale';
-            beaufort['fact'] = 'Slight structural damage (chimney pots and slates removed).';
+            beaufort['description'] = 'a "strong gale"';
+            beaufort['fact'] = 'Slight structural damage is caused (chimney pots and slates removed).';
         } else if(windSpeed < 28.5) {
-            beaufort['description'] = 'storm';
-            beaufort['fact'] = 'trees uprooted; considerable structural damage.';
+            beaufort['description'] = 'a storm';
+            beaufort['fact'] = 'Trees are uprooted. There is considerable structural damage.';
         } else if(windSpeed < 32.7) {
-            beaufort['description'] = 'violent storm';
-            beaufort['fact'] = 'Very rarely experienced; accompanied by widespread damage.';
+            beaufort['description'] = 'a "violent storm"';
+            beaufort['fact'] = 'A very rarely experienced event accompanied by widespread damage.';
         } else {
-            beaufort['description'] = 'hurricane force';
-            beaufort['fact'] = 'Devastation.';
+            beaufort['description'] = 'a "hurricane force"';
+            beaufort['fact'] = 'Causes devastation.';
         }
         
-        return `${windSpeed}m/s wind is a "${beaufort.description}" on the beaufort scale. Wind effects include:${beaufort.fact}`;
+        return `A ${windSpeed}m/s wind is ${beaufort.description} on the beaufort scale. ${beaufort.fact}`;
     }
     
     //Gets a random extra message to append to each update.
@@ -77,6 +77,11 @@ module.exports = class Weather{
     //  @returns {string} A random extra message to append to each update
     getExtra(parsedWeatherData){
         this.logger.info('Generating extra statement.');
+        
+        if(!(parsedWeatherData instanceof Object)){
+            throw new Error('Parameter parsedWeatherData must be an object');
+        }
+        
         let messageRoll = Math.random();
         
         if(messageRoll < .01){//joke
@@ -179,9 +184,8 @@ module.exports = class Weather{
     //  @param {object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
     //  @returns {string} A message describing the condition, temperature, and wind for the next 9 hours. Max 142 characters.
     getForecast(parsedWeatherData){
-
         const forecastData = parsedWeatherData.list.slice(0, 3);
-        var defaultForecast = (Math.random() > 0.000228310502) ? 'Forecast' : 'Fourcast';
+        let defaultForecast = (Math.random() > 0.000228310502) ? 'Forecast' : 'Fourcast';
         
         for(let {dt_txt, main, weather, wind: {deg, speed}} of forecastData){
             let conditions = {
