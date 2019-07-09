@@ -22,10 +22,9 @@ module.exports = class TweetWeather{
             
             let message = forecast, 
                 extra = this.weatherTools.getExtra(parsedWeatherData);
+            this.logger.info(`Generated ${extra}`);
             
             message += extra;
-            
-            this.logger.info(`Generated ${extra}`);
             
             if(message.length > 280){
                 throw new Error(`Message too long: ${message}`);
@@ -33,6 +32,8 @@ module.exports = class TweetWeather{
             
             return message;
         }catch(e){
+            this.logger.error(e);
+            
             if(/^Cannot read property '.+' of undefined$/.test(e.message)){
                 this.logger.error(new Error(`Weather data Object in unexpected format: ${e.message}`));
             } else {
