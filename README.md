@@ -25,7 +25,7 @@ __❗❗❗Make sure `config.json` is not tracked by git. If `git status` shows 
 Running `node index.js` will start up the bot.  
   
 vv Not Yet vv  
-Running `node windowsInstall.js` will install the bot as a service so it automatically starts when booting your windows machine.
+Running `node windowsInstall.js` will install the bot as a service so it automatically starts when booting your windows machine.  
 ^^ Planned Feature ^^  
   
 ## Contributing
