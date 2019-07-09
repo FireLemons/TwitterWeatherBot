@@ -25,11 +25,12 @@ module.exports = {
             throw new Error('Cannot find closest element from empty list.');
         }
         
-        let midpoint = Math.floor(list.length / 2), currentComparison = {
-            "comparison": compare(elem, list[midpoint]),
-            "idx": midpoint,
-            "offset": offset
-        }
+        let midpoint = Math.floor(list.length / 2),
+            currentComparison = {
+                "comparison": compare(elem, list[midpoint]),
+                "idx": midpoint,
+                "offset": offset
+            };
         
         if(Math.abs(lastComparison.comparison) < Math.abs(currentComparison.comparison)){
             return lastComparison.idx + lastComparison.offset;
@@ -49,6 +50,14 @@ module.exports = {
         }
         
         return this.getClosestIndex(elem, newList, compare, currentComparison, offset);
+    },
+    
+    //Gets the number of days between 2 dates
+    //  @param {Date} date1 A valid date
+    //  @param {Date} date2 A valid date
+    //  @return {number} The number of days between date1 and date2. A negative number if date2 came before date1.
+    getDaysBetween(date1, date2){
+        return (date2 - date1) / (1000 * 60 * 60 * 24);
     },
     
     //Picks a random element out of an array
