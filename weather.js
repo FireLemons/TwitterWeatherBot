@@ -94,13 +94,13 @@ module.exports = class Weather{
             return this.getTutorial();
         } else if (messageRoll < .4) {//celestial event
             this.logger.info('Generating celestial event.');
-            //let eventRoll = Math.random();
+            let eventRoll = Math.random();
             
-            //if(eventRoll < .5){
+            if(eventRoll < .5){
                 return this.getLunarPhase();
-            //} else {
+            } else {
                 //equinox, solstice,
-            //}
+            }
         } else if (messageRoll < .7) {//trivia
             this.logger.info('Generating trivia.');
             //beaufort scale
@@ -119,10 +119,11 @@ module.exports = class Weather{
     //  @param {object} forecastData An array of 3 objects containing weather data
     //  @returns {string} A forecast message displaying the given stat
     getExtraStat(stat, forecastData){
+        console.log(forecastData);
         if(stat === 'precipitation'){
             let precipitationStats = forecastData.map((elem) => {
                 return {
-                    time: util.getCST(elem.dt_txt.substr(11, 2)),
+                    time: util.getCST(parseInt(elem.dt_txt.substr(11, 2))),
                     rain: (typeof elem.rain === 'object') ? elem.rain['3h'] : undefined,
                     snow: (typeof elem.snow === 'object') ? elem.snow['3h'] : undefined
                 }
@@ -155,7 +156,7 @@ module.exports = class Weather{
                 let pressure = 'Expected Pressure:\n';
             
                 forecastData.forEach((elem) => {
-                    pressure += `${util.getCST(elem.dt_txt.substr(11, 2))}:00: ${elem.main.grnd_level}hPa\n`;
+                    pressure += `${util.getCST(parseInt(elem.dt_txt.substr(11, 2)))}:00: ${elem.main.grnd_level}hPa\n`;
                 });
                 
                 return pressure.substr(0, pressure.length - 1);
@@ -163,7 +164,7 @@ module.exports = class Weather{
                 let humidity = 'Expected Humidity:\n';
             
                 forecastData.forEach((elem) => {
-                    humidity += `${util.getCST(elem.dt_txt.substr(11, 2))}:00: ${elem.main.humidity}%\n`;
+                    humidity += `${util.getCST(parseInt(elem.dt_txt.substr(11, 2)))}:00: ${elem.main.humidity}%\n`;
                 });
                 
                 return humidity.substr(0, humidity.length - 1);
@@ -171,7 +172,7 @@ module.exports = class Weather{
                 let cloudiness = 'Expected Cloud Coverage:\n';
             
                 forecastData.forEach((elem) => {
-                    cloudiness += `${util.getCST(elem.dt_txt.substr(11, 2))}:00: ${elem.clouds.all}%\n`;
+                    cloudiness += `${util.getCST(parseInt(elem.dt_txt.substr(11, 2)))}:00: ${elem.clouds.all}%\n`;
                 });
                 
                 return cloudiness.substr(0, cloudiness.length - 1);
@@ -194,7 +195,7 @@ module.exports = class Weather{
                     max: Math.round(main.temp_max),            
                     min: Math.round(main.temp_min)
                 },
-                time: util.getCST(dt_txt.substr(11, 2)),
+                time: util.getCST(parseInt(dt_txt.substr(11, 2))),
                 wind: {
                     direction: this.getWindDirectionAsCardinal(deg),
                     speed: speed.toPrecision(2)
@@ -219,7 +220,7 @@ module.exports = class Weather{
         
         let closestPhase = util.getClosestIndex(now, nearbyPhases, (date1, date2) => date1 - date2),
             phase,
-            proximity = util.getDaysBetween(now, new Date(nearbyPhases[closestPhase]));
+            proximity = util.getDaysBetween(now, nearbyPhases[closestPhase]);
         
         switch(closestPhase){
             case 0:
@@ -273,6 +274,29 @@ module.exports = class Weather{
         }
         
         return `The moon is currently in the ${phase} phase.`;
+    }
+    
+    //Generates a statement stating the days between the last solstice or equinox until now and days until the next solstice or equinox
+    //  @return {String} A statement stating the days between the last solstice or equinox until now and days until the next solstice or equinox
+    getSeasonProgress(){
+        let now = new Date(),
+            seasonData = require('./data/seasons.json'),
+            currentYearDates = Object.values(seasonData[now.getFullYear()]).map((elem) => new Date(elem)),
+            nearestEvent = util.getClosestIndex(now, currentYearDates, (date1, date2) => date1 - date2),
+            proximityNearestDate = util.getDaysBetween(now, );
+            previousEvent,
+            nextEvent;
+        
+        switch(nearestEvent){
+            default:
+                if(nearestEvent){
+                    
+                } else {
+                    
+                }
+            case 1:
+            case 2:
+        }
     }
     
     //Generates a random message explaining some of the messages the bot displays.

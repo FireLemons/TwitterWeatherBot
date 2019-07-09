@@ -1,11 +1,19 @@
 /** @fileoverview A collection of utility functions. */
 module.exports = {
     //Converts UTC hours into CST hours
-    //  @param {string} UTC A 2 digit number representing hours at UTC time
+    //  @param {number} UTC A number representing hours at UTC time
     //  @return {string} A 2 digit number representing the input UTC hours converted to central time
-    getCST: function(UTC){
-        let offsetHour = parseInt(UTC) - 6;
-        let CST = offsetHour >= 0 ? offsetHour : offsetHour + 24;
+    getCST(UTC){
+        if(isNaN(parseFloat(n)) || !isFinite(n)){
+            throw new TypeError('Param UTC must be a number');
+        }
+        
+        if(0 > UTC || UTC > 23){
+            throw new RangeError('UTC must be between 0 and 23');
+        }
+        
+        let offsetHour = Math.floor(UTC) - 6,
+            CST = offsetHour >= 0 ? offsetHour : offsetHour + 24;
         
         return ('0' + CST).substr(-2);
     },
@@ -21,8 +29,16 @@ module.exports = {
     //  @param {number} offset Only used in recursive calls
     //  @return {object} The index of the most similar element in list to elem
     getClosestIndex(elem, list, compare, lastComparison = {"comparison": Infinity, "idx": null, "offset": 0}, offset = 0){
+        if(!(list instanceof Array)){
+            throw new TypeError('Param list must be an Array');
+        }
+        
+        if(!(compare instanceof Function)){
+            throw new TypeError('Param compare must be a Function');
+        }
+        
         if(!list.length){
-            throw new Error('Cannot find closest element from empty list.');
+            throw new RangeError('Cannot find closest element from empty list.');
         }
         
         let midpoint = Math.floor(list.length / 2),
@@ -57,6 +73,14 @@ module.exports = {
     //  @param {Date} date2 A valid date
     //  @return {number} The number of days between date1 and date2. A negative number if date2 came before date1.
     getDaysBetween(date1, date2){
+        if(!(date1 instanceof Date)){
+            throw new TypeError('First argument not a date');
+        }
+        
+        if(!(date2 instanceof Date)){
+            throw new TypeError('Second argument not a date');
+        }
+        
         return (date2 - date1) / (1000 * 60 * 60 * 24);
     },
     
@@ -64,7 +88,11 @@ module.exports = {
     //  @param {array} arr An array to pick random elements from
     //  @return {object} The element from arr chosen at random
     pickRandom(arr){
-        if(arr.length === 0){
+        if(!(arr instanceof Array)){
+            throw new TypeError('Param arr must be an Array');
+        }
+        
+        if(!arr.length){
             throw new Error('Cannot pick random member of empty array');
         }
         
@@ -73,9 +101,13 @@ module.exports = {
     
     //Validates that each member of an object isn't null
     //  @param {object} object The javascript object to be validated
-    //  @param {string} path The key path up to object. Used for recursive calls. Initially ''
-    //  @throws {Error} An error on discovering a member of an object has value NaN null or undefined.
-    validateNotNull: function(object, path){
+    //  @param {string} Only used for recursive calls
+    //  @throws {Error} An error on discovering a member of an object has value NaN null or undefined
+    validateNotNull(object, path){
+        if(!(object instanceof Object)){
+            throw new TypeError('Param "object" must be a javascript Object');
+        }
+        
         for(let key in object){
             const value = object[key];
             
