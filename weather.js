@@ -83,17 +83,23 @@ module.exports = class Weather{
             
             return util.pickRandom(jokes);
         } else if (messageRoll < .1) {//tutorials
-            
+            return this.getTutorial();
         } else if (messageRoll < .4) {//celestial event
-            //equinox, solstice, moon phase & high tide
+            let eventRoll = Math.random();
+            
+            if(eventRoll < .5){
+                return this.getLunarPhase();
+            } else {
+                //equinox, solstice,
+            }
         } else if (messageRoll < .7) {//trivia
             //beaufort scale
-            return getBeaufort(parsedWeatherData.list[0].wind.speed.toPrecision(2));
+            return this.getBeaufort(parsedWeatherData.list[0].wind.speed.toPrecision(2));
         } else {//random extra stat
             const forecastData = parsedWeatherData.list.slice(0, 3);
             
             let stat = util.pickRandom(['precipitation', 'precipitation', 'precipitation', 'pressure', 'humidity', 'cloudiness']);
-            return getExtraStat(stat);
+            return this.getExtraStat(stat);
         }
     }
     
@@ -121,8 +127,8 @@ module.exports = class Weather{
                     
                     if(rain || snow){
                         precipitation += `${pStat.time}:00:`;
-                        precipitation += (rain) ? `${rain} mm rain` : '';
-                        precipitation += (snow) ? `, ${snow} mm snow.` : '.';
+                        precipitation += (rain) ? `${rain}mm/h rain` : '';
+                        precipitation += (snow) ? `, ${snow}mm/h snow.` : '.';
                         precipitation += '\n';
                     }
                 }
@@ -196,6 +202,90 @@ module.exports = class Weather{
         return defaultForecast;
     }
     
+    //Get a message describing the current moon phase.
+    //  @return {string} A message stating the current phase of the moon.
+    getLunarPhase(){
+        let nearbyPhases = Object.values(lune.phase_hunt()), now = new Date();
+        
+        let closestPhase = util.getClosestIndex(now, nearbyPhases, (date1, date2) => date1 - date2),
+            phase,
+            proximity = util.getDaysBetween(now, new Date(nearbyPhases[closestPhase]));
+        
+        switch(closestPhase){
+            case 0:
+                if(Math.abs(proximity) < 1){
+                    phase = '🌑 New Moon';
+                } else if(proximity > 0) {
+                    phase = '🌒 Waxing Crescent';
+                } else {
+                    phase = '🌘 Waning Crescent';
+                }
+                
+                break;
+            case 1:
+                if(Math.abs(proximity) < 1){
+                    phase = '🌓 First Quarter';
+                } else if(proximity > 0) {
+                    phase = '🌔 Waxing Gibbous';
+                } else {
+                    phase = '🌒 Waxing Crescent';
+                }
+            
+                break;
+            case 2:
+                if(Math.abs(proximity) < 1){
+                    phase = '🌕 Full Moon';
+                } else if(proximity > 0) {
+                    phase = '🌖 Waning Gibbous';
+                } else {
+                    phase = '🌔 Waxing Gibbous';
+                }
+            
+                break;
+            case 3:
+                if(Math.abs(proximity) < 1){
+                    phase = '🌗 Third Quarter';
+                } else if(proximity > 0) {
+                    phase = '🌘 Waning Crescent';
+                } else {
+                    phase = '🌖 Waning Gibbous';
+                }
+                
+                break;
+            case 4:
+                if(Math.abs(proximity) < 1){
+                    phase = '🌑 New Moon';
+                } else {
+                    phase = '🌒 Waxing Crescent';
+                }
+            
+                break;
+        }
+        
+        return `The moon is currently in the ${phase} phase.`
+    }
+    
+    //Generates a random message explaining some of the messages the bot displays.
+    //  @param {number=} id The id of the specified tutorial.
+    //  @return {string} If an id is given, the tutorial message with the given id otherwise a random explanation message.
+    getTutorial(id){
+        let iconDefinitions = require('./data/iconDefinitions.json');
+        
+        if(!id){
+            id = Math.floor(Math.random() * (2 + iconDefinitions.length));
+        }
+        
+        switch(id){
+            case 0:
+                return 'The beaufort scale is a way of measuring wind speed based on observing things blown by the wind rather than using instruments.';
+            case 1:
+                return 'The pressure displayed is at ground level. Columbia is 758ft(231m) above sea level.';
+            default: //Icon Definitions
+                let iconDefinition = iconDefinitions[id - 2];
+                return `${iconDefinition.icon} indicates ${iconDefinition.conditions.replace(',', ' or')}`;
+        }
+    }
+    
     //Converts an angle into cardinal direction
     //  @param {number} azimuth A number representing an angle in the range [0, 360)
     //  @return {string} A character representing a cardinal direction or 2 character representing an intercardinal direction
@@ -217,27 +307,6 @@ module.exports = class Weather{
                 return '➡️';
             case 7:
                 return '↘️';
-        }
-    }
-    
-    //Generates a random message explaining some of the messages the bot displays.
-    //  @param {number=} id The id of the specified tutorial.
-    //  @return {string} If an id is given, the tutorial message with the given id otherwise a random explanation message.
-    getTutorial(id){
-        let iconDefinitions = require('./data/iconDefinitions.json');
-        
-        if(!id){
-            id = Math.floor(Math.random() * (2 + iconDefinitions.length));
-        }
-        
-        switch(id){
-            case 0:
-                return 'The beaufort scale is a way of measuring wind speed based on observing things blown by the wind rather than using instruments.';
-            case 1:
-                return 'The pressure displayed is at ground level. Columbia is 758ft(231m) above sea level.';
-            default: //Icon Definitions
-                let iconDefinition = iconDefinitions[id - 2];
-                return `${iconDefinition.icon} indicates ${iconDefinition.conditions.replace(',', ' or')}`;
         }
     }
     
