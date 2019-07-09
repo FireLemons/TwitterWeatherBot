@@ -76,26 +76,32 @@ module.exports = class Weather{
     //  @param {object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
     //  @returns {string} A random extra message to append to each update
     getExtra(parsedWeatherData){
+        this.logger.info('Generating extra statement.');
         let messageRoll = Math.random();
         
         if(messageRoll < .01){//joke
+            this.logger.info('Generating joke.');
             let jokes = require('./data/jokes.json');
             
             return util.pickRandom(jokes);
         } else if (messageRoll < .1) {//tutorials
+            this.logger.info('Generating tutorial.');
             return this.getTutorial();
         } else if (messageRoll < .4) {//celestial event
-            let eventRoll = Math.random();
+            this.logger.info('Generating celestial event.');
+            //let eventRoll = Math.random();
             
-            if(eventRoll < .5){
+            //if(eventRoll < .5){
                 return this.getLunarPhase();
-            } else {
+            //} else {
                 //equinox, solstice,
-            }
+            //}
         } else if (messageRoll < .7) {//trivia
+            this.logger.info('Generating trivia.');
             //beaufort scale
             return this.getBeaufort(parsedWeatherData.list[0].wind.speed.toPrecision(2));
         } else {//random extra stat
+            this.logger.info('Generating extra stat.');
             const forecastData = parsedWeatherData.list.slice(0, 3);
             
             let stat = util.pickRandom(['precipitation', 'precipitation', 'precipitation', 'pressure', 'humidity', 'cloudiness']);
@@ -262,7 +268,7 @@ module.exports = class Weather{
                 break;
         }
         
-        return `The moon is currently in the ${phase} phase.`
+        return `The moon is currently in the ${phase} phase.`;
     }
     
     //Generates a random message explaining some of the messages the bot displays.

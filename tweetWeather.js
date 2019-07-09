@@ -19,7 +19,13 @@ module.exports = class TweetWeather{
         try{
             let forecast = this.weatherTools.getForecast(parsedWeatherData);
             this.logger.info('Created forecast');
-            let message = forecast;
+            
+            let message = forecast, 
+                extra = this.weatherTools.getExtra(parsedWeatherData);
+            
+            message += extra;
+            
+            this.logger.info(`Generated ${extra}`);
             
             if(message.length > 280){
                 throw new Error(`Message too long: ${message}`);
