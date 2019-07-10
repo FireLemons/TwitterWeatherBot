@@ -167,22 +167,50 @@ const weatherTools = new weatherManager(config.open_weather_map, logger);
 const tweetWeather = new twitterManager(config.twitter, logger, weatherTools);
 
 /*
+ * Load stats
+ */
+
+//Saves a collection of stats to a file
+//  @param {object} stats An object holding the stats to be saved
+
+let _stats,
+    stats,
+    saveStats = () => {    
+        fs.writeFile('./data/stats.json', JSON.stringify(_stats), (error) => {
+            if(error){
+                logger.error(error);
+            }
+        });
+    };
+
+if(!fs.existsSync('./data/stats.json')){
+    _stats = {
+        "lastUpdate": new Date()
+    };
+    
+    saveStats();
+} else {
+    _stats = require('./data/stats.json');
+}
+
+stats = util.getWatchedObject(_stats, saveStats);
+
+/*
  *  Schedule forecasts to go out every 2 hours.
  */
-var lastUpdate = new Date();
 
 //Turns weather data into a twitter status and tweets it
 //  @param {object} parsedWeatherData The weather data.
 const onWeatherLoaded = (parsedWeatherData) => {
-    lastUpdate = new Date();
+    stats.lastUpdate = new Date();
     
     tweetWeather.sendTweet(tweetWeather.getStatusMessage(parsedWeatherData));
 }
 
-//var updates = schedule.scheduleJob('0 */2 * * *', function(){
+var updates = schedule.scheduleJob('0 */2 * * *', function(){
     //Detect if computer fell asleep
-    if(new Date() - lastUpdate > 7620000){//7620000ms = 2 hours 7 minutes
-        lastUpdate.setHours(lastUpdate.getHours() + 2);
+    if(new Date() - stats.lastUpdate > 7620000){//7620000ms = 2 hours 7 minutes
+        stats.lastUpdate.setHours(stats.lastUpdate.getHours() + 2);
         logger.warn(new Error('Missed scheduled twitter update. Presumably by waking from sleep.'));
     } else {
         let retryTimeout = 0;
@@ -219,6 +247,6 @@ const onWeatherLoaded = (parsedWeatherData) => {
         
         weatherTools.loadWeather(onWeatherLoaded, onFailLoadWeather);
     }
-//});
+});
 
 logger.info('Bot process started.');
