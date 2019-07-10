@@ -86,9 +86,8 @@ module.exports = class Weather{
         
         if(messageRoll < .01){//joke
             this.logger.info('Generating joke.');
-            let jokes = require('./data/jokes.json');
             
-            return util.pickRandom(jokes);
+            return getJoke(parsedWeatherData.list[0]);
         } else if (messageRoll < .1) {//tutorials
             this.logger.info('Generating tutorial.');
             return this.getTutorial();
@@ -216,7 +215,18 @@ module.exports = class Weather{
     //  @param {object} currentConditions The conditions for the near future
     //  @return {String} A joke.
     getJoke(currentConditions){
+        if(!(currentConditions instanceof Object)){
+            throw new TypeError('Param currentConditions must be an Object');
+        }
         
+        let jokes = require('./data/jokes.json'),
+            jokePool = jokes.general;
+            
+        if((currentConditions.main.temp_min + currentConditions.main.temp_max) / 2 >= 30){
+            jokePool.concat(jokes.hot);
+        }
+        
+        return util.pickRandom(jokePool);
     }
     
     //Get a message describing the current moon phase.
