@@ -202,9 +202,15 @@ stats = util.getWatchedObject(_stats, saveStats);
 //Turns weather data into a twitter status and tweets it
 //  @param {object} parsedWeatherData The weather data.
 const onWeatherLoaded = (parsedWeatherData) => {
-    stats.lastUpdate = new Date();
+    let statusMessage = tweetWeather.getStatusMessage(parsedWeatherData)
     
-    tweetWeather.sendTweet(tweetWeather.getStatusMessage(parsedWeatherData));
+    if(statusMessage){
+        tweetWeather.sendTweet(statusMessage);
+    } else {
+        logger.error(new Error('Failed to generate status message.'));
+    }
+    
+    stats.lastUpdate = new Date();
 }
 
 var updates = schedule.scheduleJob('0 */2 * * *', function(){
