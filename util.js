@@ -84,6 +84,41 @@ module.exports = {
         return (date2 - date1) / (1000 * 60 * 60 * 24);
     },
     
+    //Generates an object that executes onChange when the values in the object change
+    //From https://davidwalsh.name/watch-object-changes
+    //  @param {object} obj The object to be watched for changes
+    //  @param {function} onChange The function to be executed when values inside obj change
+    //  @return {Proxy} obj as a Proxy that reacts to change
+    getWatchedObject(obj, onChange){
+        if(!(obj instanceof Object)){
+            throw new TypeError('Param obj must be an object.');
+        }
+        
+        if(!(onChange instanceof Function)){
+            throw new TypeError('Param onChange must be a function.');
+        }
+        
+        const handler = {
+            get(target, property, receiver) {
+                try {
+                    return new Proxy(target[property], handler);
+                } catch (err) {
+                    return Reflect.get(target, property, receiver);
+                }
+            },
+            defineProperty(target, property, descriptor) {
+                onChange();
+                return Reflect.defineProperty(target, property, descriptor);
+            },
+            deleteProperty(target, property) {
+                onChange();
+                return Reflect.deleteProperty(target, property);
+            }
+        };
+        
+        return new Proxy(obj, handler);
+    },
+    
     //Picks a random element out of an array
     //  @param {array} arr An array to pick random elements from
     //  @return {object} The element from arr chosen at random
