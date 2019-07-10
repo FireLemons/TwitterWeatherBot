@@ -191,6 +191,7 @@ if(!fs.existsSync('./data/stats.json')){
     saveStats();
 } else {
     _stats = require('./data/stats.json');
+    _stats.lastUpdate = new Date(_stats.lastUpdate);
 }
 
 stats = util.getWatchedObject(_stats, saveStats);
@@ -244,7 +245,9 @@ var updates = schedule.scheduleJob('0 */2 * * *', function(){
                         logger.error(error);
                     }
                     
-                    //send Error joke
+                    let failureMessage = util.pickRandom(require('./data/jokes.json').error);
+                    
+                    tweetWeather.sendTweet(failureMessage);
                 }
             } else {
                 logger.error(new Error(`Expected param 'errors' to be array of Error objects. Got ${typeof errors} instead.`));
