@@ -92,8 +92,8 @@ module.exports = class Weather{
         } else if (messageRoll < .1) {//tutorials
             this.logger.info('Generating tutorial.');
             return this.getTutorial();
-        } else if (messageRoll < .4) {//celestial event
-            this.logger.info('Generating celestial event.');
+        } else if (messageRoll < .4) {//celestial info
+            this.logger.info('Generating celestial info.');
             let eventRoll = Math.random();
             
             if(eventRoll < .5){
@@ -110,7 +110,7 @@ module.exports = class Weather{
             const forecastData = parsedWeatherData.list.slice(0, 3);
             
             let stat = util.pickRandom(['precipitation', 'precipitation', 'precipitation', 'pressure', 'humidity', 'cloudiness']);
-            return this.getExtraStat(stat);
+            return this.getExtraStat(stat, forecastData);
         }
     }
     
@@ -119,7 +119,6 @@ module.exports = class Weather{
     //  @param {object} forecastData An array of 3 objects containing weather data
     //  @returns {string} A forecast message displaying the given stat
     getExtraStat(stat, forecastData){
-        console.log(forecastData);
         if(stat === 'precipitation'){
             let precipitationStats = forecastData.map((elem) => {
                 return {
@@ -213,6 +212,13 @@ module.exports = class Weather{
         return defaultForecast;
     }
     
+    //Gets a joke
+    //  @param {object} currentConditions The conditions for the near future
+    //  @return {String} A joke.
+    getJoke(currentConditions){
+        
+    }
+    
     //Get a message describing the current moon phase.
     //  @return {string} A message stating the current phase of the moon.
     getLunarPhase(){
@@ -277,7 +283,7 @@ module.exports = class Weather{
     }
     
     //Generates a statement stating the days between the last solstice or equinox until now and days until the next solstice or equinox
-    //  @param {Date=} A date to test the season progress for.
+    //  @param {Date=} date For testing. A date to get the season progress for.
     //  @return {String} A statement stating the days between the last solstice or equinox until now and days until the next solstice or equinox
     getSeasonProgress(date){
         let now = date ? date : new Date(),
