@@ -138,6 +138,19 @@ module.exports = {
         return arr[Math.floor(Math.random() * arr.length)];
     },
     
+    //Converts an angle in degrees to radians
+    //  @param {number} deg The degree representation of an angle
+    //  @return {number} The radian representation of deg
+    toRadians(deg){
+        deg %= 360;
+        
+        if(deg < 0){
+            deg += 360;
+        }
+        
+        return deg * Math.PI / 180;
+    },
+    
     //Validates that each member of an object isn't null
     //  @param {object} object The javascript object to be validated
     //  @param {string} Only used for recursive calls
