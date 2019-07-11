@@ -11,6 +11,8 @@
         "Pretty much everywhere, it's gonna be hot."
     ],
     "error":[
-        "Error: Failed to get weather data.\nAssume the worst."
+        "Error: Failed to get weather data.\nAssume the worst.",
+        "I'm back. Must have been a windows update.",
+        "Must have fell asleep."
     ]
 }
