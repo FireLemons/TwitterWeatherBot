@@ -101,7 +101,11 @@ module.exports = {
         const handler = {
             get(target, property, receiver) {
                 try {
-                    return new Proxy(target[property], handler);
+                    if(!(target[property] instanceof Date)){
+                        return new Proxy(target[property], handler);
+                    } else {
+                        return target[property];
+                    }
                 } catch (err) {
                     return Reflect.get(target, property, receiver);
                 }
