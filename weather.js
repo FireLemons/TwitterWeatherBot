@@ -1,5 +1,5 @@
+const celestial = require('./celestial.js');
 const https = require('https');
-const lune = require('lune');
 const util = require('./util.js');
 
 //Shortened descriptions and symbols for weather condition codes
@@ -83,21 +83,17 @@ module.exports = class Weather{
                 "lat": 38.9517
             },
             julianDate = (now.getTime() / 86400000) - (now.getTimezoneOffset() / 1440) + 2440587.5,
-            n = julianDate - 2451545 + .0008,
+            n = julianDate - 2451544.9992,
+            //These equations, from the Astronomical Almanac,[3][4] can be used to calculate the apparent coordinates of the Sun, mean equinox and ecliptic of date, to a precision of about 0°.01 (36″), 
+            //for dates between 1950 and ((((2050)))).
             sun_mean_longitude = (280.46 + (.9856474 * n)) % 360,
-            sun_mean_anomaly = (357.528 + (.9856003 * n)) % 360,
-            sun_ecliptic_longitude = sun_mean_longitude + (1.915 * Math.sin(util.toRadians(sun_mean_anomaly))) + (.020 * Math.sin(util.toRadians(2 * sun_mean_anomaly))),
-            sun_obliquity_of_the_ecliptic = 23.439 - (.0000004 * n),
-            sun_declination = Math.asin(Math.sin(util.toRadians(sun_obliquity_of_the_ecliptic)) * Math.sin(util.toRadians(sun_ecliptic_longitude)));
+            sun_mean_anomaly = util.toRadians((357.528 + (.9856003 * n)) % 360),
+            sun_ecliptic_longitude = sun_mean_longitude + (1.915 * Math.sin(sun_mean_anomaly)) + (.020 * Math.sin(2 * sun_mean_anomaly)),
+            sun_obliquity_of_the_ecliptic = util.toRadians(23.439 - (.0000004 * n)),
+            sun_declination = Math.asin(Math.sin(sun_obliquity_of_the_ecliptic) * Math.sin(util.toRadians(sun_ecliptic_longitude)));
             
-            /*mean_solar_noon = n - (coordinates.long / 360),
-            solar_mean_anomaly = (357.5291 + (.98560028 * mean_solar_noon)) % 360,
-            center = (1.9148 * Math.sin(util.toRadians(solar_mean_anomaly))) + (.02 * Math.sin(util.toRadians(2 * solar_mean_anomaly))) + (.0003 * Math.sin(util.toRadians(3 * solar_mean_anomaly))),
-            ecliptic_longitude = (solar_mean_anomaly + center + 282.9372) % 360,
-            solar_transit = 2451545 + mean_solar_noon + (.0053 * Math.sin(util.toRadians(solar_mean_anomaly))) - (.0069 * Math.sin(util.toRadians(2 * ecliptic_longitude))),
-            sun_declination = Math.asin(Math.sin(util.toRadians(ecliptic_longitude)) * Math.sin(util.toRadians(23.44)));*/
-            
-            
+            //hour_angle = Math.acos(util);
+        return sun_declination * 180 / Math.PI;
     }
     
     //Gets a random extra message to append to each update.
@@ -124,9 +120,9 @@ module.exports = class Weather{
             let eventRoll = Math.random();
             
             if(eventRoll < .5){
-                return this.getLunarPhase();
+                return celestial.getLunarPhase();
             } else {
-                return this.getSeasonProgress();
+                return celestial.getSeasonProgress();
             }
         } else if (messageRoll < .7) {//trivia
             this.logger.info('Generating trivia.');
@@ -255,177 +251,6 @@ module.exports = class Weather{
         }
         
         return util.pickRandom(jokePool);
-    }
-    
-    //Get a message describing the current moon phase.
-    //  @return {string} A message stating the current phase of the moon.
-    getLunarPhase(){
-        let nearbyPhases = Object.values(lune.phase_hunt()), now = new Date();
-        
-        let closestPhase = util.getClosestIndex(now, nearbyPhases, (date1, date2) => date1 - date2),
-            phase,
-            proximity = util.getDaysBetween(now, nearbyPhases[closestPhase]);
-        
-        switch(closestPhase){
-            case 0:
-                if(Math.abs(proximity) < 1){
-                    phase = '🌑 New Moon';
-                } else if(proximity > 0) {
-                    phase = '🌒 Waxing Crescent';
-                } else {
-                    phase = '🌘 Waning Crescent';
-                }
-                
-                break;
-            case 1:
-                if(Math.abs(proximity) < 1){
-                    phase = '🌓 First Quarter';
-                } else if(proximity > 0) {
-                    phase = '🌔 Waxing Gibbous';
-                } else {
-                    phase = '🌒 Waxing Crescent';
-                }
-            
-                break;
-            case 2:
-                if(Math.abs(proximity) < 1){
-                    phase = '🌕 Full Moon';
-                } else if(proximity > 0) {
-                    phase = '🌖 Waning Gibbous';
-                } else {
-                    phase = '🌔 Waxing Gibbous';
-                }
-            
-                break;
-            case 3:
-                if(Math.abs(proximity) < 1){
-                    phase = '🌗 Third Quarter';
-                } else if(proximity > 0) {
-                    phase = '🌘 Waning Crescent';
-                } else {
-                    phase = '🌖 Waning Gibbous';
-                }
-                
-                break;
-            case 4:
-                if(Math.abs(proximity) < 1){
-                    phase = '🌑 New Moon';
-                } else {
-                    phase = '🌒 Waxing Crescent';
-                }
-            
-                break;
-        }
-        
-        return `The moon is currently in the ${phase} phase.`;
-    }
-    
-    //Generates a statement stating the days between the last solstice or equinox until now and days until the next solstice or equinox
-    //  @param {Date=} date For testing. A date to get the season progress for.
-    //  @return {String} A statement stating the days between the last solstice or equinox until now and days until the next solstice or equinox
-    getSeasonProgress(date){
-        let now = date ? date : new Date(),
-            seasonData = require('./data/seasons.json'),
-            currentYear = now.getFullYear(),
-            currentYearDates = Object.values(seasonData[currentYear]).map((elem) => new Date(elem)),
-            nearestEvent = util.getClosestIndex(now, currentYearDates, (date1, date2) => date1 - date2),
-            proximityNearestDate = Math.floor(util.getDaysBetween(now, currentYearDates[nearestEvent])),
-            closeEvent = {
-                "days": proximityNearestDate
-            },
-            previousEvent,
-            nextEvent;
-        
-        switch(nearestEvent){
-            case 0:
-                closeEvent.event = "vernal equinox";
-                
-                if(proximityNearestDate < 0){
-                    closeEvent.days *= -1;
-                    
-                    previousEvent = closeEvent;
-                    nextEvent = {
-                        "days": Math.floor(util.getDaysBetween(now, currentYearDates[nearestEvent + 1])),
-                        "event": "summer solstice"
-                    };
-                } else {
-                    previousEvent = {
-                        "days": Math.floor(util.getDaysBetween(new Date(seasonData[currentYear - 1]['winter_solstice']), now)),
-                        "event": "winter_solstice"
-                    };
-                    nextEvent = closeEvent;
-                }
-                
-                break;
-            case 1:
-                closeEvent.event = "summer solstice";
-                
-                if(proximityNearestDate < 0){
-                    closeEvent.days *= -1;
-                    
-                    previousEvent = closeEvent;
-                    nextEvent = {
-                        "days": Math.floor(util.getDaysBetween(now, currentYearDates[nearestEvent + 1])),
-                        "event": "autumnal equinox"
-                    };
-                } else {
-                    previousEvent = {
-                        "days": Math.floor(util.getDaysBetween(currentYearDates[nearestEvent - 1], now)),
-                        "event": "vernal equinox"
-                    };
-                    nextEvent = closeEvent;
-                }
-                
-                break;
-            case 2:
-                closeEvent.event = "autumnal equinox";
-                
-                if(proximityNearestDate < 0){
-                    closeEvent.days *= -1;
-                    
-                    previousEvent = closeEvent;
-                    nextEvent = {
-                        "days": Math.floor(util.getDaysBetween(now, currentYearDates[nearestEvent + 1])),
-                        "event": "winter equinox"
-                    };
-                } else {
-                    previousEvent = {
-                        "days": Math.floor(util.getDaysBetween(currentYearDates[nearestEvent - 1], now)),
-                        "event": "summer solstice"
-                    };
-                    nextEvent = closeEvent;
-                }
-                
-                break;
-            case 3:
-                closeEvent.event = "winter solstice";
-            
-                if(proximityNearestDate < 0){
-                    let proximityNext = util.getDaysBetween(now, new Date(seasonData[currentYear + 1]['vernal_equinox']));
-                    
-                    closeEvent.days *= -1;
-                    
-                    previousEvent = closeEvent;
-                    nextEvent = {
-                        "days" : Math.floor(proximityNext),
-                        "event": "vernal equinox"
-                    };
-                } else {
-                    previousEvent = {
-                        "days": Math.floor(util.getDaysBetween(currentYearDates[nearestEvent - 1], now)),
-                        "event": "autumnal equinox"
-                    };
-                    nextEvent = closeEvent;
-                }
-                
-                break;
-        }
-        
-        if(!proximityNearestDate){
-            return `Today is the ${previousEvent.event}.`;
-        }
-        
-        return `Today is ${previousEvent.days} days from the ${previousEvent.event} and ${nextEvent.days} days until the ${nextEvent.event}.`;
     }
     
     //Generates a random message explaining some of the messages the bot displays.
