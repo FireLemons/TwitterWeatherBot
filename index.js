@@ -2,7 +2,6 @@ const config = require('./config.json');
 const fs = require( 'fs' );
 const path = require('path');
 const schedule = require('node-schedule');
-//const stats = require('./stats.json');
 const twitterManager = require('./tweetWeather.js');
 const weatherManager = require('./weather.js');
 const winston = require('winston');
@@ -214,48 +213,97 @@ const onWeatherLoaded = (parsedWeatherData) => {
     stats.lastUpdate = new Date();
 }
 
-var updates = schedule.scheduleJob('0 */2 * * *', function(){
-    //Detect if computer fell asleep
-    if(new Date() - stats.lastUpdate > 7620000){//7620000ms = 2 hours 7 minutes
-        stats.lastUpdate.setHours(stats.lastUpdate.getHours() + 2);
-        logger.warn(new Error('Missed scheduled twitter update. Presumably by waking from sleep.'));
-    } else {
-        let retryTimeout = 0;
+//Detect if computer fell asleep
+if(new Date() - stats.lastUpdate > 7620000){//7620000ms = 2 hours 7 minutes
+    stats.lastUpdate = new Date();
+    logger.warn(new Error('Missed scheduled twitter update. Presumably by waking from sleep.'));
+    
+    const onWeatherLoadedLate = (parsedWeatherData) => {
+        let statusMessage = tweetWeather.getStatusMessage(parsedWeatherData, true)
         
-        //Retries the request up to three times
-        //  @param {Error[]} A list of errors describing why the failure occurred
-        const onFailLoadWeather = (errors) => {
-            logger.error(new Error('Failed to load weather data.'));
-            
-            if(Array.isArray(errors)){
-                if(retryTimeout <= 262144){
-                    for(let error of errors){
-                        logger.warn(error);
-                    }
-                    
-                    logger.info(`Retrying fetching weather data in ${retryTimeout}ms. Retry ${(retryTimeout / 131072) + 1} of 3`);
-                    
-                    setTimeout(() => {
-                        weatherTools.loadWeather(onWeatherLoaded, onFailLoadWeather);
-                    }, retryTimeout);
-                    
-                    retryTimeout += 131072;
-                } else {
-                    for(let error of errors){
-                        logger.error(error);
-                    }
-                    
-                    let failureMessage = util.pickRandom(require('./data/jokes.json').error);
-                    
-                    tweetWeather.sendTweet(failureMessage);
-                }
-            } else {
-                logger.error(new Error(`Expected param 'errors' to be array of Error objects. Got ${typeof errors} instead.`));
-            }
+        if(statusMessage){
+            tweetWeather.sendTweet(statusMessage);
+        } else {
+            logger.error(new Error('Failed to generate status message.'));
         }
         
-        weatherTools.loadWeather(onWeatherLoaded, onFailLoadWeather);
+        stats.lastUpdate = new Date();
     }
+    
+    let retryTimeout = 0;
+    
+    //Retries the request up to three times
+    //  @param {Error[]} A list of errors describing why the failure occurred
+    const onFailLoadWeather = (errors) => {
+        logger.error(new Error('Failed to load weather data.'));
+        
+        if(Array.isArray(errors)){
+            if(retryTimeout <= 262144){
+                for(let error of errors){
+                    logger.warn(error);
+                }
+                
+                logger.info(`Retrying fetching weather data in ${retryTimeout}ms. Retry ${(retryTimeout / 131072) + 1} of 3`);
+                
+                setTimeout(() => {
+                    weatherTools.loadWeather(onWeatherLoadedLate, onFailLoadWeather);
+                }, retryTimeout);
+                
+                retryTimeout += 131072;
+            } else {
+                for(let error of errors){
+                    logger.error(error);
+                }
+                
+                let failureMessage = util.pickRandom(require('./data/jokes.json').error);
+                
+                tweetWeather.sendTweet(failureMessage);
+            }
+        } else {
+            logger.error(new Error(`Expected param 'errors' to be array of Error objects. Got ${typeof errors} instead.`));
+        }
+    }
+    
+    weatherTools.loadWeather(onWeatherLoadedLate, onFailLoadWeather);
+}
+
+var updates = schedule.scheduleJob('0 */2 * * *', function(){
+    
+    let retryTimeout = 0;
+    
+    //Retries the request up to three times
+    //  @param {Error[]} A list of errors describing why the failure occurred
+    const onFailLoadWeather = (errors) => {
+        logger.error(new Error('Failed to load weather data.'));
+        
+        if(Array.isArray(errors)){
+            if(retryTimeout <= 262144){
+                for(let error of errors){
+                    logger.warn(error);
+                }
+                
+                logger.info(`Retrying fetching weather data in ${retryTimeout}ms. Retry ${(retryTimeout / 131072) + 1} of 3`);
+                
+                setTimeout(() => {
+                    weatherTools.loadWeather(onWeatherLoaded, onFailLoadWeather);
+                }, retryTimeout);
+                
+                retryTimeout += 131072;
+            } else {
+                for(let error of errors){
+                    logger.error(error);
+                }
+                
+                let failureMessage = util.pickRandom(require('./data/jokes.json').error);
+                
+                tweetWeather.sendTweet(failureMessage);
+            }
+        } else {
+            logger.error(new Error(`Expected param 'errors' to be array of Error objects. Got ${typeof errors} instead.`));
+        }
+    }
+    
+    weatherTools.loadWeather(onWeatherLoaded, onFailLoadWeather);
 });
 
 logger.info('Bot process started.');

@@ -1,4 +1,5 @@
 const twitter = require('twitter');
+const util = require('./util.js')
 
 module.exports = class TweetWeather{
     constructor(config, logger, weatherTools){
@@ -14,14 +15,15 @@ module.exports = class TweetWeather{
     
     //Get periodic update message
     //  @param {object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
+    //  @param {boolean} isLate True if the bot missed a twitter update. False otherwise.
     //  @returns {string} A weather update message to be posted to twitter.
-    getStatusMessage(parsedWeatherData){
+    getStatusMessage(parsedWeatherData, isLate){
         try{
             let forecast = this.weatherTools.getForecast(parsedWeatherData);
             this.logger.info('Created forecast');
             
             let message = forecast, 
-                extra = this.weatherTools.getExtra(parsedWeatherData);
+                extra = (isLate) ? util.pickRandom(require('./data/jokes.json').late) : this.weatherTools.getExtra(parsedWeatherData);
             this.logger.info(`Generated ${extra}`);
             
             message += extra;
