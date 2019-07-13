@@ -7,7 +7,7 @@ const util = require('./util.js');
 module.exports = {
     //Generates a statement stating the length of the day or night for the current time and sunrise and sunset times
     //Calculations derived from https://en.wikipedia.org/wiki/Position_of_the_Sun and https://en.wikipedia.org/wiki/Sunrise_equation
-    //  @param {Date=} date For testing. A date to get the sunlight data for.
+    //  @param  {Date=} date For testing. A date to get the sunlight data for.
     //  @return {String} A statement stating the amount of sunlight 
     getDaylight(date){
         date = date ? date : new Date();
@@ -21,15 +21,10 @@ module.exports = {
                 "lat": 38.9517
             },
             solarPosition = this.solarPosition,
-            julianDate = solarPosition.getJulianDate(dateCorrection),
-            n = solarPosition.getN(julianDate),
+            n = solarPosition.getN(solarPosition.getJulianDate(dateCorrection)),
             //These equations, from the Astronomical Almanac,[3][4] can be used to calculate the apparent coordinates of the Sun, mean equinox and ecliptic of date, to a precision of about 0°.01 (36″), 
             //for dates between 1950 and ((((2050)))).
-            sun_mean_longitude = (280.46 + (.9856474 * n)) % 360,
-            sun_mean_anomaly = util.toRadians((357.528 + (.9856003 * n)) % 360),
-            sun_ecliptic_longitude = sun_mean_longitude + (1.915 * Math.sin(sun_mean_anomaly)) + (.020 * Math.sin(2 * sun_mean_anomaly)),
-            sun_obliquity_of_the_ecliptic = util.toRadians(23.439 - (.0000004 * n)),
-            sun_declination = Math.asin(Math.sin(sun_obliquity_of_the_ecliptic) * Math.sin(util.toRadians(sun_ecliptic_longitude))),
+            sun_declination = solarPosition.getSolarDeclination(solarPosition.getAxialTilt(n), solarPosition.getSolarEclipticLongitude(solarPosition.getSolarMeanLongitude(n), solarPosition.getMeanAnomaly(n))),
             
             mean_solar_noon = n - (coordinates.long / 360),
             solar_mean_anomaly = util.toRadians((357.5291 + (.98560028 * mean_solar_noon)) % 360),
@@ -108,7 +103,7 @@ module.exports = {
     },
     
     //Generates a statement stating the days between the last solstice or equinox until now and days until the next solstice or equinox
-    //  @param {Date=} date For testing. A date to get the season progress for.
+    //  @param  {Date=} date For testing. A date to get the season progress for.
     //  @return {String} A statement stating the days between the last solstice or equinox until now and days until the next solstice or equinox
     getSeasonProgress(date){
         let now = date ? date : new Date(),
@@ -216,6 +211,13 @@ module.exports = {
     },
     
     solarPosition:{
+        //Gets the axial tilt of the Earth 
+        //  @param  {number} n The number of whole days since January 1 2000 12:00:00 UTC
+        //  @return {number} The axial tilt of the earth at time n in radians
+        getAxialTilt(n){
+            return util.toRadians(23.439 - (.0000004 * n));
+        },
+        
         //Converts a number representing a julian date into a Date object
         //  @param  {number} julianDate The julian date to be converted
         //  @return {Date} A Date representation of julianDate
@@ -224,24 +226,47 @@ module.exports = {
         },
         
         //Converts a date to a julian date
-        //  @param {Date} date The date to be converted into a julian date
+        //  @param  {Date} date The date to be converted into a julian date
         //  @return {number} The number of days since the beginning of the Julian Period in local time
         getJulianDate(date){
             return (date.getTime() / 86400000) + 2440587.5
         },
         
+        //Gets the mean anomaly of the Earth with respect to the Sun
+        //  @param  {number} n The number of whole days since January 1 2000 12:00:00 UTC
+        //  @return {number} The mean anomaly of the Earth with respect to the Sun in radians
+        getMeanAnomaly(n){
+            return util.toRadians(357.528 + (.9856003 * n));
+        },
+        
         //Converts a Julian Date to a count of the number of days since January 1 2000 12:00:00 UTC
-        //  @param {number} JD a Julian Date
+        //  @param  {number} JD a Julian Date
         //  @return {number} The number of whole days since January 1 2000 12:00:00 UTC
         getN(JD){
             return Math.floor(JD - 2451544.9992);
         },
         
+        //Gets the ecliptic longitude of the Sun
+        //  @param  {number} solarMeanLongitude The solar mean longitude in radians
+        //  @param  {number} meanAnomaly The mean anomaly of the Earth with respect to the Sun in radians
+        //  @return {number} The ecliptic longitude of the Sun in radians
+        getSolarEclipticLongitude(solarMeanLongitude, meanAnomaly){
+            return solarMeanLongitude + util.toRadians((1.915 * Math.sin(meanAnomaly)) + (.020 * Math.sin(2 * meanAnomaly)));
+        },
+        
         //Gets mean longitude of the Sun, corrected for the aberration of light
-        //  @param {number} n The number of whole days since January 1 2000 12:00:00 UTC
-        //  @return {number} The mean longitude of the sun in degrees
-        getSolarMeanLongitude(){
-            
+        //  @param  {number} n The number of whole days since January 1 2000 12:00:00 UTC
+        //  @return {number} The mean longitude of the Sun in radians
+        getSolarMeanLongitude(n){
+            return util.toRadians(280.46 + (.9856474 * n));
+        },
+        
+        //Gets the declination of the Sun
+        //  @param  {number} axialTilt The axial tilt of the Earth in radians
+        //  @param  {number} solarEclipticLongitude The ecliptic longitude of the Sun in radians
+        //  @return {number} The declination of the Sun
+        getSolarDeclination(axialTilt, solarEclipticLongitude){
+            return Math.asin(Math.sin(axialTilt) * Math.sin(solarEclipticLongitude));
         }
     }
 }

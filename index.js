@@ -176,7 +176,7 @@ const tweetWeather = new twitterManager(config.twitter, logger, weatherTools);
 
 let _stats,
     stats,
-    saveStats = () => {    
+    saveStats = () => {
         fs.writeFile('./data/stats.json', JSON.stringify(_stats), (error) => {
             if(error){
                 logger.error(error);
