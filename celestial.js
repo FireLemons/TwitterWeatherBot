@@ -3,7 +3,56 @@
 const lune = require('lune');
 const util = require('./util.js');
 
+/** @fileoverview A collection of functions to calculate celstial events and stats. */
 module.exports = {
+    //Converts a number representing a julian date into a Date object
+    //  @param  {number} julianDate The number representing a julian date to be converted
+    //  @return {Date} A Date representation of julianDate
+    getDateFromJulian(julianDate){
+        return new Date((julianDate - 2440587.5) * 86400000);
+    },
+    
+    //Generates a statement stating the length of the day or night for the current time and sunrise and sunset times
+    //Calculations derived from https://en.wikipedia.org/wiki/Position_of_the_Sun and https://en.wikipedia.org/wiki/Sunrise_equation
+    //  @param {Date=} date For testing. A date to get the sunlight data for.
+    //  @return {String} A statement stating the amount of sunlight 
+    getDaylight(date){
+        let now = date ? date : new Date(),
+            coordinates = {
+                "elevation": 231,
+                "long": -92.3341,
+                "lat": 38.9517
+            },
+            julianDate = getJulianDate(now),
+            n = Math.floor(julianDate - 2451544.9992),
+            //These equations, from the Astronomical Almanac,[3][4] can be used to calculate the apparent coordinates of the Sun, mean equinox and ecliptic of date, to a precision of about 0°.01 (36″), 
+            //for dates between 1950 and ((((2050)))).
+            sun_mean_longitude = (280.46 + (.9856474 * n)) % 360,
+            sun_mean_anomaly = util.toRadians((357.528 + (.9856003 * n)) % 360),
+            sun_ecliptic_longitude = sun_mean_longitude + (1.915 * Math.sin(sun_mean_anomaly)) + (.020 * Math.sin(2 * sun_mean_anomaly)),
+            sun_obliquity_of_the_ecliptic = util.toRadians(23.439 - (.0000004 * n)),
+            sun_declination = Math.asin(Math.sin(sun_obliquity_of_the_ecliptic) * Math.sin(util.toRadians(sun_ecliptic_longitude))),
+            
+            mean_solar_noon = n - (coordinates.long / 360),
+            solar_mean_anomaly = util.toRadians((357.5291 + (.98560028 * mean_solar_noon)) % 360),
+            center = (1.9148 * Math.sin(solar_mean_anomaly)) + (.02 * Math.sin(2 * solar_mean_anomaly)) + (.0003 * Math.sin(3 * solar_mean_anomaly)),
+            ecliptic_longitude = solar_mean_anomaly + util.toRadians((center + 282.9372) % 360) % (Math.PI * 2),
+            solar_noon = 2451545 + mean_solar_noon + (.0053 * Math.sin(solar_mean_anomaly)) - (.0069 * Math.sin(2 * ecliptic_longitude)),
+            
+            hour_angle = Math.acos((Math.sin(util.toRadians(-0.83 /*- (2.076 * Math.sqrt(coordinates.elevation) / 60)*/)) - Math.sin(util.toRadians(coordinates.lat)) * Math.sin(sun_declination)) / (Math.cos(util.toRadians(coordinates.lat)) * Math.cos(sun_declination))),
+            sunrise = solar_noon - ((hour_angle * 180 / Math.PI) / 360),
+            sunset = solar_noon + ((hour_angle * 180 / Math.PI) / 360);
+            
+        return '';
+    },
+    
+    //Converts a date to a julian date
+    //  @param {Date} date The date to be converted into a julian date
+    //  @return {number} The number of days since January 1st 2000 00:00:00 UTC
+    getJulianDate(date){
+        return (date.getTime() / 86400000) + 2440587.5
+    },
+    
     //Get a message describing the current moon phase.
     //  @return {string} A message stating the current phase of the moon.
     getLunarPhase(){
