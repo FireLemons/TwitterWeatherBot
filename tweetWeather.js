@@ -1,3 +1,5 @@
+'use strict';
+
 const twitter = require('twitter');
 const util = require('./util.js')
 

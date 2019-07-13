@@ -1,3 +1,5 @@
+'use strict';
+
 const celestial = require('./celestial.js');
 const https = require('https');
 const util = require('./util.js');

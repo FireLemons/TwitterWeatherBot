@@ -1,3 +1,5 @@
+'use strict';
+
 /** @fileoverview A collection of utility functions. */
 module.exports = {
     //Converts UTC hours into CST hours

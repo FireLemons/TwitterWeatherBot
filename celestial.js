@@ -1,3 +1,5 @@
+'use strict';
+
 const lune = require('lune');
 const util = require('./util.js');
 
