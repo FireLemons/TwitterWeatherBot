@@ -112,13 +112,25 @@ module.exports = {
                     return Reflect.get(target, property, receiver);
                 }
             },
+
             defineProperty(target, property, descriptor) {
-                onChange();
-                return Reflect.defineProperty(target, property, descriptor);
+                let changed = Reflect.defineProperty(target, property, descriptor);
+                
+                if(changed){
+                    onChange();
+                }
+                
+                return changed;
             },
+            
             deleteProperty(target, property) {
-                onChange();
-                return Reflect.deleteProperty(target, property);
+                let changed = Reflect.deleteProperty(target, property);
+                
+                if(changed){
+                    onChange();
+                }
+                
+                return changed;
             }
         };
         
