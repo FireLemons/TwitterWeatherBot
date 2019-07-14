@@ -25,7 +25,7 @@ const dateFormat = {
     formatDate = new Intl.DateTimeFormat('en-US', dateFormat).format;
 
 //Makes human readable timestamps
-//  @return {String} A timestamp in the form: FULL_MONTH_NAME DAY HH:MM:SS
+//  @return {string} A timestamp in the form: FULL_MONTH_NAME DAY HH:MM:SS
 function getCurrentTimeFormatted(){
     var date = new Date(),
         formattedDate = formatDate(date);
@@ -40,8 +40,8 @@ function getCurrentTimeFormatted(){
 }
 
 //Gets the line number of an Error
-//  @param {Error} An Error object
-//  @return {Number} The line number where the Error occurred 
+//  @param  {Error} An Error object
+//  @return {number} The line number where the Error occurred 
 function getErrorSource(error){
     let { stack } = error;
     
@@ -171,11 +171,9 @@ const tweetWeather = new twitterManager(config.twitter, logger, weatherTools);
  * Load stats
  */
 
-//Saves a collection of stats to a file
-//  @param {object} stats An object holding the stats to be saved
-
 let _stats,
     stats,
+    //Saves the stats object to a file
     saveStats = () => {
         fs.writeFile('./data/stats.json', JSON.stringify(_stats), (error) => {
             if(error){

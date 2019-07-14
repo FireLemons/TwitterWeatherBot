@@ -16,9 +16,9 @@ module.exports = class TweetWeather{
     }
     
     //Get periodic update message
-    //  @param {object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
-    //  @param {boolean} isLate True if the bot missed a twitter update. False otherwise.
-    //  @returns {string} A weather update message to be posted to twitter.
+    //  @param  {object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
+    //  @param  {boolean} isLate True if the bot missed a twitter update. False otherwise.
+    //  @return {string} A weather update message to be posted to twitter.
     getStatusMessage(parsedWeatherData, isLate){
         try{
             let forecast = this.weatherTools.getForecast(parsedWeatherData);

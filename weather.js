@@ -25,8 +25,8 @@ module.exports = class Weather{
     }
     
     //Gets a statement about the current wind speed using the beaufort scale
-    //  @param {number} windSpeed The windSpeed in m/s
-    //  @returns {string} A statement about how the current wind speed scores on the beaufort scale
+    //  @param  {number} windSpeed The windSpeed in m/s
+    //  @return {string} A statement about how the current wind speed scores on the beaufort scale
     getBeaufort(windSpeed){
         let beaufort = {};
         
@@ -75,8 +75,8 @@ module.exports = class Weather{
     }
     
     //Gets a random extra message to append to each update.
-    //  @param {object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
-    //  @returns {string} A random extra message to append to each update
+    //  @param  {object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
+    //  @return {string} A random extra message to append to each update
     getExtra(parsedWeatherData){
         this.logger.info('Generating extra statement.');
         
@@ -117,8 +117,8 @@ module.exports = class Weather{
     
     //Gets an extended forecast for 3 extra stats not usually presesnt in the main forecast
     //  @param  {string} stat The name of the extra stat to feature.
-    //  @param {object} forecastData An array of 3 objects containing weather data
-    //  @returns {string} A forecast message displaying the given stat
+    //  @param  {object} forecastData An array of 3 objects containing weather data
+    //  @return {string} A forecast message displaying the given stat
     getExtraStat(stat, forecastData){
         if(stat === 'precipitation'){
             let precipitationStats = forecastData.map((elem) => {
@@ -182,8 +182,8 @@ module.exports = class Weather{
     }
     
     //Gets the default forecast message.
-    //  @param {object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
-    //  @returns {string} A message describing the condition, temperature, and wind for the next 9 hours. Max 142 characters.
+    //  @param  {object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
+    //  @return {string} A message describing the condition, temperature, and wind for the next 9 hours. Max 142 characters.
     getForecast(parsedWeatherData){
         const forecastData = parsedWeatherData.list.slice(0, 3);
         let defaultForecast = (Math.random() > 0.000228310502) ? 'Forecast' : 'Fourcast';
@@ -214,7 +214,7 @@ module.exports = class Weather{
     }
     
     //Gets a joke
-    //  @param {object} currentConditions The conditions for the near future
+    //  @param  {object} currentConditions The conditions for the near future
     //  @return {String} A joke.
     getJoke(currentConditions){
         if(!(currentConditions instanceof Object)){
@@ -232,7 +232,7 @@ module.exports = class Weather{
     }
     
     //Generates a random message explaining some of the messages the bot displays.
-    //  @param {number=} id The id of the specified tutorial.
+    //  @param  {number=} id The id of the specified tutorial.
     //  @return {string} If an id is given, the tutorial message with the given id otherwise a random explanation message.
     getTutorial(id){
         let iconDefinitions = require('./data/iconDefinitions.json');
@@ -253,7 +253,7 @@ module.exports = class Weather{
     }
     
     //Converts an angle into cardinal direction
-    //  @param {number} azimuth A number representing an angle in the range [0, 360)
+    //  @param  {number} azimuth A number representing an angle in the range [0, 360)
     //  @return {string} A character representing a cardinal direction or 2 character representing an intercardinal direction
     getWindDirectionAsCardinal(azimuth){
         switch(Math.round(azimuth / 45)){

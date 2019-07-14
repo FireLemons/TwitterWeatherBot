@@ -3,7 +3,7 @@
 /** @fileoverview A collection of utility functions. */
 module.exports = {
     //Converts UTC hours into CST hours
-    //  @param {number} UTC A number representing hours at UTC time
+    //  @param  {number} UTC A number representing hours at UTC time
     //  @return {string} A 2 digit number representing the input UTC hours converted to central time
     getCST(UTC){
         if(isNaN(parseFloat(UTC)) || !isFinite(UTC)){
@@ -24,11 +24,11 @@ module.exports = {
     //  @param {object} elem The given object to be compared for similarity against
     //  @param {object[]} list The sorted list to be searched for the most similar element
     //  @param {function} compare The comparison function
-    //    @param {object} elem1 The first element to be compared
-    //    @param {object} elem2 The second element to be compared
+    //    @param  {object} elem1 The first element to be compared
+    //    @param  {object} elem2 The second element to be compared
     //    @return {number} A negative value if elem1 comes before elem2 otherwise a positive value
-    //  @param {object} lastComparison Only used in recursive calls
-    //  @param {number} offset Only used in recursive calls
+    //  @param  {object} lastComparison Only used in recursive calls
+    //  @param  {number} offset Only used in recursive calls
     //  @return {object} The index of the most similar element in list to elem
     getClosestIndex(elem, list, compare, lastComparison = {"comparison": Infinity, "idx": null, "offset": 0}, offset = 0){
         if(!(list instanceof Array)){
@@ -71,8 +71,8 @@ module.exports = {
     },
     
     //Gets the number of days between 2 dates
-    //  @param {Date} date1 A valid date
-    //  @param {Date} date2 A valid date
+    //  @param  {Date} date1 A valid date
+    //  @param  {Date} date2 A valid date
     //  @return {number} The number of days between date1 and date2. A negative number if date2 came before date1.
     getDaysBetween(date1, date2){
         if(!(date1 instanceof Date)){
@@ -88,8 +88,8 @@ module.exports = {
     
     //Generates an object that executes onChange when the values in the object change
     //From https://davidwalsh.name/watch-object-changes
-    //  @param {object} obj The object to be watched for changes
-    //  @param {function} onChange The function to be executed when values inside obj change
+    //  @param  {object} obj The object to be watched for changes
+    //  @param  {function} onChange The function to be executed when values inside obj change
     //  @return {Proxy} obj as a Proxy that reacts to change
     getWatchedObject(obj, onChange){
         if(!(obj instanceof Object)){
@@ -138,7 +138,7 @@ module.exports = {
     },
     
     //Picks a random element out of an array
-    //  @param {array} arr An array to pick random elements from
+    //  @param  {array} arr An array to pick random elements from
     //  @return {object} The element from arr chosen at random
     pickRandom(arr){
         if(!(arr instanceof Array)){
@@ -153,7 +153,7 @@ module.exports = {
     },
     
     //Converts an angle in degrees to radians
-    //  @param {number} deg The degree representation of an angle
+    //  @param  {number} deg The degree representation of an angle
     //  @return {number} The radian representation of deg
     toRadians(deg){
         deg %= 360;
@@ -166,8 +166,8 @@ module.exports = {
     },
     
     //Validates that each member of an object isn't null
-    //  @param {object} object The javascript object to be validated
-    //  @param {string} Only used for recursive calls
+    //  @param  {object} object The javascript object to be validated
+    //  @param  {string} Only used for recursive calls
     //  @throws {Error} An error on discovering a member of an object has value NaN null or undefined
     validateNotNull(object, path){
         if(!(object instanceof Object)){
