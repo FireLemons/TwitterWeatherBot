@@ -11,7 +11,7 @@ const weatherStatusCodeMap = require('./data/statusCodeMap.json');
 module.exports = class Weather{
     constructor(config, logger){
         //Prepare weather get request URL from config 
-        var {location} = config,
+        var {location} = config.open_weather_map,
             locationParams = '';
 
         for(var paramName in location){
@@ -20,6 +20,7 @@ module.exports = class Weather{
             }
         }
 
+        this.coordinates = config.coordinates;
         this.logger = logger;
         this.weatherRequestURL = `https://api.openweathermap.org/data/2.5/forecast?${locationParams}&units=metric&APPID=${config.key}`;
     }
@@ -89,22 +90,22 @@ module.exports = class Weather{
         if(messageRoll < .01){//joke
             this.logger.info('Generating joke.');
             
-            return getJoke(parsedWeatherData.list[0]);
+            return this.getJoke(parsedWeatherData.list[0]);
         } else if (messageRoll < .1) {//tutorials
             this.logger.info('Generating tutorial.');
             return this.getTutorial();
-        } else if (messageRoll < .45) {//celestial info
+        } else if (messageRoll < .3) {//celestial info
             this.logger.info('Generating celestial info.');
             let eventRoll = Math.random();
             
             if(eventRoll < .6){
-                return celestial.getDayNight();
+                return celestial.getDayNight(this.coordinates);
             } else if(eventRoll < .8){
                 return celestial.getLunarPhase();
             } else {
                 return celestial.getSeasonProgress();
             }
-        } else if (messageRoll < .65) {//trivia
+        } else if (messageRoll < .5) {//trivia
             this.logger.info('Generating trivia.');
             //beaufort scale
             return this.getBeaufort(parsedWeatherData.list[0].wind.speed.toPrecision(2));
@@ -285,6 +286,14 @@ module.exports = class Weather{
     //      @param {Error[]} errors The error(s) causing the failure
     loadWeather(onDataLoaded, onFailure){
         this.logger.info('Attempt fetch weather data');
+        
+        if(!(onDataLoaded instanceof Function)){
+            throw new TypeError('Param onDataLoaded must be a function');
+        }
+        
+        if(!(onFailure instanceof Function)){
+            throw new TypeError('Param onFailure must be a function');
+        }
         
         https.get(this.weatherRequestURL, (res) => {
             const { statusCode } = res;

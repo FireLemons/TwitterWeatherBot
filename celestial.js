@@ -6,12 +6,13 @@ const util = require('./util.js');
 /** @fileoverview A collection of functions to calculate celstial events and stats. */
 module.exports = {
     //Generates a message describing how long the day/night is, the nearest sunrise, and the nearest sunset
+    //  @param  {object} coordinates An object containing the latitude and longitude of the observer
     //  @param  {Date=} date The time to get sunrise, sunset, and length data for. The current time if unspecified.
     //  @return {string} If day, the sunrise, sunset, and length of the day otherwise the sunset sunrise, and length of the night
-    getDayNight(date){
+    getDayNight(coordinates, date){
         date = date ? date : new Date();
         
-        let dayInfo = this.getSunUpDown(date),
+        let dayInfo = this.getSunUpDown(coordinates, date),
             diff,
             sky,
             sunrise,
@@ -24,7 +25,7 @@ module.exports = {
             let previousDay = new Date(date);
             previousDay.setDate(previousDay.getDate() - 1);
             
-            sunset = util.roundMinutes(this.getSunUpDown(previousDay).sunset);
+            sunset = util.roundMinutes(this.getSunUpDown(coordinates, previousDay).sunset);
             diff = sunrise - sunset;
         } else if(dayInfo.sunset - date < 0){//date is after sunset
             sky = 'night';
@@ -33,7 +34,7 @@ module.exports = {
             let nextDay = new Date(date);
             nextDay.setDate(nextDay.getDate() + 1);
             
-            sunrise = util.roundMinutes(this.getSunUpDown(nextDay).sunrise);
+            sunrise = util.roundMinutes(this.getSunUpDown(coordinates, nextDay).sunrise);
             diff = sunrise - sunset;
         } else {//it's day
             sky = 'day';
@@ -221,20 +222,16 @@ module.exports = {
     
     //Generates a statement stating the length of the day or night for the current time and sunrise and sunset times
     //Calculations derived from https://en.wikipedia.org/wiki/Position_of_the_Sun and https://en.wikipedia.org/wiki/Sunrise_equation
+    //  @param  {object} coordinates An object containing the latitude and longitude of the observer
     //  @param  {Date=} date A date to get the sunlight data for
     //  @return {object} An object containing 2 Dates: sunrise and sunset 
-    getSunUpDown(date){
+    getSunUpDown(coordinates, date){
         date = date ? date : new Date();
         
         let dateCorrection = new Date(date);
         dateCorrection.setHours(date.getHours() + 6);
         
-        let coordinates = {
-                "elevation": 231,
-                "long": -92.3341,
-                "lat": 38.9517
-            },
-            solarPosition = this.solarPosition,
+        let solarPosition = this.solarPosition,
             n = solarPosition.getN(solarPosition.getJulianDate(dateCorrection)),
             //These equations, from the Astronomical Almanac,[3][4] can be used to calculate the apparent coordinates of the Sun, mean equinox and ecliptic of date, to a precision of about 0°.01 (36″), 
             //for dates between 1950 and ((((2050)))).

@@ -160,7 +160,7 @@ process.on('SIGINT', disruptHandler);
 process.on('SIGHUP', disruptHandler);
 
 //Init Weather Data Object
-const weatherTools = new weatherManager(config.open_weather_map, logger);
+const weatherTools = new weatherManager(config, logger);
 
 //Init Twitter Data Object
 const tweetWeather = new twitterManager(config.twitter, logger, weatherTools);
