@@ -9,8 +9,6 @@ const weatherManager = require('./weather.js');
 const winston = require('winston');
 const util = require('./util.js');
 
-const testData = require('./test/sampleData1.json');
-
 /*
  * Set up logging
  */
@@ -206,11 +204,10 @@ const onWeatherLoaded = (parsedWeatherData) => {
     
     if(statusMessage){
         tweetWeather.sendTweet(statusMessage);
+        stats.lastUpdate = new Date();
     } else {
         logger.error(new Error('Failed to generate status message.'));
     }
-    
-    stats.lastUpdate = new Date();
 }
 
 //Detect if computer fell asleep
@@ -223,11 +220,10 @@ if(new Date() - stats.lastUpdate > 7620000){//7620000ms = 2 hours 7 minutes
         
         if(statusMessage){
             tweetWeather.sendTweet(statusMessage);
+            stats.lastUpdate = new Date();
         } else {
             logger.error(new Error('Failed to generate status message.'));
         }
-        
-        stats.lastUpdate = new Date();
     }
     
     let retryTimeout = 0;
