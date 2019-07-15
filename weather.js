@@ -97,7 +97,9 @@ module.exports = class Weather{
             this.logger.info('Generating celestial info.');
             let eventRoll = Math.random();
             
-            if(eventRoll < .5){
+            if(eventRoll < .6){
+                return celestial.getDayNight();
+            } else if(eventRoll < .8){
                 return celestial.getLunarPhase();
             } else {
                 return celestial.getSeasonProgress();
