@@ -5,36 +5,47 @@ const util = require('./util.js');
 
 /** @fileoverview A collection of functions to calculate celstial events and stats. */
 module.exports = {
-    //Generates a statement stating the length of the day or night for the current time and sunrise and sunset times
-    //Calculations derived from https://en.wikipedia.org/wiki/Position_of_the_Sun and https://en.wikipedia.org/wiki/Sunrise_equation
-    //  @param  {Date=} date For testing. A date to get the sunlight data for.
-    //  @return {String} A statement stating the amount of sunlight 
-    getDaylight(date){
+    //Generates a message describing how long the day/night is, the nearest sunrise, and the nearest sunset
+    //  @param  {Date=} date The time to get sunrise, sunset, and length data for. The current time if unspecified.
+    //  @return {string} If day, the sunrise, sunset, and length of the day otherwise the sunset sunrise, and length of the night
+    getDayNight(date){
         date = date ? date : new Date();
         
-        let dateCorrection = date;
-        dateCorrection.setHours(date.getHours() + 6);
+        let dayInfo = this.getSunUpDown(date),
+            diff,
+            sky,
+            sunrise,
+            sunset;
+            
+        if(dayInfo.sunrise - date > 0){//date is before sunrise
+            sky = 'night';
+            sunrise = util.roundMinutes(dayInfo.sunrise);
+            
+            let previousDay = new Date(date);
+            previousDay.setDate(previousDay.getDate() - 1);
+            
+            sunset = util.roundMinutes(this.getSunUpDown(previousDay).sunset);
+            diff = sunrise - sunset;
+        } else if(dayInfo.sunset - date < 0){//date is after sunset
+            sky = 'night';
+            sunset = util.roundMinutes(dayInfo.sunset);
+            
+            let nextDay = new Date(date);
+            nextDay.setDate(nextDay.getDate() + 1);
+            
+            sunrise = util.roundMinutes(this.getSunUpDown(nextDay).sunrise);
+            diff = sunrise - sunset;
+        } else {//it's day
+            sky = 'day';
+            sunrise = util.roundMinutes(dayInfo.sunrise);
+            sunset = util.roundMinutes(dayInfo.sunset);
+            diff = sunset - sunrise;
+        }
         
-        let coordinates = {
-                "elevation": 231,
-                "long": -92.3341,
-                "lat": 38.9517
-            },
-            solarPosition = this.solarPosition,
-            n = solarPosition.getN(solarPosition.getJulianDate(dateCorrection)),
-            //These equations, from the Astronomical Almanac,[3][4] can be used to calculate the apparent coordinates of the Sun, mean equinox and ecliptic of date, to a precision of about 0°.01 (36″), 
-            //for dates between 1950 and ((((2050)))).
-            eclipticLongitude = solarPosition.getSolarEclipticLongitude(solarPosition.getSolarMeanLongitude(n), solarPosition.getMeanAnomaly(n)),
-            solarDeclination = solarPosition.getSolarDeclination(solarPosition.getAxialTilt(n), eclipticLongitude),
-            //These equations probably don't expire
-            meanSolarNoon = solarPosition.getMeanSolarNoon(coordinates.long, n),
-            solarNoon = solarPosition.getSolarNoon(eclipticLongitude, solarPosition.getMeanAnomaly(meanSolarNoon), meanSolarNoon),
-            
-            hourRatio = solarPosition.getSolarHourAngle(coordinates.lat, solarDeclination) / (2 * Math.PI),
-            sunrise = solarPosition.getDateFromJulian(solarNoon - hourRatio),
-            sunset = solarPosition.getDateFromJulian(solarNoon + hourRatio);
-            
-        return sunrise;
+        return (sky === 'day') ? 
+            `Sunrise was at ${sunrise.toTimeString().substr(0, 5)}. Sunset will be at ${sunset.toTimeString().substr(0, 5)}. Today is ${Math.floor(diff / 3600000)} hours, ${(diff / 60000) % 60} minutes long.` 
+            : 
+            `Sunset was at ${sunset.toTimeString().substr(0, 5)}. Sunrise will be at ${sunrise.toTimeString().substr(0, 5)}. Tonight is ${Math.floor(diff / 3600000)} hours, ${(diff / 60000) % 60} minutes long.`;
     },
     
     //Get a message describing the current moon phase.
@@ -206,6 +217,41 @@ module.exports = {
         }
         
         return `It has been ${previousEvent.days} days since the ${previousEvent.event} and will be ${nextEvent.days} days until the ${nextEvent.event}.`;
+    },
+    
+    //Generates a statement stating the length of the day or night for the current time and sunrise and sunset times
+    //Calculations derived from https://en.wikipedia.org/wiki/Position_of_the_Sun and https://en.wikipedia.org/wiki/Sunrise_equation
+    //  @param  {Date=} date A date to get the sunlight data for
+    //  @return {object} An object containing 2 Dates: sunrise and sunset 
+    getSunUpDown(date){
+        date = date ? date : new Date();
+        
+        let dateCorrection = new Date(date);
+        dateCorrection.setHours(date.getHours() + 6);
+        
+        let coordinates = {
+                "elevation": 231,
+                "long": -92.3341,
+                "lat": 38.9517
+            },
+            solarPosition = this.solarPosition,
+            n = solarPosition.getN(solarPosition.getJulianDate(dateCorrection)),
+            //These equations, from the Astronomical Almanac,[3][4] can be used to calculate the apparent coordinates of the Sun, mean equinox and ecliptic of date, to a precision of about 0°.01 (36″), 
+            //for dates between 1950 and ((((2050)))).
+            eclipticLongitude = solarPosition.getSolarEclipticLongitude(solarPosition.getSolarMeanLongitude(n), solarPosition.getMeanAnomaly(n)),
+            solarDeclination = solarPosition.getSolarDeclination(solarPosition.getAxialTilt(n), eclipticLongitude),
+            //These equations probably don't expire
+            meanSolarNoon = solarPosition.getMeanSolarNoon(coordinates.long, n),
+            solarNoon = solarPosition.getSolarNoon(eclipticLongitude, solarPosition.getMeanAnomaly(meanSolarNoon), meanSolarNoon),
+            
+            hourRatio = solarPosition.getSolarHourAngle(coordinates.lat, solarDeclination) / (2 * Math.PI),
+            sunrise = solarPosition.getDateFromJulian(solarNoon - hourRatio),
+            sunset = solarPosition.getDateFromJulian(solarNoon + hourRatio);
+            
+        return {
+            "sunrise": sunrise,
+            "sunset": sunset
+        };
     },
     
     solarPosition:{
