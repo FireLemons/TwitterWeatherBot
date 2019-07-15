@@ -152,6 +152,35 @@ module.exports = {
         return arr[Math.floor(Math.random() * arr.length)];
     },
     
+    //Rounds a date to the nearest minute
+    //  @param  {Date} date The date to be rounded
+    //  @return {Date} A new Date rounded to the nearest minute of date
+    roundMinutes(date){
+        if(!(date instanceof Date)){
+            throw new TypeError('Param date must be a Date object');
+        }
+        
+        if(Number.isNaN(date.getTime())){
+            throw new RangeError('Param date not a valid Date');
+        }
+        
+        let dateRounded = new Date(date);
+        
+        if(dateRounded.getMilliseconds() > 500){
+            dateRounded.setSeconds(dateRounded.getSeconds() + 1);
+        }
+        
+        dateRounded.setMilliseconds(0);
+        
+        if(dateRounded.getSeconds() > 30){
+            dateRounded.setMinutes(dateRounded.getMinutes() + 1);
+        }
+        
+        dateRounded.setSeconds(0);
+        
+        return dateRounded;
+    },
+    
     //Converts an angle in degrees to radians
     //  @param  {number} deg The degree representation of an angle
     //  @return {number} The radian representation of deg
