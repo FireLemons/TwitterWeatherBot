@@ -6,7 +6,7 @@ module.exports = {
     //  @param  {number} UTC A number representing hours at UTC time
     //  @return {string} A 2 digit number representing the input UTC hours converted to central time
     getCST(UTC){
-        if(isNaN(parseFloat(UTC)) || !isFinite(UTC)){
+        if(isNaN(UTC) || !isFinite(UTC)){
             throw new TypeError('Param UTC must be a number');
         }
         
