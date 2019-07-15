@@ -93,7 +93,7 @@ module.exports = class Weather{
         } else if (messageRoll < .1) {//tutorials
             this.logger.info('Generating tutorial.');
             return this.getTutorial();
-        } else if (messageRoll < .4) {//celestial info
+        } else if (messageRoll < .45) {//celestial info
             this.logger.info('Generating celestial info.');
             let eventRoll = Math.random();
             
@@ -102,7 +102,7 @@ module.exports = class Weather{
             } else {
                 return celestial.getSeasonProgress();
             }
-        } else if (messageRoll < .7) {//trivia
+        } else if (messageRoll < .65) {//trivia
             this.logger.info('Generating trivia.');
             //beaufort scale
             return this.getBeaufort(parsedWeatherData.list[0].wind.speed.toPrecision(2));
