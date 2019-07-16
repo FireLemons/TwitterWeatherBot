@@ -1,7 +1,7 @@
 # WORK IN PROGRESS
 # ColumbiaMOWeatherTweetBot
 
-Tweets weather forecasts twice daily for Columbia MO. Location can be changed in `config.json` for use in other cities. As a side note, I can't imagine why anyone would want this. Seeing as most people have a weather app on their smartphone that shows the weather on the lock screen. Why would anyone check twitter for the weather?
+Tweets weather forecasts twice daily for Columbia MO. Location can be changed in `config.json` for use in other cities. As a side note, I can't imagine why anyone would want this because there are more convenient methods to check the weather than Twitter.  
 
 ## Getting Started
 Api keys from Twitter and OpenWeatherMap are needed.  
@@ -9,7 +9,7 @@ Api keys from Twitter and OpenWeatherMap are needed.
 + [Register for a Twitter developer account](https://developer.twitter.com/en/apply)
 
 This service runs on [Node.js](https://nodejs.org/en/download/).  
-After cloning the project, run `npm install` where `package.json` is which should be the root project directory.  
+After cloning, run `npm install` where `package.json` is which should be the root project directory.  
 Configure `config.json` with your location and api keys.  
 
 __❗❗❗Make sure `config.json` is not tracked by git. If `git status` shows your config as `modified`, use `git update-index --assume-unchanged config.json` to untrack it. Having the file tracked may expose your API keys.__
