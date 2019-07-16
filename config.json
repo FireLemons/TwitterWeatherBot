@@ -1,4 +1,25 @@
 {
+    "alerts":{
+        "filter": {
+            TBA
+        },
+        "params": {
+            <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            GET parameters for api.weather.gov/alerts expressed as key value pairs
+            See https://www.weather.gov/documentation/services-web-api#/default/get_alerts to see all available get parameters
+            
+            For example the for the request https://api.weather.gov/alerts?active=true&area=MO
+            key value pairs would be:
+            "active": true,
+            "area": MO
+            >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        }
+    },
+    "coordinates": {//Used to calculate sunrise and sunset
+        "elevation": ELEVATION IN METERS,
+        "long": LATITUDE WEST IN DEGREES(west is negative, east is positive),
+        "lat": NORTH LATITUDE IN DEGREES(north is positive, south is negative) 
+    },
     "log": {
         "logDir": "logs"
     },
