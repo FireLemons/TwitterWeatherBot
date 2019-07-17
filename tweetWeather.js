@@ -20,7 +20,7 @@ module.exports = class TweetWeather {
   //  @return {string} A weather alert warning to be posted to twitter.
   getAlertMessage (parsedAlertData) {
     try {
-      const message = this.weatherTools.getAlert(parsedAlertData)
+      const message = this.weatherTools.getAlertMessage(parsedAlertData)
 
       if (message.length > 280) {
         throw new Error(`Message too long: ${message}`)
@@ -29,18 +29,6 @@ module.exports = class TweetWeather {
       return message
     } catch (e) {
       this.logger.error(e)
-
-      if (/^Cannot read property '.+' of undefined$/.test(e.message)) {
-        this.logger.error(new Error(`Weather alert data Object in unexpected format: ${e.message}`))
-      } else {
-        const keyPathCheck = /^Member (.+) of object is undefined|NaN|null$/.exec(e.message)
-
-        if (keyPathCheck && keyPathCheck.length > 1) {
-          this.logger.error(new Error(`Failed to read ${keyPathCheck[1]} from weather alerts object. `))
-        } else {
-          this.logger.error(e)
-        }
-      }
     }
   }
 
@@ -66,18 +54,6 @@ module.exports = class TweetWeather {
       return message
     } catch (e) {
       this.logger.error(e)
-
-      if (/^Cannot read property '.+' of undefined$/.test(e.message)) {
-        this.logger.error(new Error(`Weather data Object in unexpected format: ${e.message}`))
-      } else {
-        const keyPathCheck = /^Member (.+) of object is undefined|NaN|null$/.exec(e.message)
-
-        if (keyPathCheck && keyPathCheck.length > 1) {
-          this.logger.error(new Error(`Failed to read ${keyPathCheck[1]} from openWeatherMap object. `))
-        } else {
-          this.logger.error(e)
-        }
-      }
     }
   }
 

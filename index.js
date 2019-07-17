@@ -246,13 +246,18 @@ const onFailLoadWeather = (errors) => {
 // Turns weather alert data into a twitter status and tweets it
 //  @param {object} parsedWeatherAlertData The alert data. See https://www.weather.gov/documentation/services-web-api#/default/get_alerts for more information.
 const onWeatherAlertLoaded = (parsedWeatherAlertData) => {
-  const alertStatusMessage = tweetWeather.getAlertMessage(parsedWeatherAlertData)
-
-  if (alertStatusMessage) {
-    tweetWeather.sendTweet(alertStatusMessage)
-  } else if (alertStatusMessage !== 'All clear') {
-    logger.error(new Error('Failure in generating alert'))
-  }
+  const alerts = weather.getAlerts(parsedWeatherAlertData);
+  
+  alerts.forEach((alertData) => {
+      let alertMessage = tweetWeather.getAlertMessage(alertData);
+      
+      if (alertMessage) {
+        console.log(alertMessage)//tweetWeather.sendTweet(alertMessage)
+      } else if (!alertMessage) {
+        logger.error(new Error('Failure in generating alert message'))
+        logger.error(alertData);
+      }
+  });
 }
 
 let retryAlertTimeout = 0
@@ -289,7 +294,6 @@ const onFailLoadWeatherAlert = (errors) => {
 
 // Detect if computer fell asleep
 if (new Date() - stats.lastUpdate > 7620000) { // 7620000ms = 2 hours 7 minutes
-  stats.lastUpdate = new Date()
   logger.warn(new Error('Missed scheduled twitter update. Presumably by waking from sleep.'))
 
   const onWeatherLoadedLate = (parsedWeatherData) => {
