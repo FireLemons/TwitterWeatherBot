@@ -86,6 +86,40 @@ module.exports = {
     return (date2 - date1) / (1000 * 60 * 60 * 24)
   },
 
+  // Gets the value referenced by path in object
+  //  @param  {object} object An object
+  //  @param  {string} path A string consisting of object keys delimited by periods
+  //  @return The value at path if it exists
+  //  @throws {ReferenceError} On finding that the path is invalid
+  getValue(object, path){
+      if(typeof path !== 'string'){
+          throw new TypeError('Param path must be a string');
+      }
+      
+      if(!(object instanceof Object)){
+          throw new TypeError('Param object must be an object');
+      }
+      
+      if(!path.length){
+          return object;
+      }
+      
+      let keys = path.split('.'),
+          leaf = object[keys[0]];
+      
+      if(keys.length === 1){
+          let leaf = object[keys[0]];
+          
+          if(leaf === undefined){
+              throw new ReferenceError('Invalid path');
+          } else {
+              return leaf;
+          }
+      } else {
+          return this.getValue(leaf, path.substr(path.indexOf('.') + 1))
+      }
+  },
+
   // Generates an object that executes onChange when the values in the object change
   // From https://davidwalsh.name/watch-object-changes
   //  @param  {object} obj The object to be watched for changes
@@ -203,7 +237,7 @@ module.exports = {
       if (value instanceof Object) {
         const newPath = (`${path}.${key}`[0] === '.') ? key : `${path}.${key}`
         this.validateNotNull(value, newPath)
-      } else if (!value) {
+      } else if (!value && value !== 0) {
         throw new Error(`Member ${path}.${key} of object is ${value}`)
       }
     }
