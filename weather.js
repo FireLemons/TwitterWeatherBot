@@ -31,6 +31,7 @@ module.exports = class Weather {
       }
     }
 
+    this.alertAppInfo = config.alerts.app
     this.alertFilters = config.alerts.filters
     this.coordinates = config.coordinates
     this.logger = logger
@@ -447,7 +448,7 @@ module.exports = class Weather {
     https.get(this.alertURL,
     {
         headers: {
-            "User-Agent": 'ColumbiaMOWeatherBot/v0.2 (https://firelemons.github.io/COMOWeather/; comoweatherbot@gmail.com)'
+            "User-Agent": `${this.alertAppInfo.name}/v${this.alertAppInfo.version} (${this.alertAppInfo.website}; ${this.alertAppInfo.contact})`
         }
     }, (res) => {
       const { statusCode } = res
@@ -516,7 +517,7 @@ module.exports = class Weather {
 
       if (statusCode !== 200) {
         error = new Error(`Request Failed. Status Code: ${statusCode}`)
-      } else if (!/^application\/json/.test(contentType)) {
+      } else if (!/^application\/([a-zA-Z]+\+)*json/.test(contentType)) {
         error = new Error(`Invalid content-type. Expected application/json but received ${contentType}`)
       }
 
