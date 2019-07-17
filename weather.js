@@ -13,7 +13,6 @@ module.exports = class Weather {
   //  @param {object} logger A winston logger
   constructor (config, logger) {
     // Prepare weather get request URLs from config
-    const alertFilter = config.alerts.filter
     const alertParams = config.alerts.params
     let alertQueryParams = ''
     const OWM = config.open_weather_map
@@ -32,6 +31,7 @@ module.exports = class Weather {
       }
     }
 
+    this.alertFilters = config.alerts.filters
     this.coordinates = config.coordinates
     this.logger = logger
 
@@ -41,9 +41,13 @@ module.exports = class Weather {
 
   // Generates a warning message
   //  @param  {object} alertData A parsed json object from api.weather.gov/alerts. See https://www.weather.gov/documentation/services-web-api#/default/get_alerts for more information.
-  //  @return {string} A message desribing the nature of the alert.
-  getAlert (alertData) {
-      
+  //  @return {string[]} An array containing messages desribing the nature of each active alert.
+  getAlertMessage (alertData) {
+    let message = 'ALERT: ';
+    
+    
+    
+    return message;
   }
 
   // Generates a statement about the current wind speed using the beaufort scale
@@ -148,8 +152,8 @@ module.exports = class Weather {
       const precipitationStats = forecastData.map((elem) => {
         return {
           time: util.getCST(parseInt(elem.dt_txt.substr(11, 2))),
-          rain: (typeof elem.rain === 'object') ? elem.rain['3h'] : undefined,
-          snow: (typeof elem.snow === 'object') ? elem.snow['3h'] : undefined
+          rain: (elem.rain instanceof Object) ? elem.rain['3h'] : undefined,
+          snow: (elem.snow instanceof Object) ? elem.snow['3h'] : undefined
         }
       })
 
@@ -158,13 +162,13 @@ module.exports = class Weather {
 
         for (let i = 0; i < 3; i++) {
           const pStat = precipitationStats[i]
-          const rain = pStat.rain
-          const snow = pStat.snow
+          const rain = pStat.rain.toFixed(2)
+          const snow = pStat.snow.toFixed(2)
 
           if (rain || snow) {
-            precipitation += `${pStat.time}:00:`
-            precipitation += (rain) ? `${rain}mm/h rain` : ''
-            precipitation += (snow) ? `, ${snow}mm/h snow.` : '.'
+            precipitation += `${pStat.time}:00: `
+            precipitation += (rain) ? `${rain} mm/h rain` : ''
+            precipitation += (snow) ? `, ${snow} mm/h snow.` : '.'
             precipitation += '\n'
           }
         }
@@ -298,6 +302,123 @@ module.exports = class Weather {
       case 7:
         return '↘️'
     }
+  }
+
+  // Filters weather alerts
+  // @param  {object[]} alerts A list of weather alerts to be filtered
+  // @param  {object[]} filters A list of objects in the form
+  //   {
+  //     "restriction": "", One of the below restrictions
+  //        "after"     - Path leads to a date string. All alerts with dates before value will be removed
+  //        "before"    - Path leads to a date string. All alerts with dates after value will be removed
+  //        "contains"  - Path leads to an array. All alerts with arrays containing value will be kept
+  //        "has"       - Checks if path exits. Value not required. All alerts with valid paths will be kept
+  //        "equals"    - Path leads to a primitive value. All alerts with value matching the value at path will be kept
+  //        "matches"   - Path leads to a string. All alerts matching the regex stored in value will be kept
+  //     "path": "", The path to the value to filter by
+  //     "value": "" The value to be used for filtering
+  //   }
+  // @return {object[]} A list of weather alerts matching the specified filters
+  filterAlerts (alerts) {
+    if(!Array.isArray(alerts)){
+        throw new TypeError('Param alerts must be an array');
+    }
+    
+    // Either there are no filters or there's nothing to filter
+    if(!(alerts.length && this.alertFilters.length)){
+        return alerts;
+    }
+    
+    let unfilteredAlerts = alerts.slice(0),
+        filteredAlerts;
+    
+    this.alertFilters.forEach((filter) => {
+        filteredAlerts = [];
+        
+        let filterTest;
+        
+        switch(filter.restriction){
+            case 'after':
+                filterTest = (alertElem) => {
+                    let dateAtPath = new Date(util.getValue(alertElem, filter.path));
+                    
+                    if(Number.isNaN(dateAtPath.getTime())){
+                        throw new TypeError('Could not filter using restriction before. Value at path invalid date string.');
+                    }
+                    
+                    if(new Date(filter.value) - dateAtPath < 0){
+                        filteredAlerts.push(alertElem);
+                    }
+                };
+                break;
+            case 'before':
+                filterTest = (alertElem) => {
+                    let dateAtPath = new Date(util.getValue(alertElem, filter.path));
+                    
+                    if(Number.isNaN(dateAtPath.getTime())){
+                        throw new TypeError('Could not filter using restriction before. Value at path invalid date string.');
+                    }
+                    
+                    if(new Date(filter.value) - dateAtPath > 0){
+                        filteredAlerts.push(alertElem);
+                    }
+                };
+                break;
+            case 'contains':
+                filterTest = (alertElem) => {
+                    let valueAtPath = util.getValue(alertElem, filter.path);
+                    
+                    if(!Array.isArray(valueAtPath)){
+                        throw new TypeError('Could not filter using restriction contains. Value at path not array.');
+                    }
+                    
+                    if(valueAtPath.indexOf(filter.value) > -1){
+                        filteredAlerts.push(alertElem);
+                    }
+                };
+                break;
+            case 'has':
+                filterTest = (alertElem) => {
+                    try{
+                        if(util.getValue(alertElem, filter.path) !== undefined){
+                            filteredAlerts.push(alertElem);
+                        }
+                    } catch(e) {
+                        // do nothing
+                    }
+                };
+                break;
+            case 'equals':
+                filterTest = (alertElem) => {
+                    if(util.getValue(alertElem, filter.path) === filter.value){
+                        filteredAlerts.push(alertElem);
+                    }
+                };
+                break;
+            case 'matches':
+                filterTest = (alertElem) => {
+                    let regex = new RegExp(filter.value),
+                        valueAtPath = util.getValue(alertElem, filter.path);
+                    
+                    if(typeof valueAtPath !== 'string'){
+                        throw new TypeError('Could not filter using restriction mathces. Value at path not string.');
+                    }
+                    
+                    if(regex.test(util.getValue(alertElem, filter.path))){
+                        filteredAlerts.push(alertElem);
+                    }
+                };
+                break;
+            default:
+                throw new RangeError(`Unknown filter restriction: ${elem.restriction}`);
+                break;
+        }
+        
+        unfilteredAlerts.forEach(filterTest);
+        unfilteredAlerts = filteredAlerts.slice(0);
+    });
+    
+    return filteredAlerts;
   }
 
   // Sends the get request for weather alerts.
