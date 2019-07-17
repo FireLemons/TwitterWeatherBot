@@ -21,13 +21,13 @@ module.exports = class Weather {
 
     for (const paramName in alertParams) {
       if (Object.prototype.hasOwnProperty.call(alertParams, paramName)) {
-        alertQueryParams += paramName + '=' + alertParams[paramName]
+        alertQueryParams += '&' + paramName + '=' + alertParams[paramName]
       }
     }
 
     for (const paramName in OWMlocation) {
       if (Object.prototype.hasOwnProperty.call(OWMlocation, paramName)) {
-        OWMQueryParams += paramName + '=' + OWMlocation[paramName]
+        OWMQueryParams += '&' + paramName + '=' + OWMlocation[paramName]
       }
     }
 
@@ -35,17 +35,20 @@ module.exports = class Weather {
     this.coordinates = config.coordinates
     this.logger = logger
 
-    this.alertURL = `https://api.weather.gov/alerts?${alertQueryParams}`
-    this.weatherRequestURL = `https://api.openweathermap.org/data/2.5/forecast?${OWMQueryParams}&units=metric&APPID=${OWM.key}`
+    this.alertURL = `https://api.weather.gov/alerts?${alertQueryParams.substr(1)}`
+    this.weatherRequestURL = `https://api.openweathermap.org/data/2.5/forecast?${OWMQueryParams.substr(1)}&units=metric&APPID=${OWM.key}`
   }
 
   // Generates a warning message
   //  @param  {object} alertData A parsed json object from api.weather.gov/alerts. See https://www.weather.gov/documentation/services-web-api#/default/get_alerts for more information.
   //  @return {string[]} An array containing messages desribing the nature of each active alert.
   getAlertMessage (alertData) {
-    let message = 'ALERT: ';
+    let message = `ALERT: ${alertData.properties.event}\n`;
     
+    let start = new Date(alertData.properties.effective),
+        end = new Date(alertData.properties.ends);
     
+    message += `Lasting from ${start.toDateString().substr(0, 10)} ${start.getHours()}:00 to ${end.toDateString().substr(0, 10)} ${end.getHours()}:00\n`;
     
     return message;
   }
@@ -340,13 +343,15 @@ module.exports = class Weather {
         switch(filter.restriction){
             case 'after':
                 filterTest = (alertElem) => {
-                    let dateAtPath = new Date(util.getValue(alertElem, filter.path));
+                    let dateAtPath = new Date();
                     
                     if(Number.isNaN(dateAtPath.getTime())){
                         throw new TypeError('Could not filter using restriction before. Value at path invalid date string.');
                     }
                     
-                    if(new Date(filter.value) - dateAtPath < 0){
+                    let referenceDate = filter.value === 'now' ? new Date() : new Date(filter.value);
+                    
+                    if(referenceDate - dateAtPath < 0){
                         filteredAlerts.push(alertElem);
                     }
                 };
@@ -359,7 +364,9 @@ module.exports = class Weather {
                         throw new TypeError('Could not filter using restriction before. Value at path invalid date string.');
                     }
                     
-                    if(new Date(filter.value) - dateAtPath > 0){
+                    let referenceDate = filter.value === 'now' ? new Date() : new Date(filter.value);
+                    
+                    if(referenceDate - dateAtPath > 0){
                         filteredAlerts.push(alertElem);
                     }
                 };
@@ -436,8 +443,13 @@ module.exports = class Weather {
     if (!(onFailure instanceof Function)) {
       throw new TypeError('Param onFailure must be a function')
     }
-
-    https.get(this.alertURL, (res) => {
+    
+    https.get(this.alertURL,
+    {
+        headers: {
+            "User-Agent": 'ColumbiaMOWeatherBot/v0.2 (https://firelemons.github.io/COMOWeather/; comoweatherbot@gmail.com)'
+        }
+    }, (res) => {
       const { statusCode } = res
       const contentType = res.headers['content-type']
 
@@ -445,7 +457,7 @@ module.exports = class Weather {
 
       if (statusCode !== 200) {
         error = new Error(`Request Failed. Status Code: ${statusCode}`)
-      } else if (!/^application\/json/.test(contentType)) {
+      } else if (!/^application\/([a-zA-Z]+\+)*json/.test(contentType)) {
         error = new Error(`Invalid content-type. Expected application/json but received ${contentType}`)
       }
 
