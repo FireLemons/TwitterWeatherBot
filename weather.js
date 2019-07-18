@@ -49,7 +49,7 @@ module.exports = class Weather {
     let start = new Date(alertData.properties.effective),
         end = new Date(alertData.properties.ends);
     
-    message += `Lasting from ${start.toDateString().substr(0, 10)} ${start.getHours()}:00 to ${end.toDateString().substr(0, 10)} ${end.getHours()}:00\n`;
+    message += `Lasting from ${start.toDateString().substr(0, 10)} ${start.getHours()}:00 to ${end.toDateString().substr(0, 10)} ${end.getHours()}:00\n\n`;
     
     return message;
   }
@@ -280,7 +280,7 @@ module.exports = class Weather {
         return 'The pressure displayed is at ground level. Columbia is 758ft(231m) above sea level.'
       default: // Icon Definitions
         const iconDefinition = iconDefinitions[id - 2]
-        return `${iconDefinition.icon} indicates ${iconDefinition.conditions.replace(',', ' or')}`
+        return `${iconDefinition.icon} indicates ${iconDefinition.conditions.replace(',', ' or')}\nSee all the icon meanings at https://firelemons.github.io/COMOWeather/`
     }
   }
 
