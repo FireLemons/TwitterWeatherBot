@@ -246,7 +246,7 @@ const onFailLoadWeather = (errors) => {
 // Turns weather alert data into a twitter status and tweets it
 //  @param {object} parsedWeatherAlertData The alert data. See https://www.weather.gov/documentation/services-web-api#/default/get_alerts for more information.
 const onWeatherAlertLoaded = (parsedWeatherAlertData) => {
-  const alerts = weather.getAlerts(parsedWeatherAlertData);
+  const alerts = weatherTools.filterAlerts(parsedWeatherAlertData.features);
   
   alerts.forEach((alertData) => {
       let alertMessage = tweetWeather.getAlertMessage(alertData);
@@ -265,7 +265,7 @@ let retryAlertTimeout = 0
 // Retries the request to ge forecast data up to three times
 //  @param {Error[]} A list of errors describing why the failure occurred
 const onFailLoadWeatherAlert = (errors) => {
-  logger.error(new Error('Failed to load weather data.'))
+  logger.error(new Error('Failed to load weather alert data.'))
 
   if (Array.isArray(errors)) {
     if (retryAlertTimeout <= 262144) {
