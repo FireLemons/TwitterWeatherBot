@@ -44,12 +44,17 @@ module.exports = class Weather {
   //  @param  {object} alertData A parsed json object from api.weather.gov/alerts. See https://www.weather.gov/documentation/services-web-api#/default/get_alerts for more information.
   //  @return {string[]} An array containing messages desribing the nature of each active alert.
   getAlertMessage (alertData) {
-    let message = `ALERT: ${alertData.properties.event}\n`;
+    
+    let alertEvent = alertData.properties.event,
+        message = `ALERT: ${alertEvent}\n`;
     
     let start = new Date(alertData.properties.effective),
         end = new Date(alertData.properties.ends);
     
     message += `Lasting from ${start.toDateString().substr(0, 10)} ${start.getHours()}:00 to ${end.toDateString().substr(0, 10)} ${end.getHours()}:00\n\n`;
+    
+    let alertDefintions = require('./data/alertDefinitions.json');
+    message += alertDefintions[alertEvent];
     
     return message;
   }
