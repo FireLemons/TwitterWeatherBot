@@ -1,8 +1,32 @@
 {
     "alerts":{
-        "filter": {
-            TBA
+        "app":  { Information required by the national weather service when requesting alert data
+            "contact": "EMAIL",
+            "name": "APP NAME",
+            "version": "VERSION #",
+            "website": "WEBSITE URL"
         },
+        "filters": [
+            <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            Optional filters to be applied to the list of alerts recieved from api.weather.gov
+            
+            Filters are a collection of objects in the form:
+            {
+                "restriction": "FILTER NAME",
+                "path": "PATH IN OBJECT TO VALUE TO BE FILTERED",
+                "value": "SEE BELOW"
+            }
+            
+            supported filters are:
+            "after"     - Path leads to a date string. All alerts with dates before the current time + value(hours) will be removed
+            "before"    - Path leads to a date string. All alerts with dates after the current time + value(hours) will be removed
+            "contains"  - Path leads to an array. All alerts with arrays containing value will be kept
+            "has"       - Checks if path exits. Value specifies whether alerts with valid paths will be kept or removed.
+                "value": true to keep matching alerts "value": false to discard alerts
+            "equals"    - Path leads to a primitive value. All alerts with value matching the value at path will be kept
+            "matches"   - Path leads to a string. All alerts matching the regex in value will be kept
+            >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        ],
         "params": {
             <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             GET parameters for api.weather.gov/alerts expressed as key value pairs
@@ -26,11 +50,8 @@
     "open_weather_map": {
         "location": {
             <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            There are many key value pairs for specifying
-            a location. Each one is based on the 
-            OpenWeatherMap api for 5 day forecasts.
-            
-            As of December 2018 valid key value pairs are:
+            GET parameters for api.openweathermap.org expressed as key value pairs excluding the api key
+            As of December 2018 valid parameters are:
             ==============================================
             City & Country Combination
             Based on api call: api.openweathermap.org/data/2.5/forecast?q={city name},{country code}
