@@ -91,33 +91,33 @@ module.exports = {
   //  @param  {string} path A string consisting of object keys delimited by periods
   //  @return The value at path if it exists
   //  @throws {ReferenceError} On finding that the path is invalid
-  getValue(object, path){
-      if(typeof path !== 'string'){
-          throw new TypeError('Param path must be a string');
-      }
-      
-      if(!(object instanceof Object)){
-          throw new TypeError('Param object must be an object');
-      }
-      
-      if(!path.length){
-          return object;
-      }
-      
-      let keys = path.split('.'),
-          leaf = object[keys[0]];
-      
-      if(keys.length === 1){
-          let leaf = object[keys[0]];
-          
-          if(leaf === undefined){
-              throw new ReferenceError('Invalid path');
-          } else {
-              return leaf;
-          }
+  getValue (object, path) {
+    if (typeof path !== 'string') {
+      throw new TypeError('Param path must be a string')
+    }
+
+    if (!(object instanceof Object)) {
+      throw new TypeError('Param object must be an object')
+    }
+
+    if (!path.length) {
+      return object
+    }
+
+    const keys = path.split('.')
+    const leaf = object[keys[0]]
+
+    if (keys.length === 1) {
+      const leaf = object[keys[0]]
+
+      if (leaf === undefined) {
+        throw new ReferenceError('Invalid path')
       } else {
-          return this.getValue(leaf, path.substr(path.indexOf('.') + 1))
+        return leaf
       }
+    } else {
+      return this.getValue(leaf, path.substr(path.indexOf('.') + 1))
+    }
   },
 
   // Generates an object that executes onChange when the values in the object change
