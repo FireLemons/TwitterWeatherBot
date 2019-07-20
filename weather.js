@@ -32,19 +32,22 @@ module.exports = class Weather {
     }
 
     this.alertAppInfo = config.alerts.app
-    this.alertFilters = config.alerts.filters
-    
-    //Prioritize "has" filters first
-    this.alertFilters.sort((filter1, filter2) => {
-        if(filter1.restriction === filter2.restriction){
-            return 0;
-        } else if(filter1.restriction === 'has'){
-            return -1;
+
+    if (config.alerts.filters) {
+      this.alertFilters = config.alerts.filters
+
+      // Prioritize "has" filters first
+      this.alertFilters.sort((filter1, filter2) => {
+        if (filter1.restriction === filter2.restriction) {
+          return 0
+        } else if (filter1.restriction === 'has') {
+          return -1
         } else {
-            return 1;
+          return 1
         }
-    });
-    
+      })
+    }
+
     this.coordinates = config.coordinates
     this.logger = logger
 
@@ -56,19 +59,18 @@ module.exports = class Weather {
   //  @param  {object} alertData A parsed json object from api.weather.gov/alerts. See https://www.weather.gov/documentation/services-web-api#/default/get_alerts for more information.
   //  @return {string[]} An array containing messages desribing the nature of each active alert.
   getAlertMessage (alertData) {
-    
-    let alertEvent = alertData.properties.event,
-        message = `ALERT: ${alertEvent}\n`;
-    
-    let start = new Date(alertData.properties.effective),
-        end = new Date(alertData.properties.ends);
-    
-    message += `Lasting from ${start.toDateString().substr(0, 10)} ${start.getHours()}:00 to ${end.toDateString().substr(0, 10)} ${end.getHours()}:00\n\n`;
-    
-    let alertDefintions = require('./data/alertDefinitions.json');
-    message += alertDefintions[alertEvent];
-    
-    return message;
+    const alertEvent = alertData.properties.event
+    let message = `ALERT: ${alertEvent}\n`
+
+    const start = new Date(alertData.properties.effective)
+    const end = new Date(alertData.properties.ends)
+
+    message += `Lasting from ${start.toDateString().substr(0, 10)} ${start.getHours()}:00 to ${end.toDateString().substr(0, 10)} ${end.getHours()}:00\n\n`
+
+    const alertDefintions = require('./data/alertDefinitions.json')
+    message += alertDefintions[alertEvent]
+
+    return message
   }
 
   // Generates a statement about the current wind speed using the beaufort scale
@@ -341,117 +343,125 @@ module.exports = class Weather {
   //   }
   // @return {object[]} A list of weather alerts matching the specified filters
   filterAlerts (alerts) {
-    if(!Array.isArray(alerts)){
-        throw new TypeError('Param alerts must be an array');
+    if (!Array.isArray(alerts)) {
+      throw new TypeError('Param alerts must be an array')
     }
-    
+
     // Either there are no filters or there's nothing to filter
-    if(!(alerts.length && this.alertFilters.length)){
-        return alerts;
+    if (!(alerts.length && this.alertFilters.length)) {
+      return alerts
     }
-    
-    let unfilteredAlerts = alerts.slice(0),
-        filteredAlerts;
-    
+
+    let unfilteredAlerts = alerts.slice(0)
+    let filteredAlerts
+
     this.alertFilters.forEach((filter) => {
-        filteredAlerts = [];
-        
-        let filterTest;
-        
-        switch(filter.restriction){
-            case 'after':
-                filterTest = (alertElem) => {
-                    let dateAtPath = new Date();
-                    
-                    if(Number.isNaN(dateAtPath.getTime())){
-                        throw new TypeError('Could not filter using restriction before. Value at path invalid date string.');
-                    }
-                    
-                    let referenceDate = filter.value === 'now' ? new Date() : new Date(filter.value);
-                    
-                    if(referenceDate - dateAtPath < 0){
-                        filteredAlerts.push(alertElem);
-                    }
-                };
-                break;
-            case 'before':
-                filterTest = (alertElem) => {
-                    let dateAtPath = new Date(util.getValue(alertElem, filter.path));
-                    
-                    if(Number.isNaN(dateAtPath.getTime())){
-                        throw new TypeError('Could not filter using restriction before. Value at path invalid date string.');
-                    }
-                    
-                    let referenceDate = filter.value === 'now' ? new Date() : new Date(filter.value);
-                    
-                    if(referenceDate - dateAtPath > 0){
-                        filteredAlerts.push(alertElem);
-                    }
-                };
-                break;
-            case 'contains':
-                filterTest = (alertElem) => {
-                    let valueAtPath = util.getValue(alertElem, filter.path);
-                    
-                    if(!Array.isArray(valueAtPath)){
-                        throw new TypeError('Could not filter using restriction contains. Value at path not array.');
-                    }
-                    
-                    if(valueAtPath.indexOf(filter.value) > -1){
-                        filteredAlerts.push(alertElem);
-                    }
-                };
-                break;
-            case 'has':
-                filterTest = filter.value ? (alertElem) => {
-                        try{
-                            if(util.getValue(alertElem, filter.path) !== undefined){
-                                filteredAlerts.push(alertElem);
-                            }
-                        } catch(e) {
-                            // do nothing
-                        }
-                    } 
-                    : 
-                    (alertElem) => {
-                        try{
-                            util.getValue(alertElem, filter.path);
-                        } catch(e) {
-                            filteredAlerts.push(alertElem);
-                        }
-                    };
-                break;
-            case 'equals':
-                filterTest = (alertElem) => {
-                    if(util.getValue(alertElem, filter.path) === filter.value){
-                        filteredAlerts.push(alertElem);
-                    }
-                };
-                break;
-            case 'matches':
-                filterTest = (alertElem) => {
-                    let regex = new RegExp(filter.value),
-                        valueAtPath = util.getValue(alertElem, filter.path);
-                    
-                    if(typeof valueAtPath !== 'string'){
-                        throw new TypeError('Could not filter using restriction mathces. Value at path not string.');
-                    }
-                    
-                    if(regex.test(util.getValue(alertElem, filter.path))){
-                        filteredAlerts.push(alertElem);
-                    }
-                };
-                break;
-            default:
-                throw new RangeError(`Unknown filter restriction: ${elem.restriction}`);
-                break;
-        }
-        
-        unfilteredAlerts.forEach(filterTest);
-        unfilteredAlerts = filteredAlerts.slice(0);
-    });
-    
-    return filteredAlerts;
+      filteredAlerts = []
+
+      let filterTest
+
+      switch (filter.restriction) {
+        case 'after':
+          if (isNaN(filter.value)) {
+            throw new TypeError('Could not filter using restriction after. Filter value not a number.')
+          }
+
+          filterTest = (alertElem) => {
+            const dateAtPath = new Date(util.getValue(alertElem, filter.path))
+
+            if (Number.isNaN(dateAtPath.getTime())) {
+              throw new TypeError('Could not filter using restriction before. Value at path invalid date string.')
+            }
+
+            const referenceDate = new Date()
+            referenceDate.setHours(filter.value + referenceDate.getHours())
+
+            if (referenceDate - dateAtPath < 0) {
+              filteredAlerts.push(alertElem)
+            }
+          }
+          break
+        case 'before':
+          if (isNaN(filter.value)) {
+            throw new TypeError('Could not filter using restriction before. Filter value not a number.')
+          }
+
+          filterTest = (alertElem) => {
+            const dateAtPath = new Date(util.getValue(alertElem, filter.path))
+
+            if (Number.isNaN(dateAtPath.getTime())) {
+              throw new TypeError('Could not filter using restriction before. Value at path invalid date string.')
+            }
+
+            const referenceDate = new Date()
+            referenceDate.setHours(filter.value + referenceDate.getHours())
+
+            if (referenceDate - dateAtPath > 0) {
+              filteredAlerts.push(alertElem)
+            }
+          }
+          break
+        case 'contains':
+          filterTest = (alertElem) => {
+            const valueAtPath = util.getValue(alertElem, filter.path)
+
+            if (!Array.isArray(valueAtPath)) {
+              throw new TypeError('Could not filter using restriction contains. Value at path not array.')
+            }
+
+            if (valueAtPath.indexOf(filter.value) > -1) {
+              filteredAlerts.push(alertElem)
+            }
+          }
+          break
+        case 'has':
+          filterTest = filter.value ? (alertElem) => {
+            try {
+              if (util.getValue(alertElem, filter.path) !== undefined) {
+                filteredAlerts.push(alertElem)
+              }
+            } catch (e) {
+              // do nothing
+            }
+          }
+            : (alertElem) => {
+              try {
+                util.getValue(alertElem, filter.path)
+              } catch (e) {
+                filteredAlerts.push(alertElem)
+              }
+            }
+          break
+        case 'equals':
+          filterTest = (alertElem) => {
+            if (util.getValue(alertElem, filter.path) === filter.value) {
+              filteredAlerts.push(alertElem)
+            }
+          }
+          break
+        case 'matches':
+          filterTest = (alertElem) => {
+            const regex = new RegExp(filter.value)
+            const valueAtPath = util.getValue(alertElem, filter.path)
+
+            if (typeof valueAtPath !== 'string') {
+              throw new TypeError('Could not filter using restriction mathces. Value at path not string.')
+            }
+
+            if (regex.test(util.getValue(alertElem, filter.path))) {
+              filteredAlerts.push(alertElem)
+            }
+          }
+          break
+        default:
+          throw new RangeError(`Unknown filter restriction: ${filter.restriction}`)
+      }
+
+      unfilteredAlerts.forEach(filterTest)
+      unfilteredAlerts = filteredAlerts.slice(0)
+    })
+
+    return filteredAlerts
   }
 
   // Sends the get request for weather alerts.
@@ -469,51 +479,51 @@ module.exports = class Weather {
     if (!(onFailure instanceof Function)) {
       throw new TypeError('Param onFailure must be a function')
     }
-    
+
     https.get(this.alertURL,
-    {
+      {
         headers: {
-            "User-Agent": `${this.alertAppInfo.name}/v${this.alertAppInfo.version} (${this.alertAppInfo.website}; ${this.alertAppInfo.contact})`
+          'User-Agent': `${this.alertAppInfo.name}/v${this.alertAppInfo.version} (${this.alertAppInfo.website}; ${this.alertAppInfo.contact})`
         }
-    }, (res) => {
-      const { statusCode } = res
-      const contentType = res.headers['content-type']
+      }, (res) => {
+        const { statusCode } = res
+        const contentType = res.headers['content-type']
 
-      let error
+        let error
 
-      if (statusCode !== 200) {
-        error = new Error(`Request Failed. Status Code: ${statusCode}`)
-      } else if (!/^application\/([a-zA-Z]+\+)*json/.test(contentType)) {
-        error = new Error(`Invalid content-type. Expected application/json but received ${contentType}`)
-      }
-
-      if (error) {
-        onFailure([
-          error
-        ])
-
-        res.resume()
-        return
-      }
-
-      res.setEncoding('utf8')
-
-      let rawData = ''
-
-      res.on('data', (chunk) => {
-        rawData += chunk
-      })
-
-      res.on('end', () => {
-        try {
-          const parsedWeatherAlertData = JSON.parse(rawData)
-
-          onDataLoaded(parsedWeatherAlertData)
-        } catch (e) {
-          onFailure([e])
+        if (statusCode !== 200) {
+          error = new Error(`Request Failed. Status Code: ${statusCode}`)
+        } else if (!/^application\/([a-zA-Z]+\+)*json/.test(contentType)) {
+          error = new Error(`Invalid content-type. Expected application/json but received ${contentType}`)
         }
-      })
-    }).on('error', (e) => {
+
+        if (error) {
+          onFailure([
+            error
+          ])
+
+          res.resume()
+          return
+        }
+
+        res.setEncoding('utf8')
+
+        let rawData = ''
+
+        res.on('data', (chunk) => {
+          rawData += chunk
+        })
+
+        res.on('end', () => {
+          try {
+            const parsedWeatherAlertData = JSON.parse(rawData)
+
+            onDataLoaded(parsedWeatherAlertData)
+          } catch (e) {
+            onFailure([e])
+          }
+        })
+      }).on('error', (e) => {
       onFailure([e])
     })
   }
