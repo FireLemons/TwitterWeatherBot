@@ -252,7 +252,7 @@ const onWeatherAlertLoaded = (parsedWeatherAlertData) => {
       let alertMessage = tweetWeather.getAlertMessage(alertData);
       
       if (alertMessage) {
-        console.log(alertMessage)//tweetWeather.sendTweet(alertMessage)
+        tweetWeather.sendTweet(alertMessage)
       } else if (!alertMessage) {
         logger.error(new Error('Failure in generating alert message'))
         logger.error(alertData);
@@ -337,7 +337,7 @@ if (new Date() - stats.lastUpdate > 7620000) { // 7620000ms = 2 hours 7 minutes
     }
   }
 
-  // weatherTools.loadWeatherAlerts(onWeatherAlertLoaded, onFailLoadWeatherAlert);
+  weatherTools.loadWeatherAlerts(onWeatherAlertLoaded, onFailLoadWeatherAlert);
   weatherTools.loadWeather(onWeatherLoadedLate, onFailLoadWeatherLate)
 }
 
@@ -345,7 +345,7 @@ var updates = schedule.scheduleJob('0 */2 * * *', function () {
   retryTimeout = 0
   retryAlertTimeout = 0
 
-  // weatherTools.loadWeatherAlerts(onWeatherAlertLoaded, onFailLoadWeatherAlert);
+  weatherTools.loadWeatherAlerts(onWeatherAlertLoaded, onFailLoadWeatherAlert);
   weatherTools.loadWeather(onWeatherLoaded, onFailLoadWeather)
 })
 
