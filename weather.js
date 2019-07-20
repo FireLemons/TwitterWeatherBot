@@ -33,6 +33,18 @@ module.exports = class Weather {
 
     this.alertAppInfo = config.alerts.app
     this.alertFilters = config.alerts.filters
+    
+    //Prioritize "has" filters first
+    this.alertFilters.sort((filter1, filter2) => {
+        if(filter1.restriction === filter2.restriction){
+            return 0;
+        } else if(filter1.restriction === 'has'){
+            return -1;
+        } else {
+            return 1;
+        }
+    });
+    
     this.coordinates = config.coordinates
     this.logger = logger
 
@@ -321,7 +333,7 @@ module.exports = class Weather {
   //        "after"     - Path leads to a date string. All alerts with dates before value will be removed
   //        "before"    - Path leads to a date string. All alerts with dates after value will be removed
   //        "contains"  - Path leads to an array. All alerts with arrays containing value will be kept
-  //        "has"       - Checks if path exits. Value not required. All alerts with valid paths will be kept
+  //        "has"       - Checks if path exits. Value specifies whether alerts with valid paths will be kept or removed.
   //        "equals"    - Path leads to a primitive value. All alerts with value matching the value at path will be kept
   //        "matches"   - Path leads to a string. All alerts matching the regex stored in value will be kept
   //     "path": "", The path to the value to filter by
@@ -391,15 +403,23 @@ module.exports = class Weather {
                 };
                 break;
             case 'has':
-                filterTest = (alertElem) => {
-                    try{
-                        if(util.getValue(alertElem, filter.path) !== undefined){
+                filterTest = filter.value ? (alertElem) => {
+                        try{
+                            if(util.getValue(alertElem, filter.path) !== undefined){
+                                filteredAlerts.push(alertElem);
+                            }
+                        } catch(e) {
+                            // do nothing
+                        }
+                    } 
+                    : 
+                    (alertElem) => {
+                        try{
+                            util.getValue(alertElem, filter.path);
+                        } catch(e) {
                             filteredAlerts.push(alertElem);
                         }
-                    } catch(e) {
-                        // do nothing
-                    }
-                };
+                    };
                 break;
             case 'equals':
                 filterTest = (alertElem) => {
