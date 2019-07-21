@@ -5,6 +5,7 @@ const util = require('./util.js')
 
 module.exports = class TweetWeather {
   constructor (config, logger, weatherTools) {
+    this.localStationAccount = config.localStationID
     this.logger = logger
     this.weatherTools = weatherTools
     this.twitterClient = new Twitter({
@@ -31,6 +32,40 @@ module.exports = class TweetWeather {
     } catch (e) {
       this.logger.error(e)
     }
+  }
+
+  // Retweets all of another twitter account's tweets mad in the past hour
+  retweetLocalStationTweets () {
+    const params = {
+      count: 10,
+      exclude_replies: true,
+      trim_user: true,
+      user_id: this.localStationAccount
+    }
+
+    this.twitterClient.get('statuses/user_timeline', params, (error, tweets, response) => {
+      if (error) {
+        this.logger.error(error)
+        return
+      }
+
+      const rtParams = {
+        trim_user: true
+      }
+
+      tweets.forEach((tweet) => {
+        if (new Date() - new Date(tweet.created_at) < 360000) {
+          this.twitterClient.post(`statuses/retweet/${tweet.id_str}.json`, rtParams, (error, tweets, response) => {
+            if (error) {
+              this.logger.error(error)
+              return
+            }
+
+            this.logger.log(`Received ${response} from retweet request.`)
+          })
+        }
+      })
+    })
   }
 
   // Get periodic update message
