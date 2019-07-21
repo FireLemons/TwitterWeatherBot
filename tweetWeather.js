@@ -26,6 +26,7 @@ module.exports = class TweetWeather {
         throw new Error(`Message too long: ${message}`)
       }
 
+      this.logger.info(`Prepared alert ${message}`)
       return message
     } catch (e) {
       this.logger.error(e)
