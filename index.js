@@ -341,7 +341,7 @@ if (new Date() - stats.lastUpdate > 7620000) { // 7620000ms = 2 hours 7 minutes
   weatherTools.loadWeather(onWeatherLoadedLate, onFailLoadWeatherLate)
 }
 
-var updates = schedule.scheduleJob('0 */2 * * *', function () {
+schedule.scheduleJob('0 */2 * * *', function () {
   retryTimeout = 0
   retryAlertTimeout = 0
 
