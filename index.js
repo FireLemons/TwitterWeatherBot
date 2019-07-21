@@ -349,4 +349,10 @@ schedule.scheduleJob('0 */2 * * *', function () {
   weatherTools.loadWeather(onWeatherLoaded, onFailLoadWeather)
 })
 
+if (config.twitter.localStationID) {
+  schedule.scheduleJob('30 */1 * * *', function () {
+    tweetWeather.retweetLocalStationTweets()
+  })
+}
+
 logger.info('Bot process started.')
