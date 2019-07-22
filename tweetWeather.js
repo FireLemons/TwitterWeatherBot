@@ -55,8 +55,12 @@ module.exports = class TweetWeather {
         trim_user: true
       }
 
+      if(tweets.length){
+          this.logger.info(`Latest tweet created at: ${tweets[0].created_at}`);
+      }
+
       tweets.forEach((tweet) => {
-        if (new Date() - new Date(tweet.created_at) < 360000) {
+        if (new Date() - new Date(tweet.created_at) < 3600000) {
           this.logger.info(`Retweeting tweet with id ${tweet.id_str}`)
 
           this.twitterClient.post(`statuses/retweet/${tweet.id_str}.json`, rtParams, (error, tweets, response) => {
