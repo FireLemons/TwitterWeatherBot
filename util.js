@@ -2,24 +2,6 @@
 
 /** @fileoverview A collection of utility functions. */
 module.exports = {
-  // Converts UTC hours into CST hours
-  //  @param  {number} UTC A number representing hours at UTC time
-  //  @return {string} A 2 digit number representing the input UTC hours converted to central time
-  getCST (UTC) {
-    if (isNaN(UTC) || !isFinite(UTC)) {
-      throw new TypeError('Param UTC must be a number')
-    }
-
-    if (UTC < 0 || UTC > 23) {
-      throw new RangeError('UTC must be between 0 and 23')
-    }
-
-    const offsetHour = Math.floor(UTC) - 6
-    const CST = offsetHour >= 0 ? offsetHour : offsetHour + 24
-
-    return ('0' + CST).substr(-2)
-  },
-
   // Gets the element from a sorted list closest to the given element.
   //  @param {object} elem The given object to be compared for similarity against
   //  @param {object[]} list The sorted list to be searched for the most similar element

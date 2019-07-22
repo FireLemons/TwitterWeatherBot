@@ -142,7 +142,7 @@ module.exports = class Weather {
     } else if (messageRoll < 0.1) { // tutorials
       this.logger.info('Generating tutorial.')
       return this.getTutorial()
-    } else if (messageRoll < 0.3) { // celestial info
+    } else if (messageRoll < 0.35) { // celestial info
       this.logger.info('Generating celestial info.')
       const eventRoll = Math.random()
 
@@ -174,7 +174,7 @@ module.exports = class Weather {
     if (stat === 'precipitation') {
       const precipitationStats = forecastData.map((elem) => {
         return {
-          time: util.getCST(parseInt(elem.dt_txt.substr(11, 2))),
+          time: new Date(elem.dt * 1000).toTimeString().substr(0, 2),
           rain: (elem.rain instanceof Object) ? elem.rain['3h'] : undefined,
           snow: (elem.snow instanceof Object) ? elem.snow['3h'] : undefined
         }
@@ -207,7 +207,7 @@ module.exports = class Weather {
         let pressure = 'Expected Pressure:\n'
 
         forecastData.forEach((elem) => {
-          pressure += `${util.getCST(parseInt(elem.dt_txt.substr(11, 2)))}:00: ${elem.main.grnd_level}hPa\n`
+          pressure += `${new Date(elem.dt * 1000).toTimeString().substr(0, 2)}:00: ${elem.main.grnd_level}hPa\n`
         })
 
         return pressure.substr(0, pressure.length - 1)
@@ -215,7 +215,7 @@ module.exports = class Weather {
         let humidity = 'Expected Humidity:\n'
 
         forecastData.forEach((elem) => {
-          humidity += `${util.getCST(parseInt(elem.dt_txt.substr(11, 2)))}:00: ${elem.main.humidity}%\n`
+          humidity += `${new Date(elem.dt * 1000).toTimeString().substr(0, 2)}:00: ${elem.main.humidity}%\n`
         })
 
         return humidity.substr(0, humidity.length - 1)
@@ -223,7 +223,7 @@ module.exports = class Weather {
         let cloudiness = 'Expected Cloud Coverage:\n'
 
         forecastData.forEach((elem) => {
-          cloudiness += `${util.getCST(parseInt(elem.dt_txt.substr(11, 2)))}:00: ${elem.clouds.all}%\n`
+          cloudiness += `${new Date(elem.dt * 1000).toTimeString().substr(0, 2)}:00: ${elem.clouds.all}%\n`
         })
 
         return cloudiness.substr(0, cloudiness.length - 1)
@@ -239,14 +239,14 @@ module.exports = class Weather {
     const forecastData = parsedWeatherData.list.slice(0, 3)
     let defaultForecast = (Math.random() > 0.000228310502) ? 'Forecast' : 'Fourcast'
 
-    for (const { dt_txt, main, weather, wind: { deg, speed } } of forecastData) {
+    for (const { dt, main, weather, wind: { deg, speed } } of forecastData) {
       const conditions = {
         symbol: weatherStatusCodeMap[weather[0].id].symbol,
         temp: {
           max: Math.round(main.temp_max),
           min: Math.round(main.temp_min)
         },
-        time: util.getCST(parseInt(dt_txt.substr(11, 2))),
+        time: new Date(dt * 1000).toTimeString().substr(0, 2),
         wind: {
           direction: this.getWindDirectionAsCardinal(deg),
           speed: speed.toPrecision(2)
