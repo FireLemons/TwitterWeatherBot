@@ -44,8 +44,8 @@ module.exports = class TweetWeather {
     }
 
     this.twitterClient.get('statuses/user_timeline', params, (error, tweets, response) => {
-      this.logger.log('Checking for retweets')
-      
+      this.logger.info('Checking for retweets')
+
       if (error) {
         this.logger.error(error)
         return
@@ -57,15 +57,15 @@ module.exports = class TweetWeather {
 
       tweets.forEach((tweet) => {
         if (new Date() - new Date(tweet.created_at) < 360000) {
-          this.logger.log(`Retweeting tweet with id ${tweet.id_str}`)
-          
+          this.logger.info(`Retweeting tweet with id ${tweet.id_str}`)
+
           this.twitterClient.post(`statuses/retweet/${tweet.id_str}.json`, rtParams, (error, tweets, response) => {
             if (error) {
               this.logger.error(error)
               return
             }
 
-            this.logger.log(`Received ${response} from retweet request.`)
+            this.logger.info(`Received ${response} from retweet request.`)
           })
         }
       })
