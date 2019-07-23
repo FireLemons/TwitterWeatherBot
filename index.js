@@ -162,9 +162,6 @@ process.on('SIGHUP', disruptHandler)
 // Init Weather Data Object
 const weatherTools = new WeatherManager(config, logger)
 
-// Init Twitter Data Object
-const tweetWeather = new TwitterManager(config.twitter, logger, weatherTools)
-
 /*
  * Load stats
  */
@@ -192,6 +189,9 @@ if (!fs.existsSync('./data/stats.json')) {
 
 const stats = util.getWatchedObject(_stats, saveStats)
 
+// Init Twitter Data Object
+const tweetWeather = new TwitterManager(config.twitter, logger, stats, weatherTools)
+
 /*
  *  Schedule forecasts to go out every 2 hours.
  */
@@ -199,14 +199,7 @@ const stats = util.getWatchedObject(_stats, saveStats)
 // Turns weather data into a twitter status and tweets it
 //  @param {object} parsedWeatherData The weather data. See https://openweathermap.org/forecast5#parameter for details about the structure of the Object.
 const onWeatherLoaded = (parsedWeatherData) => {
-  const statusMessage = tweetWeather.getStatusMessage(parsedWeatherData)
-
-  if (statusMessage) {
-    tweetWeather.sendTweet(statusMessage)
-    stats.lastUpdate = new Date()
-  } else {
-    logger.error(new Error('Failed to generate status message.'))
-  }
+  tweetWeather.tweetForecast(parsedWeatherData)
 }
 
 let retryTimeout = 0

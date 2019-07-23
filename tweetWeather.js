@@ -4,9 +4,10 @@ const Twitter = require('twitter')
 const util = require('./util.js')
 
 module.exports = class TweetWeather {
-  constructor (config, logger, weatherTools) {
+  constructor (config, logger, stats, weatherTools) {
     this.localStationAccount = config.localStationID
     this.logger = logger
+    this.stats = stats
     this.weatherTools = weatherTools
     this.twitterClient = new Twitter({
       consumer_key: config.consumer_key,
@@ -55,8 +56,8 @@ module.exports = class TweetWeather {
         trim_user: true
       }
 
-      if(tweets.length){
-          this.logger.info(`Latest tweet created at: ${tweets[0].created_at}`);
+      if (tweets.length) {
+        this.logger.info(`Latest tweet created at: ${tweets[0].created_at}`)
       }
 
       tweets.forEach((tweet) => {
@@ -76,11 +77,23 @@ module.exports = class TweetWeather {
     })
   }
 
-  // Get periodic update message
+  // Tweets weather messages
+  //  @param {string} message The message to be sent(max length 280).
+  sendTweet (message) {
+    this.twitterClient.post('statuses/update', { status: message }, (error, tweet, response) => {
+      if (error) {
+        this.logger.error(error)
+      }
+
+      this.logger.info('Sent tweet.')
+      this.logger.info(`Recieved ${response}`)
+    })
+  }
+
+  // Send regular forecast message
   //  @param  {object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
   //  @param  {boolean} isLate True if the bot missed a twitter update. False otherwise.
-  //  @return {string} A weather update message to be posted to twitter.
-  getStatusMessage (parsedWeatherData, isLate) {
+  tweetForecast (parsedWeatherData, isLate) {
     try {
       const forecast = this.weatherTools.getForecast(parsedWeatherData)
       this.logger.info('Created forecast')
@@ -95,22 +108,14 @@ module.exports = class TweetWeather {
         throw new Error(`Message too long: ${message}`)
       }
 
-      return message
+      if (message) {
+        this.sendTweet(message)
+        this.stats.lastUpdate = new Date()
+      } else {
+        throw new Error('Failed to generate status message.')
+      }
     } catch (e) {
       this.logger.error(e)
     }
-  }
-
-  // Tweets weather messages
-  //  @param {string} message The message to be sent(max length 280).
-  sendTweet (message) {
-    this.twitterClient.post('statuses/update', { status: message }, (error, tweet, response) => {
-      if (error) {
-        this.logger.error(error)
-      }
-
-      this.logger.info('Sent tweet.')
-      this.logger.info(`Recieved ${response}`)
-    })
   }
 }
