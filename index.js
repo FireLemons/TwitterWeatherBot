@@ -302,14 +302,7 @@ if (new Date() - stats.lastUpdate > 7620000) { // 7620000ms = 2 hours 7 minutes
   logger.warn(new Error('Missed scheduled twitter update. Presumably by waking from sleep.'))
 
   const onWeatherLoadedLate = (parsedWeatherData) => {
-    const statusMessage = tweetWeather.getStatusMessage(parsedWeatherData, true)
-
-    if (statusMessage) {
-      tweetWeather.sendTweet(statusMessage)
-      stats.lastUpdate = new Date()
-    } else {
-      logger.error(new Error('Failed to generate status message.'))
-    }
+    tweetWeather.tweetForecast(parsedWeatherData, true)
   }
 
   const onFailLoadWeatherLate = (errors) => {
@@ -324,7 +317,7 @@ if (new Date() - stats.lastUpdate > 7620000) { // 7620000ms = 2 hours 7 minutes
         logger.info(`Retrying fetching weather data in ${retryTimeout}ms. Retry ${(retryTimeout / 131072) + 1} of 3`)
 
         setTimeout(() => {
-          weatherTools.loadWeather(onWeatherLoaded, onFailLoadWeather)
+          weatherTools.loadWeather(onWeatherLoadedLate, onFailLoadWeatherLate)
         }, retryTimeout)
 
         retryTimeout += 131072
