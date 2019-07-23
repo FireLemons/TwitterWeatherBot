@@ -309,6 +309,7 @@ module.exports = class Weather {
   getWindDirectionAsCardinal (azimuth) {
     switch (Math.round(azimuth / 45)) {
       case 0:
+      case 8:
         return '⬇️'
       case 1:
         return '↙️'
