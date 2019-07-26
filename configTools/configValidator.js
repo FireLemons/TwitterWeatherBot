@@ -353,6 +353,18 @@ for (const key in config) {
           console.log(`INFO: Observer position aka coordinates set as ${coordinates.elevation}m in elevation, ${Math.abs(coordinates.lat)}° ${coordinates.lat < 0 ? 'S' : 'N'}, ${Math.abs(coordinates.long)}° ${coordinates.long < 0 ? 'W' : 'E'}`);
       }
 
+      for (const coordinateKey in coordinates) {
+        switch(coordinateKey){
+            case 'elevation':
+            case 'lat':
+            case 'long':
+                break;
+            default:
+                console.log(`WARNING: Unknown key ${coordinateKey} in config.coordinates`)
+                break;
+        }
+      }
+
       break
     case 'log':
       // regex 4 later
