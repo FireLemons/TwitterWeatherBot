@@ -99,22 +99,29 @@ module.exports = {
     
     // Checks whether config.coordinates.elevation is in the range of acceptable elevations
     //  @param  {number} longitude The given elevation in meters
-    //  @return {boolean} true if elevation is between RANGERANGERANGERANGE false otherwise
+    //  @return {boolean} true if elevation is between -413 and 8848 false otherwise
     validateCoordinatesElevation(elevation){
         return -413 <= elevation && elevation <= 8848;
     },
     
     // Checks whether config.coordinates.lat is in the range of acceptable latitudes
     //  @param  {number} latitude The given latitude in degrees
-    //  @return {boolean} true if latitude is between RANGERANGERANGERANGE false otherwise
+    //  @return {boolean} true if latitude is between -90 and 90 false otherwise
     validateCoordinatesLat(latitude){
         return -90 <= latitude && latitude <= 90;
     },
     
     // Checks whether config.coordinates.long is in the range of acceptable longitudes
     //  @param  {number} longitude The given longitude in degrees
-    //  @return {boolean} true if longitude is between RANGERANGERANGERANGE false otherwise
+    //  @return {boolean} true if longitude is between -180 and 180 false otherwise
     validateCoordinatesLong(longitude){
         return -180 <= longitude && longitude <= 180;
     },
+    
+    //Checks whether config.log.logDir is a valid file path
+    //  @param  {string} logDir The given directory path
+    //  @
+    validateLogLogDir(logDir){
+        return /^(?:[\w]\:[\\\/]+|\.|\.\.){0,1}[\w_\-\s\.]+(?:[\\\/]+[a-z_\-\s0-9\.]+)*$/.test(logDir);
+    }
 }
