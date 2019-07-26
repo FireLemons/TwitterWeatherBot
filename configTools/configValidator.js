@@ -68,18 +68,23 @@ function printFilterPathHint () {
 
 // Prints a hint about valid elevation values
 function printElevationHint(){
-    
+    console.log('"elevation" is the elevation of the area in meters')
+    //fill
+    console.log('A typical "elevation" looks like: "elevation": 200')
 }
 
 // Prints a hint about valid latitude values
 function printLatitudeHint(){
     console.log('"lat" is the north latitude(north is positive, south is negative) in degrees')
-    console.log('A typical "lat" looks like: "lat": 40.000')
+    //fill
+    console.log('A typical "lat" looks like: "lat": 40.596')
 }
 
 // Prints a hint about valid longitude values
 function printLongitudeHint(){
-    
+    console.log('"long" is the longitude west(west is negative, east is positive) in degrees')
+    //fill
+    console.log('A typical "long" looks like: "long": -90.596')
 }
 
 for (const key in config) {
