@@ -296,7 +296,7 @@ module.exports = class Weather {
       case 0:
         return 'The beaufort scale is a way of measuring wind speed based on observing things blown by the wind rather than using instruments.'
       case 1:
-        return 'The pressure displayed is at ground level. Columbia is 758ft(231m) above sea level.'
+        return 'The pressure displayed is at ground level. Columbia is ${this.coordinates.elevation}m above sea level.'
       default: // Icon Definitions
         const iconDefinition = iconDefinitions[id - 2]
         return `${iconDefinition.icon} indicates ${iconDefinition.conditions.replace(',', ' or')}\nSee all the icon meanings at https://firelemons.github.io/COMOWeather/`
