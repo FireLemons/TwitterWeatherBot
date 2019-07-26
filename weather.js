@@ -48,11 +48,11 @@ module.exports = class Weather {
       })
     }
 
-    this.coordinates = config.coordinates
-    this.logger = logger
-
     this.alertURL = `https://api.weather.gov/alerts?${alertQueryParams.substr(1)}`
     this.weatherRequestURL = `https://api.openweathermap.org/data/2.5/forecast?${OWMQueryParams.substr(1)}&units=metric&APPID=${OWM.key}`
+
+    this.coordinates = config.coordinates
+    this.logger = logger
   }
 
   // Generates a warning message
@@ -363,10 +363,6 @@ module.exports = class Weather {
 
       switch (filter.restriction) {
         case 'after':
-          if (isNaN(filter.value)) {
-            throw new TypeError('Could not filter using restriction after. Filter value not a number.')
-          }
-
           filterTest = (alertElem) => {
             const dateAtPath = new Date(util.getValue(alertElem, filter.path))
 
@@ -383,10 +379,6 @@ module.exports = class Weather {
           }
           break
         case 'before':
-          if (isNaN(filter.value)) {
-            throw new TypeError('Could not filter using restriction before. Filter value not a number.')
-          }
-
           filterTest = (alertElem) => {
             const dateAtPath = new Date(util.getValue(alertElem, filter.path))
 
@@ -415,6 +407,13 @@ module.exports = class Weather {
             }
           }
           break
+        case 'equals':
+          filterTest = (alertElem) => {
+            if (util.getValue(alertElem, filter.path) === filter.value) {
+              filteredAlerts.push(alertElem)
+            }
+          }
+          break
         case 'has':
           filterTest = filter.value ? (alertElem) => {
             try {
@@ -433,13 +432,6 @@ module.exports = class Weather {
               }
             }
           break
-        case 'equals':
-          filterTest = (alertElem) => {
-            if (util.getValue(alertElem, filter.path) === filter.value) {
-              filteredAlerts.push(alertElem)
-            }
-          }
-          break
         case 'matches':
           filterTest = (alertElem) => {
             const regex = new RegExp(filter.value)
@@ -454,8 +446,6 @@ module.exports = class Weather {
             }
           }
           break
-        default:
-          throw new RangeError(`Unknown filter restriction: ${filter.restriction}`)
       }
 
       unfilteredAlerts.forEach(filterTest)
