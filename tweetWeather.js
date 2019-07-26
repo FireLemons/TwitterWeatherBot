@@ -109,7 +109,15 @@ module.exports = class TweetWeather {
 
       if (message) {
         this.sendTweet(message)
-        this.stats.lastUpdate = new Date()
+        
+        switch(message.charAt(0)){
+            case 'A':
+                this.stats.lastAlertUpdate = new Date()
+                break;
+            case 'F':
+                this.stats.lastUpdate = new Date()
+                break;
+        }
       } else {
         throw new Error('Failed to generate status message.')
       }

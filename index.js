@@ -178,12 +178,14 @@ const saveStats = () => {
 
 if (!fs.existsSync('./data/stats.json')) {
   _stats = {
-    lastUpdate: new Date()
+    "lastAlertUpdate": new Date(),
+    "lastUpdate": new Date()
   }
 
   saveStats()
 } else {
   _stats = require('./data/stats.json')
+  _stats.lastAlertUpdate = new Date(_stats.lastAlertUpdate);
   _stats.lastUpdate = new Date(_stats.lastUpdate)
 }
 
@@ -286,11 +288,11 @@ if (config.alerts && !config.alerts.disabled) {
     }
   }
 
-  if (new Date() - stats.lastUpdate > 7620000) {
+  if (new Date() - stats.lastAlertUpdate > 22020000) { // 22020000ms = 6 hours 7 minutes
     weatherTools.loadWeatherAlerts(onWeatherAlertLoaded, onFailLoadWeatherAlert)
   }
 
-  schedule.scheduleJob('0 */2 * * *', function () {
+  schedule.scheduleJob('0 */6 * * *', function () {
     retryAlertTimeout = 0
 
     weatherTools.loadWeatherAlerts(onWeatherAlertLoaded, onFailLoadWeatherAlert)
