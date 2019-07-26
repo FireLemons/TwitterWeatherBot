@@ -349,7 +349,7 @@ module.exports = class Weather {
     }
 
     // Either there are no filters or there's nothing to filter
-    if (!(alerts.length && this.alertFilters.length)) {
+    if (!(alerts.length && this.alertFilters && this.alertFilters.length)) {
       return alerts
     }
 
