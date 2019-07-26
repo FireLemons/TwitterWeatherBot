@@ -101,26 +101,20 @@ module.exports = {
     //  @param  {number} longitude The given elevation in meters
     //  @return {boolean} true if elevation is between RANGERANGERANGERANGE false otherwise
     validateCoordinatesElevation(elevation){
-        /*
-         * later
-         */
+        return -413 <= elevation && elevation <= 8848;
     },
     
     // Checks whether config.coordinates.lat is in the range of acceptable latitudes
     //  @param  {number} latitude The given latitude in degrees
     //  @return {boolean} true if latitude is between RANGERANGERANGERANGE false otherwise
     validateCoordinatesLat(latitude){
-        /*
-         * later
-         */
+        return -90 <= latitude && latitude <= 90;
     },
     
     // Checks whether config.coordinates.long is in the range of acceptable longitudes
     //  @param  {number} longitude The given longitude in degrees
     //  @return {boolean} true if longitude is between RANGERANGERANGERANGE false otherwise
     validateCoordinatesLong(longitude){
-        /*
-         * later
-         */
+        return -180 <= longitude && longitude <= 180;
     },
 }
