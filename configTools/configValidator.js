@@ -6,7 +6,7 @@ const configFieldValidator = require('./configFieldValidator.js')
 const path = require('path')
 
 if (!(config instanceof Object)) {
-  throw new TypeError('Config must be an object')
+  throw new TypeError('Config file must contain a JSON object')
 }
 
 if (config instanceof Array) {
@@ -88,21 +88,28 @@ function printLongitudeHint () {
   console.log('A typical "long" looks like: "long": -90.596')
 }
 
+function printLogDirectoryHint(){
+    console.log('"logDir" is the path to the directory to store logs in');
+    console.log('A typical "logDir" looks like: "logDir": "logs"');
+}
+
 for (const key in config) {
   switch (key) {
     // Check alerts
     case 'alerts':
-      if (!config.alerts.disabled) {
+      
+        const alerts = config.alerts
+      
+      if (!alerts.disabled) {
         console.log('INFO: Alerts are enabled.')
 
-        const alertConfig = config.alerts
 
         // Check info to be sent in user-agent header to NWS api
-        if (!alertConfig.app) {
+        if (!alerts.app) {
           console.log('ERROR: Enabled alerts require an app object containing required information to send to the national weather service api for a response.')
           console.log('The "app" object is in the form:\n"app": {\n  "contact": "EMAIL ADDRESS",\n  "name": "APP NAME",\n  "version": "VERSION NO",\n  "website": "APP WEBSITE OR CONTACT WEBSITE"\n}\n')
         } else {
-          const appInfo = alertConfig.app
+          const appInfo = alerts.app
 
           if (appInfo.contact === undefined) {
             console.log('ERROR: missing field "contact" in config.alerts.app. The national weather service api requires contact information in order to send responses.')
@@ -174,16 +181,16 @@ for (const key in config) {
         }
 
         // Check alert filters
-        if (!alertConfig.filters) { // No filters
+        if (!alerts.filters) { // No filters
           console.log('INFO: No alert filters.')
-        } else if (!(alertConfig.filters instanceof Array)) { // Filters wrong type
+        } else if (!(alerts.filters instanceof Array)) { // Filters wrong type
           console.log('ERROR: config.alerts.filters must be an array.')
-        } else if (!alertConfig.filters.length) { // No filters also
+        } else if (!alerts.filters.length) { // No filters also
           console.log('INFO: No alert filters.')
         } else { // There are filters
           console.log('INFO: Alert Filters:')
 
-          alertConfig.filters.forEach((filter, i) => {
+          alerts.filters.forEach((filter, i) => {
             if (!(filter instanceof Object)) {
               console.log('ERROR: each filter of config.alerts.filters must be an object')
             } else {
@@ -373,7 +380,8 @@ for (const key in config) {
       break
     case 'log':
       const log = config.log
-
+      let validDirectory = true;
+      
       if (!(log instanceof Object) || log instanceof Array) {
         console.log('ERROR: config.log must be an object')
       } else {
@@ -381,17 +389,21 @@ for (const key in config) {
         if (log.logDir === undefined) {
           console.log('ERROR: Missing field "logDir" in config.log')
 
-          validLongitude = false
+          validDirectory = false
         } else if (typeof log.logDir !== 'string') {
           console.log('ERROR: Field "logDir" in config.log must be a string')
 
-          validLongitude = false
+          validDirectory = false
         } else if (!configFieldValidator.validateLogLogDir(log.logDir)) {
           console.log('ERROR: Field "logDir" in config.log not recognised as a valid format')
 
-          validLongitude = false
+          validDirectory = false
         } else {
           console.log(`INFO: Log directory set as: ${path.resolve('../' + log.logDir)}`)
+        }
+        
+        if(!validDirectory){
+            printLogDirectoryHint();
         }
       }
       break
