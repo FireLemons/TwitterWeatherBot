@@ -349,6 +349,10 @@ for (const key in config) {
           printLongitudeHint();
       }
 
+      if(validElevation && validLatitude && validLongitude){
+          console.log(`INFO: Observer position aka coordinates set as ${coordinates.elevation}m in elevation, ${Math.abs(coordinates.lat)}° ${coordinates.lat < 0 ? 'S' : 'N'}, ${Math.abs(coordinates.long)}° ${coordinates.long < 0 ? 'W' : 'E'}`);
+      }
+
       break
     case 'log':
       // regex 4 later
