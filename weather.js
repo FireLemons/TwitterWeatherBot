@@ -367,7 +367,7 @@ module.exports = class Weather {
             const dateAtPath = new Date(util.getValue(alertElem, filter.path))
 
             if (Number.isNaN(dateAtPath.getTime())) {
-              throw new TypeError('Could not filter using restriction before. Value at path invalid date string.')
+              throw new TypeError('Could not filter using restriction after. Value at path invalid date string.')
             }
 
             const referenceDate = new Date()
