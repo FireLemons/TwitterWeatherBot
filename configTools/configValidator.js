@@ -3,6 +3,7 @@
 /** @fileoverview Checks the bot configuration file for mistakes. */
 const config = require('../config.json')
 const configFieldValidator = require('./configFieldValidator.js')
+const path = require("path");
 
 if (!(config instanceof Object)) {
   throw new TypeError('Config must be an object')
@@ -287,7 +288,12 @@ for (const key in config) {
 
       break
     case 'coordinates':
-      const coordinates = config.coordinates
+    const coordinates = config.coordinates
+      
+      if(!(coordinates instanceof Object) || coordinates instanceof Array){
+          console.log('ERROR: config.coordinates must be an object')
+      } else {
+    
       let validLatitude = true,
           validLongitude = true,
           validElevation = true;
@@ -364,11 +370,32 @@ for (const key in config) {
                 break;
         }
       }
-
+      }
       break
     case 'log':
-      // regex 4 later
-      // ^(?:[\w][\\|/]+|\.|\.\.)([\\|/]+[a-z_\-\s0-9\.]+)+$
+      let log = config.log;
+      
+      if(!(log instanceof Object) || log instanceof Array){
+          console.log('ERROR: config.log must be an object')
+      } else {
+      
+      // Check longitude
+      if (log.logDir === undefined) {
+        console.log('ERROR: Missing field "logDir" in config.log')
+        
+        validLongitude = false;
+      } else if (typeof log.logDir !== 'string') {
+        console.log('ERROR: Field "logDir" in config.log must be a string')
+        
+        validLongitude = false;
+      } else if (!configFieldValidator.validateLogLogDir(log.logDir)) {
+        console.log('ERROR: Field "logDir" in config.log not recognised as a valid format')
+        
+        validLongitude = false;
+      } else {
+          console.log(`INFO: Log directory set as: ${path.resolve('../' + log.logDir)}`)
+      }
+      }
       break
     case 'open_weather_map':
       break
