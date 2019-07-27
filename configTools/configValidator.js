@@ -190,39 +190,37 @@ if (!(config instanceof Object) || config instanceof Array) {
           // Check filter restriction
           if (filter.restriction === undefined) { // Filter restriction missing
             console.log(`ERROR: Filter #${i + 1} in config.alerts.filters missing field "restriction"`)
+            printFilterRestrictionHint()
 
             valid.restriction = false
           } else if (typeof filter.restriction !== 'string') { // Filter restriction wrong type
             console.log(`ERROR: Restriction of filter #${i + 1} in config.alerts.filters not a string`)
+            printFilterRestrictionHint()
 
             valid.restriction = false
           } else if (!configFieldValidator.validateAlertsFiltersRestriction(filter.restriction)) {
             console.log(`ERROR: Filter #${i + 1} has unknown filter restriction: ${filter.restriction}`)
+            printFilterRestrictionHint()
 
             valid.restriction = false
-          }
-
-          if (!valid.restriction) {
-            printFilterRestrictionHint()
           }
 
           // Check filter path
           if (filter.path === undefined) { // Filter path missing
             console.log(`ERROR: Filter #${i + 1} in config.alerts.filters missing field "path"`)
+            printFilterPathHint()
 
             valid.path = false
           } else if (typeof filter.path !== 'string') { // Filter path wrong type
             console.log(`ERROR: Path of filter #${i + 1} in config.alerts.filters is not a string`)
+            printFilterPathHint()
 
             valid.path = false
           } else if (!configFieldValidator.validateAlertsFiltersPath(filter.path)) { // Filter path wrong format
             console.log(`ERROR: Path of filter #${i + 1} in config.alerts.filters is in incorrect format`)
+            printFilterPathHint()
 
             valid.path = false
-          }
-
-          if (!valid.path) {
-            printFilterPathHint()
           }
 
           if (valid.restriction) {
@@ -275,11 +273,45 @@ if (!(config instanceof Object) || config instanceof Array) {
               }
             }
           }
+          
+          checkKeys(filter, `config.alerts.filters[${i}]`, ['restriction', 'path', 'value'])
         }
       })
     }
+    
     // check get params for api.weather.gov
     const params = alerts.params
+    
+    if (params === undefined) {
+      console.log('ERROR: Missing "params" in config.alerts');
+    } else if (!(params instanceof Object) || params instanceof Array) {
+      console.log('ERROR: config.alerts.params must be an object')
+    } else {
+      let locationParamCount = 0;
+      
+      locationParamCount += params.area !== undefined;
+      locationParamCount += params.point !== undefined;
+      locationParamCount += params.region !== undefined;
+      locationParamCount += params.region_type !== undefined;
+      locationParamCount += params.zone !== undefined;
+      
+      if(locationParamCount > 1){
+        console.log('ERROR: 2 or more of these keys are invalid: area, point, region, region_type, zone in config.alerts.params');
+      } else {
+        let alertQueryParams = '';
+        
+        for (const paramName in params) {
+          if (Object.prototype.hasOwnProperty.call(params, paramName)) {
+            alertQueryParams += '&' + paramName + '=' + params[paramName]
+          }
+        }
+        
+        console.log(`INFO: Weather alert url is https://api.weather.gov/alerts?${alertQueryParams.substr(1)}`);
+        console.log('WARNING: Validation of config.alerts.params is very limited. The best way to verify params is to visit the above URL.');
+      }
+      
+      checkKeys(params, 'config.alerts.params', ['active', 'start', 'end', 'status', 'message_type', 'event', 'code', 'region_type', 'point', 'region', 'area', 'zone', 'urgency', 'severity', 'certainty', 'limit', 'cursor'])
+    }
   }
 
   // Check coordinates
