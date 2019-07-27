@@ -97,16 +97,14 @@ function checkKeys (object, path, validKeys) {
 if (!(config instanceof Object) || config instanceof Array) {
   throw new TypeError('Config file must contain a JSON object')
 } else {
-  if (!config.alerts || config.alerts.disabled) {
-    console.log('INFO: Alerts disabled.')
-  }
-
   // Check alerts
   const alerts = config.alerts
-
-  if (!(alerts instanceof Object) || alerts instanceof Array) {
+  
+  if (!alerts || alerts.disabled) {
+    console.log('INFO: Alerts disabled.')
+  } else if (!(alerts instanceof Object) || alerts instanceof Array) {
     console.log('ERROR: config.alerts must be an object')
-  } else if (!alerts.disabled) {
+  } else {
     console.log('INFO: Alerts are enabled.')
 
     // Check info to be sent in user-agent header to NWS api
@@ -118,73 +116,55 @@ if (!(config instanceof Object) || config instanceof Array) {
     } else if (!(appInfo instanceof Object) || appInfo instanceof Array) {
       console.log('ERROR: config.alerts.app must be an object')
     } else {
-      if (appInfo.contact === undefined) {
+      // Check contact
+      const contact = appInfo.contact
+      
+      if (contact === undefined) {
         console.log('ERROR: missing field "contact" in config.alerts.app. The national weather service api requires contact information in order to send responses.')
         console.log('A typical "contact" looks like: "contact": "contact.email@example.com"')
+      } else if (typeof contact !== 'string') {
+        console.log('ERROR: field "contact" in config.alerts.app must be a string.')
+      } else if (!configFieldValidator.validateAlertsAppContact(appInfo.contact)) {
+        console.log('WARNING: field "contact" in config.alerts.app is typically an email address')
       }
 
-      if (appInfo.name === undefined) {
+      // Check app name
+      const appName = appInfo.name
+      
+      if (appName === undefined) {
         console.log('ERROR: missing field "name" in config.alerts.app. The national weather service api requires an app name in order to send responses.')
         console.log('A typical "name" looks like: "name": "ApplicationName"')
+      } else if (typeof appName !== 'string') {
+        console.log('ERROR: field "name" in config.alerts.app must be a string.')
+      } else if (!configFieldValidator.validateAlertsAppName(appName)) {
+        console.log('WARNING: field "name" in config.alerts.app is the empty string or contains exclusively whitespace')
       }
 
-      if (appInfo.version === undefined) {
+      //Check app version
+      const version = appInfo.version
+
+      if (version === undefined) {
         console.log('ERROR: missing field "version" in config.alerts.app. The national weather service api requires an app version in order to send responses.')
         console.log('A typical "version" looks like: "version": "vX.Y"')
+      } else if (typeof version !== 'string' && isNaN(version)) {
+        console.log('ERROR: field "version" in config.alerts.app must be a string or a number.')
+      } else if (typeof version === 'string' && !configFieldValidator.validateAlertsAppVersion(version)) {
+        console.log('WARNING: field "version" in config.alerts.app is the empty string or contains exclusively whitespace')
       }
 
-      if (appInfo.website === undefined) {
+      //Check app website
+      const website = appInfo.website
+      
+      if (website === undefined) {
         console.log('ERROR: missing field "website" in config.alerts.app. The national weather service api requires an app related website in order to send responses.')
         console.log('A typical "website" looks like: "website": "https://your.app.url/"')
+      } else if (typeof website !== 'string') {
+        console.log('ERROR: field "website" in config.alerts.app must be a string.')
+      } else if (!configFieldValidator.validateAlertsAppWebsite(website)) {
+        console.log('WARNING: field "website" in config.alerts.app in unrecognized format')
       }
-
-      for (const appKey in appInfo) {
-        switch (appKey) {
-          case 'contact':
-            const contact = appInfo.contact
-
-            if (typeof contact !== 'string') {
-              console.log('ERROR: field "contact" in config.alerts.app must be a string.')
-            } else if (!configFieldValidator.validateAlertsAppContact(appInfo.contact)) {
-              console.log('WARNING: field "contact" in config.alerts.app is typically an email address')
-            }
-
-            break
-          case 'name':
-            const appName = appInfo.name
-
-            if (typeof appName !== 'string') {
-              console.log('ERROR: field "name" in config.alerts.app must be a string.')
-            } else if (!configFieldValidator.validateAlertsAppName(appName)) {
-              console.log('WARNING: field "name" in config.alerts.app is the empty string or contains exclusively whitespace')
-            }
-
-            break
-          case 'version':
-            const version = appInfo.version
-
-            if (typeof version !== 'string' && isNaN(version)) {
-              console.log('ERROR: field "version" in config.alerts.app must be a string or a number.')
-            } else if (typeof version === 'string' && !configFieldValidator.validateAlertsAppVersion(version)) {
-              console.log('WARNING: field "version" in config.alerts.app is the empty string or contains exclusively whitespace')
-            }
-
-            break
-          case 'website':
-            const website = appInfo.website
-
-            if (typeof website !== 'string') {
-              console.log('ERROR: field "website" in config.alerts.app must be a string.')
-            } else if (!configFieldValidator.validateAlertsAppWebsite(website)) {
-              console.log('WARNING: field "website" in config.alerts.app in unrecognized format')
-            }
-
-            break
-          default:
-            console.log(`WARNING: Unrecognized key "${appKey}" in config.alerts.app`)
-            break
-        }
-      }
+      
+      checkKeys(appInfo, 'config.alerts.app', ['contact', 'name', 'version', 'website'])
     }
 
     // Check alert filters
@@ -301,6 +281,9 @@ if (!(config instanceof Object) || config instanceof Array) {
     // check get params for api.weather.gov
     const params = alerts.params
   }
+
+
+  
 
   // Check coordinates
   const coordinates = config.coordinates
