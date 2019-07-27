@@ -25,6 +25,13 @@
                 "value": true to keep matching alerts "value": false to discard alerts
             "equals"    - Path leads to a primitive value. All alerts with value matching the value at path will be kept
             "matches"   - Path leads to a string. All alerts matching the regex in value will be kept
+            
+            Example: remove all alerts that have been overridden by a later alert.
+            {
+                "restriction": "has",
+                "path": "properties.replacedBy",
+                "value": 0
+            }
             >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         ],
         "params": {
