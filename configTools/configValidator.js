@@ -300,64 +300,40 @@ for (const key in config) {
       if (!(coordinates instanceof Object) || coordinates instanceof Array) {
         console.log('ERROR: config.coordinates must be an object')
       } else {
-        let validLatitude = true
-        let validLongitude = true
-        let validElevation = true
 
         // Check elevation
         if (coordinates.elevation === undefined) {
           console.log('ERROR: Missing field "elevation" in config.coordinates')
-
-          validElevation = false
+          printElevationHint()
         } else if (isNaN(coordinates.elevation)) {
           console.log('ERROR: Field "elevation" in config.coordinates must be a number')
-
-          validElevation = false
+          printElevationHint()
         } else if (!configFieldValidator.validateCoordinatesElevation(coordinates.elevation)) {
           console.log('ERROR: Field "elevation" in config.coordinates must be between -413 and 8848')
-
-          validElevation = false
-        }
-
-        if (!validElevation) {
           printElevationHint()
         }
 
         // Check latitude
         if (coordinates.lat === undefined) {
           console.log('ERROR: Missing field "lat" in config.coordinates')
-
-          validLatitude = false
+          printLatitudeHint()
         } else if (isNaN(coordinates.lat)) {
           console.log('ERROR: Field "lat" in config.coordinates must be a number')
-
-          validLatitude = false
+          printLatitudeHint()
         } else if (!configFieldValidator.validateCoordinatesLat(coordinates.lat)) {
           console.log('ERROR: Field "lat" in config.coordinates must be between -90 and 90')
-
-          validLatitude = false
-        }
-
-        if (!validLatitude) {
           printLatitudeHint()
         }
 
         // Check longitude
         if (coordinates.long === undefined) {
           console.log('ERROR: Missing field "long" in config.coordinates')
-
-          validLongitude = false
+          printLongitudeHint()
         } else if (isNaN(coordinates.long)) {
           console.log('ERROR: Field "long" in config.coordinates must be a number')
-
-          validLongitude = false
+          printLongitudeHint()
         } else if (!configFieldValidator.validateCoordinatesLong(coordinates.long)) {
           console.log('ERROR: Field "long" in config.coordinates must be between -180 and 180')
-
-          validLongitude = false
-        }
-
-        if (!validLongitude) {
           printLongitudeHint()
         }
 
@@ -380,7 +356,6 @@ for (const key in config) {
       break
     case 'log':
       const log = config.log
-      let validDirectory = true;
       
       if (!(log instanceof Object) || log instanceof Array) {
         console.log('ERROR: config.log must be an object')
@@ -388,22 +363,15 @@ for (const key in config) {
       // Check longitude
         if (log.logDir === undefined) {
           console.log('ERROR: Missing field "logDir" in config.log')
-
-          validDirectory = false
+          printLogDirectoryHint();
         } else if (typeof log.logDir !== 'string') {
           console.log('ERROR: Field "logDir" in config.log must be a string')
-
-          validDirectory = false
+          printLogDirectoryHint();
         } else if (!configFieldValidator.validateLogLogDir(log.logDir)) {
-          console.log('ERROR: Field "logDir" in config.log not recognised as a valid format')
-
-          validDirectory = false
+          console.log('ERROR: Field "logDir" in config.log not recognized as a valid file path')
+          printLogDirectoryHint();
         } else {
           console.log(`INFO: Log directory set as: ${path.resolve('../' + log.logDir)}`)
-        }
-        
-        if(!validDirectory){
-            printLogDirectoryHint();
         }
       }
       break
