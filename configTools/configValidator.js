@@ -5,12 +5,8 @@ const config = require('../config.json')
 const configFieldValidator = require('./configFieldValidator.js')
 const path = require('path')
 
-if (!(config instanceof Object)) {
+if (!(config instanceof Object) || config instanceof Array) {
   throw new TypeError('Config file must contain a JSON object')
-}
-
-if (config instanceof Array) {
-  throw new TypeError('Config cannot be an Array at the top level')
 }
 
 if (!config.alerts || config.alerts.disabled) {
@@ -88,219 +84,233 @@ function printLongitudeHint () {
   console.log('A typical "long" looks like: "long": -90.596')
 }
 
+// Prints a hint about valid log directory paths
 function printLogDirectoryHint () {
   console.log('"logDir" is the path to the directory to store logs in')
   console.log('A typical "logDir" looks like: "logDir": "logs"')
 }
 
-for (const key in config) {
-  switch (key) {
+// Checks and object for unrecognized keys. Prints out warning for each unrecognized key.
+//  @param  {object} object The object to check keys for
+//  @param  {string} path The path to the object in the config
+//  @param  {array} validKeys A list of recognized keys
+function checkKeys(object, path, validKeys){
+    for (const key in object){
+        if(validKeys.indexOf(key) === -1){
+            console.log(`WARNING: Unrecognized key "${key}" in ${path}`);
+        }
+    }
+}
+
     // Check alerts
-    case 'alerts':
-      const alerts = config.alerts
+    const alerts = config.alerts
 
       if (!(alerts instanceof Object) || alerts instanceof Array) {
         console.log('ERROR: config.alerts must be an object')
-      } else {
-        if (!alerts.disabled) {
-          console.log('INFO: Alerts are enabled.')
+      } else if (!alerts.disabled) {
+        console.log('INFO: Alerts are enabled.')
 
-          // Check info to be sent in user-agent header to NWS api
-          if (!alerts.app) {
-            console.log('ERROR: Enabled alerts require an app object containing required information to send to the national weather service api for a response.')
-            console.log('The "app" object is in the form:\n"app": {\n  "contact": "EMAIL ADDRESS",\n  "name": "APP NAME",\n  "version": "VERSION NO",\n  "website": "APP WEBSITE OR CONTACT WEBSITE"\n}\n')
-          } else {
-            const appInfo = alerts.app
+        // Check info to be sent in user-agent header to NWS api
+        const appInfo = alerts.app
 
-            if (appInfo.contact === undefined) {
-              console.log('ERROR: missing field "contact" in config.alerts.app. The national weather service api requires contact information in order to send responses.')
-              console.log('A typical "contact" looks like: "contact": "contact.email@example.com"')
-            }
-
-            if (appInfo.name === undefined) {
-              console.log('ERROR: missing field "name" in config.alerts.app. The national weather service api requires an app name in order to send responses.')
-              console.log('A typical "name" looks like: "name": "ApplicationName"')
-            }
-
-            if (appInfo.version === undefined) {
-              console.log('ERROR: missing field "version" in config.alerts.app. The national weather service api requires an app version in order to send responses.')
-              console.log('A typical "version" looks like: "version": "vX.Y"')
-            }
-
-            if (appInfo.website === undefined) {
-              console.log('ERROR: missing field "website" in config.alerts.app. The national weather service api requires an app related website in order to send responses.')
-              console.log('A typical "website" looks like: "website": "https://your.app.url/"')
-            }
-
-            for (const appKey in appInfo) {
-              switch (appKey) {
-                case 'contact':
-                  const contact = appInfo.contact
-
-                  if (typeof contact !== 'string') {
-                    console.log('ERROR: field "contact" in config.alerts.app must be a string.')
-                  } else if (!configFieldValidator.validateAlertsAppContact(appInfo.contact)) {
-                    console.log('WARNING: field "contact" in config.alerts.app is typically an email address')
-                  }
-
-                  break
-                case 'name':
-                  const appName = appInfo.name
-
-                  if (typeof appName !== 'string') {
-                    console.log('ERROR: field "name" in config.alerts.app must be a string.')
-                  } else if (!configFieldValidator.validateAlertsAppName(appName)) {
-                    console.log('WARNING: field "name" in config.alerts.app is the empty string or contains exclusively whitespace')
-                  }
-
-                  break
-                case 'version':
-                  const version = appInfo.version
-
-                  if (typeof version !== 'string' && isNaN(version)) {
-                    console.log('ERROR: field "version" in config.alerts.app must be a string or a number.')
-                  } else if (typeof version === 'string' && !configFieldValidator.validateAlertsAppVersion(version)) {
-                    console.log('WARNING: field "version" in config.alerts.app is the empty string or contains exclusively whitespace')
-                  }
-
-                  break
-                case 'website':
-                  const website = appInfo.website
-
-                  if (typeof website !== 'string') {
-                    console.log('ERROR: field "website" in config.alerts.app must be a string.')
-                  } else if (!configFieldValidator.validateAlertsAppWebsite(website)) {
-                    console.log('WARNING: field "website" in config.alerts.app in unrecognized format')
-                  }
-
-                  break
-                default:
-                  console.log(`WARNING: Unrecognized key "${appKey}" in config.alerts.app`)
-                  break
-              }
-            }
+        if (appInfo === undefined) {
+          console.log('ERROR: Enabled alerts require an app object containing required information to send to the national weather service api for a response.')
+          console.log('The "app" object is in the form:\n"app": {\n  "contact": "EMAIL ADDRESS",\n  "name": "APP NAME",\n  "version": "VERSION NO",\n  "website": "APP WEBSITE OR CONTACT WEBSITE"\n}\n')
+        } else if (!(appInfo instanceof Object) || appInfo instanceof Array) {
+          console.log('ERROR: config.alerts.app must be an object')
+        } else {
+          if (appInfo.contact === undefined) {
+            console.log('ERROR: missing field "contact" in config.alerts.app. The national weather service api requires contact information in order to send responses.')
+            console.log('A typical "contact" looks like: "contact": "contact.email@example.com"')
           }
 
-          // Check alert filters
-          if (!alerts.filters) { // No filters
-            console.log('INFO: No alert filters.')
-          } else if (!(alerts.filters instanceof Array)) { // Filters wrong type
-            console.log('ERROR: config.alerts.filters must be an array.')
-          } else if (!alerts.filters.length) { // No filters also
-            console.log('INFO: No alert filters.')
-          } else { // There are filters
-            console.log('INFO: Alert Filters:')
+          if (appInfo.name === undefined) {
+            console.log('ERROR: missing field "name" in config.alerts.app. The national weather service api requires an app name in order to send responses.')
+            console.log('A typical "name" looks like: "name": "ApplicationName"')
+          }
 
-            alerts.filters.forEach((filter, i) => {
-              if (!(filter instanceof Object)) {
-                console.log('ERROR: each filter of config.alerts.filters must be an object')
-              } else {
-                const valid = {
-                  path: true,
-                  restriction: true,
-                  value: null
+          if (appInfo.version === undefined) {
+            console.log('ERROR: missing field "version" in config.alerts.app. The national weather service api requires an app version in order to send responses.')
+            console.log('A typical "version" looks like: "version": "vX.Y"')
+          }
+
+          if (appInfo.website === undefined) {
+            console.log('ERROR: missing field "website" in config.alerts.app. The national weather service api requires an app related website in order to send responses.')
+            console.log('A typical "website" looks like: "website": "https://your.app.url/"')
+          }
+
+          for (const appKey in appInfo) {
+            switch (appKey) {
+              case 'contact':
+                const contact = appInfo.contact
+
+                if (typeof contact !== 'string') {
+                  console.log('ERROR: field "contact" in config.alerts.app must be a string.')
+                } else if (!configFieldValidator.validateAlertsAppContact(appInfo.contact)) {
+                  console.log('WARNING: field "contact" in config.alerts.app is typically an email address')
                 }
 
-                // Check filter restriction
-                if (filter.restriction === undefined) { // Filter restriction missing
-                  console.log(`ERROR: Filter #${i + 1} in config.alerts.filters missing field "restriction"`)
+                break
+              case 'name':
+                const appName = appInfo.name
 
-                  valid.restriction = false
-                } else if (typeof filter.restriction !== 'string') { // Filter restriction wrong type
-                  console.log(`ERROR: Restriction of filter #${i + 1} in config.alerts.filters not a string`)
-
-                  valid.restriction = false
-                } else if (!configFieldValidator.validateAlertsFiltersRestriction(filter.restriction)) {
-                  console.log(`ERROR: Filter #${i + 1} has unknown filter restriction: ${filter.restriction}`)
-
-                  valid.restriction = false
+                if (typeof appName !== 'string') {
+                  console.log('ERROR: field "name" in config.alerts.app must be a string.')
+                } else if (!configFieldValidator.validateAlertsAppName(appName)) {
+                  console.log('WARNING: field "name" in config.alerts.app is the empty string or contains exclusively whitespace')
                 }
 
-                if (!valid.restriction) {
-                  printFilterRestrictionHint()
+                break
+              case 'version':
+                const version = appInfo.version
+
+                if (typeof version !== 'string' && isNaN(version)) {
+                  console.log('ERROR: field "version" in config.alerts.app must be a string or a number.')
+                } else if (typeof version === 'string' && !configFieldValidator.validateAlertsAppVersion(version)) {
+                  console.log('WARNING: field "version" in config.alerts.app is the empty string or contains exclusively whitespace')
                 }
 
-                // Check filter path
-                if (filter.path === undefined) { // Filter path missing
-                  console.log(`ERROR: Filter #${i + 1} in config.alerts.filters missing field "path"`)
+                break
+              case 'website':
+                const website = appInfo.website
 
-                  valid.path = false
-                } else if (typeof filter.path !== 'string') { // Filter path wrong type
-                  console.log(`ERROR: Path of filter #${i + 1} in config.alerts.filters is not a string`)
-
-                  valid.path = false
-                } else if (!configFieldValidator.validateAlertsFiltersPath(filter.path)) { // Filter path wrong format
-                  console.log(`ERROR: Path of filter #${i + 1} in config.alerts.filters is in incorrect format`)
-
-                  valid.path = false
+                if (typeof website !== 'string') {
+                  console.log('ERROR: field "website" in config.alerts.app must be a string.')
+                } else if (!configFieldValidator.validateAlertsAppWebsite(website)) {
+                  console.log('WARNING: field "website" in config.alerts.app in unrecognized format')
                 }
 
-                if (!valid.path) {
-                  printFilterPathHint()
-                }
-
-                if (valid.restriction) {
-                // Check values
-                  try {
-                    valid.value = configFieldValidator.validateAlertsFiltersValue(filter.restriction, filter.value)
-                  } catch (e) {
-                    if (e instanceof ReferenceError) {
-                      console.log(`ERROR: Invalid filter #${i + 1} "${filter.restriction}". Filter value missing.`)
-                    } else if (e instanceof TypeError) {
-                      console.log(`ERROR: Invalid filter #${i + 1} "${filter.restriction}". ${e.message}`)
-                    }
-                  }
-                  if (valid.path) {
-                    switch (filter.restriction) {
-                      case 'after':
-                        if (valid.value) {
-                          console.log(`INFO: Filter #${i + 1} will remove all alerts with dates at alert.${filter.path} that are before the time when alerts are fetched + ${filter.value} hour(s).`)
-                        }
-                        break
-                      case 'before':
-                        if (valid.value) {
-                          console.log(`INFO: Filter #${i + 1} will remove all alerts with dates at alert.${filter.path} that are after the time when alerts are fetched + ${filter.value} hour(s).`)
-                        }
-
-                        break
-                      case 'contains':
-                        if (valid.value) {
-                          console.log(`INFO: Filter #${i + 1} will remove all alerts with arrays at alert.${filter.path} not containing the value ${filter.value}.`)
-                        }
-
-                        break
-                      case 'equals':
-                        if (valid.value) {
-                          console.log(`INFO: Filter #${i + 1} will remove all alerts with values at alert.${filter.path} equal(strict equality) to ${filter.value}.`)
-                        }
-
-                        break
-                      case 'has':
-                        console.log(`INFO: Filter #${i + 1} will remove all alerts where alert.${filter.path} ${filter.value ? 'does not contain' : 'contains'} a value.`)
-                        break
-                      case 'matches':
-                        if (valid.value) {
-                          console.log(`INFO: Filter #${i + 1} will remove all alerts with strings at alert.${filter.path} not matching the regex ${filter.value}.`)
-                        } else {
-                          console.log(`ERROR: Invalid filter #${i + 1} "matches". Filter value is invalid regex.`)
-                        }
-
-                        break
-                    }
-                  }
-                }
-              }
-            })
+                break
+              default:
+                console.log(`WARNING: Unrecognized key "${appKey}" in config.alerts.app`)
+                break
+            }
           }
         }
-      }
-      break
-    case 'coordinates':
-      const coordinates = config.coordinates
 
-      if (!(coordinates instanceof Object) || coordinates instanceof Array) {
+        // Check alert filters
+        if (alerts.filters === undefined) { // No filters
+          console.log('INFO: No alert filters.')
+        } else if (!(alerts.filters instanceof Array)) { // Filters wrong type
+          console.log('ERROR: config.alerts.filters must be an array.')
+        } else if (!alerts.filters.length) { // No filters also
+          console.log('INFO: No alert filters.')
+        } else { // There are filters
+          console.log('INFO: Alert Filters:')
+
+          alerts.filters.forEach((filter, i) => {
+            if (!(filter instanceof Object) || filter instanceof Array) {
+              console.log('ERROR: each filter of config.alerts.filters must be an object')
+            } else {
+              const valid = {
+                path: true,
+                restriction: true,
+                value: null
+              }
+
+              // Check filter restriction
+              if (filter.restriction === undefined) { // Filter restriction missing
+                console.log(`ERROR: Filter #${i + 1} in config.alerts.filters missing field "restriction"`)
+
+                valid.restriction = false
+              } else if (typeof filter.restriction !== 'string') { // Filter restriction wrong type
+                console.log(`ERROR: Restriction of filter #${i + 1} in config.alerts.filters not a string`)
+
+                valid.restriction = false
+              } else if (!configFieldValidator.validateAlertsFiltersRestriction(filter.restriction)) {
+                console.log(`ERROR: Filter #${i + 1} has unknown filter restriction: ${filter.restriction}`)
+
+                valid.restriction = false
+              }
+
+              if (!valid.restriction) {
+                printFilterRestrictionHint()
+              }
+
+              // Check filter path
+              if (filter.path === undefined) { // Filter path missing
+                console.log(`ERROR: Filter #${i + 1} in config.alerts.filters missing field "path"`)
+
+                valid.path = false
+              } else if (typeof filter.path !== 'string') { // Filter path wrong type
+                console.log(`ERROR: Path of filter #${i + 1} in config.alerts.filters is not a string`)
+
+                valid.path = false
+              } else if (!configFieldValidator.validateAlertsFiltersPath(filter.path)) { // Filter path wrong format
+                console.log(`ERROR: Path of filter #${i + 1} in config.alerts.filters is in incorrect format`)
+
+                valid.path = false
+              }
+
+              if (!valid.path) {
+                printFilterPathHint()
+              }
+
+              if (valid.restriction) {
+                // Check values
+                try {
+                  valid.value = configFieldValidator.validateAlertsFiltersValue(filter.restriction, filter.value)
+                } catch (e) {
+                  if (e instanceof ReferenceError) {
+                    console.log(`ERROR: Invalid filter #${i + 1} "${filter.restriction}". Filter value missing.`)
+                  } else if (e instanceof TypeError) {
+                    console.log(`ERROR: Invalid filter #${i + 1} "${filter.restriction}". ${e.message}`)
+                  }
+                }
+                if (valid.path) {
+                  switch (filter.restriction) {
+                    case 'after':
+                      if (valid.value) {
+                        console.log(`INFO: Filter #${i + 1} will remove all alerts with dates at alert.${filter.path} that are before the time when alerts are fetched + ${filter.value} hour(s).`)
+                      }
+                      break
+                    case 'before':
+                      if (valid.value) {
+                        console.log(`INFO: Filter #${i + 1} will remove all alerts with dates at alert.${filter.path} that are after the time when alerts are fetched + ${filter.value} hour(s).`)
+                      }
+
+                      break
+                    case 'contains':
+                      if (valid.value) {
+                        console.log(`INFO: Filter #${i + 1} will remove all alerts with arrays at alert.${filter.path} not containing the value ${filter.value}.`)
+                      }
+
+                      break
+                    case 'equals':
+                      if (valid.value) {
+                        console.log(`INFO: Filter #${i + 1} will remove all alerts with values at alert.${filter.path} equal(strict equality) to ${filter.value}.`)
+                      }
+
+                      break
+                    case 'has':
+                      console.log(`INFO: Filter #${i + 1} will remove all alerts where alert.${filter.path} ${filter.value ? 'does not contain' : 'contains'} a value.`)
+                      break
+                    case 'matches':
+                      if (valid.value) {
+                        console.log(`INFO: Filter #${i + 1} will remove all alerts with strings at alert.${filter.path} not matching the regex ${filter.value}.`)
+                      } else {
+                        console.log(`ERROR: Invalid filter #${i + 1} "matches". Filter value is invalid regex.`)
+                      }
+
+                      break
+                  }
+                }
+              }
+            }
+          })
+        }
+        // check get params for api.weather.gov
+        const params = alerts.params
+    }
+    
+    // Check coordinates
+    const coordinates = config.coordinates
+
+    if (coordinates === undefined) {
+        console.log('ERROR: Missing "coordinates" in config')
+    } else if (!(coordinates instanceof Object) || coordinates instanceof Array) {
         console.log('ERROR: config.coordinates must be an object')
-      } else {
+    } else {
         let validElevation = true
         let validLatitude = true
         let validLongitude = true
@@ -343,68 +353,56 @@ for (const key in config) {
 
         // Check longitude
         if (coordinates.long === undefined) {
-          console.log('ERROR: Missing field "long" in config.coordinates')
-          printLongitudeHint()
+            console.log('ERROR: Missing field "long" in config.coordinates')
+            printLongitudeHint()
 
-          validLongitude = false
+            validLongitude = false
         } else if (isNaN(coordinates.long)) {
-          console.log('ERROR: Field "long" in config.coordinates must be a number')
-          printLongitudeHint()
+            console.log('ERROR: Field "long" in config.coordinates must be a number')
+            printLongitudeHint()
 
-          validLongitude = false
+            validLongitude = false
         } else if (!configFieldValidator.validateCoordinatesLong(coordinates.long)) {
-          console.log('ERROR: Field "long" in config.coordinates must be between -180 and 180')
-          printLongitudeHint()
+            console.log('ERROR: Field "long" in config.coordinates must be between -180 and 180')
+            printLongitudeHint()
 
-          validLongitude = false
+            validLongitude = false
         }
 
+        checkKeys(coordinates, 'config.coordinates', ['elevation', 'lat', 'long'])
+        
         if (validElevation && validLatitude && validLongitude) {
-          console.log(`INFO: Observer position aka coordinates set as ${coordinates.elevation}m in elevation, ${Math.abs(coordinates.lat)}° ${coordinates.lat < 0 ? 'S' : 'N'}, ${Math.abs(coordinates.long)}° ${coordinates.long < 0 ? 'W' : 'E'}`)
+            console.log(`INFO: Observer position aka coordinates set as ${coordinates.elevation}m in elevation, ${Math.abs(coordinates.lat)}° ${coordinates.lat < 0 ? 'S' : 'N'}, ${Math.abs(coordinates.long)}° ${coordinates.long < 0 ? 'W' : 'E'}`)
         }
-
-        for (const coordinateKey in coordinates) {
-          switch (coordinateKey) {
-            case 'elevation':
-            case 'lat':
-            case 'long':
-              break
-            default:
-              console.log(`WARNING: Unknown key ${coordinateKey} in config.coordinates`)
-              break
-          }
-        }
-      }
-      break
-    case 'log':
-      const log = config.log
-
-      if (!(log instanceof Object) || log instanceof Array) {
+    }
+    
+    // Check logging
+    const log = config.log
+      
+    if(log === undefined){
+        console.log('ERROR: Missing "log" in config')
+    } else if (!(log instanceof Object) || log instanceof Array) {
         console.log('ERROR: config.log must be an object')
-      } else {
-      // Check longitude
-        if (log.logDir === undefined) {
+    } else {
+      // Check log directory path
+      if (log.logDir === undefined) {
           console.log('ERROR: Missing field "logDir" in config.log')
           printLogDirectoryHint()
-        } else if (typeof log.logDir !== 'string') {
+      } else if (typeof log.logDir !== 'string') {
           console.log('ERROR: Field "logDir" in config.log must be a string')
           printLogDirectoryHint()
-        } else if (!configFieldValidator.validateLogLogDir(log.logDir)) {
+      } else if (!configFieldValidator.validateLogLogDir(log.logDir)) {
           console.log('ERROR: Field "logDir" in config.log not recognized as a valid file path')
           printLogDirectoryHint()
-        } else {
+      } else {
           console.log(`INFO: Log directory set as: ${path.resolve('../' + log.logDir)}`)
-        }
       }
-      break
-    case 'open_weather_map':
-      break
-    case 'twitter':
-      break
-    default:
-      console.log(`WARNING: Unrecognized key "${key}"`)
-      break
-  }
-}
-
+          
+      checkKeys(log, 'config.log', ['logDir'])
+    }
+    
+    //'open_weather_map':
+    //'twitter':
+  
+checkKeys(config, 'config', ['alerts', 'coordinates', 'log', 'open_weather_map', 'twitter'])
 console.log('INFO: Errors / warnings displayed above if any were present.')
