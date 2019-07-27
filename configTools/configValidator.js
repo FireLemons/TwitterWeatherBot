@@ -82,6 +82,20 @@ function printLogDirectoryHint () {
   console.log('A typical "logDir" looks like: "logDir": "logs"')
 }
 
+// Prints a hint about valid location parameters
+function printOpenWeatherMapsLocationHint(){
+  console.log('"location" contains get parameters to send to api.openweathermap.org/2.5/forecast to specify forecast location');
+  console.log('Valid key value pairs are:');
+  console.log('  "q": "CITY_NAME,ISO_3166_COUNTRY_CODE"');
+  console.log('  OR');
+  console.log('  "id": "CITY_ID"');
+  console.log('  OR');
+  console.log('  "lat": "LATITIUDE",');
+  console.log('  "lon": "LONGITUDE"');
+  console.log('  OR');
+  console.log('  "zip": "ZIP_CODE,ISO_3166_COUNTRY_CODE"');
+}
+
 // Checks and object for unrecognized keys. Prints out warning for each unrecognized key.
 //  @param  {object} object The object to check keys for
 //  @param  {string} path The path to the object in the config
@@ -234,6 +248,7 @@ if (!(config instanceof Object) || config instanceof Array) {
                 console.log(`ERROR: Invalid filter #${i + 1} "${filter.restriction}". ${e.message}`)
               }
             }
+            
             if (valid.path) {
               switch (filter.restriction) {
                 case 'after':
@@ -412,8 +427,62 @@ if (!(config instanceof Object) || config instanceof Array) {
     checkKeys(log, 'config.log', ['logDir'])
   }
 
-  // 'open_weather_map':
-  // 'twitter':
+  // Check Open Weather Map 
+  const OWM = config.open_weather_map
+  
+  if(OWM === undefined){
+    console.log('ERROR: Missing "open_weather_map" in config')
+  } else if(!(OWM instanceof Object) || OWM instanceof Array) {
+    console.log('ERROR: config.open_weather_map must be an object')
+  } else {
+    // Check get params for weather forecast
+    const location = OWM.location
+    
+    let paramsValid = true,
+        keyValid = true
+    
+    if(location === undefined){
+      console.log('ERROR: missing "location" in config.open_weather_map')
+      printOpenWeatherMapsLocationHint()
+      
+      paramsValid = false;
+    } else if(!(location instanceof Object) || location instanceof Array){
+      console.log('ERROR: config.open_weather_map.location must be an object')
+      printOpenWeatherMapsLocationHint()
+      
+      paramsValid = false;
+    } else {
+      checkKeys(location, 'config.open_weather_map.location', ['q', 'id', 'lat', 'lon', 'zip'])
+    }
+    
+    //Check api key
+    const apiKey = OWM.key
+    
+    if(apiKey === undefined){
+      console.log('ERROR: missing field "key" in config.open_weather_map')
+      
+      keyValid = false
+    } else if(typeof apiKey !== 'string'){
+      console.log('ERROR: config.open_weather_map.key must be a string')
+      
+      keyValid = false
+    }
+    
+    if(paramsValid && keyValid){
+      let OWMQueryParams = ''
+      
+      for (const paramName in location) {
+        if (Object.prototype.hasOwnProperty.call(location, paramName)) {
+          OWMQueryParams += '&' + paramName + '=' + location[paramName]
+        }
+      }
+    
+      console.log(`INFO: Forecast data URL is https://api.openweathermap.org/data/2.5/forecast?${OWMQueryParams.substr(1)}&units=metric&APPID=${OWM.key}`)
+      console.log('WARNING: Validation of config.open_weather_map is very limited. The best way to verify config.open_weather_map is to visit the above URL.');
+    }
+    
+    checkKeys(OWM, 'config.open_weather_map', ['location', 'key'])
+  }
 
   checkKeys(config, 'config', ['alerts', 'coordinates', 'log', 'open_weather_map', 'twitter'])
 }
