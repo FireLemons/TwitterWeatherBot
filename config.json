@@ -54,23 +54,19 @@
             Valid parameters are:
             ==============================================
             City & Country Combination
-            Based on api call: api.openweathermap.org/data/2.5/forecast?q={city name},{country code}
             
             "q": "CITY_NAME,ISO_3166_COUNTRY_CODE"
             ======================OR======================
             City ID
-            Based on api call: api.openweathermap.org/data/2.5/forecast?id={city ID}
             
             "id": "CITY_ID"
             ======================OR======================
             Geographic Coordinates
-            Based on api call: api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}
             
             "lat": "LATITIUDE",
             "lon": "LONGITUDE"
             ======================OR======================
             Zip Code
-            Based on api call: api.openweathermap.org/data/2.5/forecast?zip={zip code},{country code}
             
             "zip": "ZIP_CODE,ISO_3166_COUNTRY_CODE"
             ==============================================
