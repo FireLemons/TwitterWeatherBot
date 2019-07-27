@@ -51,7 +51,7 @@
         "location": {
             <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             GET parameters for api.openweathermap.org/2.5/forecast expressed as key value pairs excluding the api key
-            As of December 2018 valid parameters are:
+            Valid parameters are:
             ==============================================
             City & Country Combination
             Based on api call: api.openweathermap.org/data/2.5/forecast?q={city name},{country code}
