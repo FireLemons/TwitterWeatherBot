@@ -5,14 +5,6 @@ const config = require('../config.json')
 const configFieldValidator = require('./configFieldValidator.js')
 const path = require('path')
 
-if (!(config instanceof Object) || config instanceof Array) {
-  throw new TypeError('Config file must contain a JSON object')
-}
-
-if (!config.alerts || config.alerts.disabled) {
-  console.log('INFO: Alerts disabled.')
-}
-
 // Prints a hint about valid filter restrictions
 function printFilterRestrictionHint () {
   console.log('The "restriction" field is used to determine the type of filter. Possible values for restriction are:')
@@ -100,6 +92,13 @@ function checkKeys(object, path, validKeys){
             console.log(`WARNING: Unrecognized key "${key}" in ${path}`);
         }
     }
+}
+
+if (!(config instanceof Object) || config instanceof Array) {
+  throw new TypeError('Config file must contain a JSON object')
+} else {
+  if (!config.alerts || config.alerts.disabled) {
+  console.log('INFO: Alerts disabled.')
 }
 
     // Check alerts
@@ -405,4 +404,6 @@ function checkKeys(object, path, validKeys){
     //'twitter':
   
 checkKeys(config, 'config', ['alerts', 'coordinates', 'log', 'open_weather_map', 'twitter'])
+}
+
 console.log('INFO: Errors / warnings displayed above if any were present.')
