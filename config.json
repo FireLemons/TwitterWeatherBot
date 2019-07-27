@@ -50,7 +50,7 @@
     "open_weather_map": {
         "location": {
             <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            GET parameters for api.openweathermap.org expressed as key value pairs excluding the api key
+            GET parameters for api.openweathermap.org/2.5/forecast expressed as key value pairs excluding the api key
             As of December 2018 valid parameters are:
             ==============================================
             City & Country Combination
