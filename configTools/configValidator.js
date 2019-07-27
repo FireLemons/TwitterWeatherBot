@@ -99,7 +99,7 @@ if (!(config instanceof Object) || config instanceof Array) {
 } else {
   // Check alerts
   const alerts = config.alerts
-  
+
   if (!alerts || alerts.disabled) {
     console.log('INFO: Alerts disabled.')
   } else if (!(alerts instanceof Object) || alerts instanceof Array) {
@@ -118,7 +118,7 @@ if (!(config instanceof Object) || config instanceof Array) {
     } else {
       // Check contact
       const contact = appInfo.contact
-      
+
       if (contact === undefined) {
         console.log('ERROR: missing field "contact" in config.alerts.app. The national weather service api requires contact information in order to send responses.')
         console.log('A typical "contact" looks like: "contact": "contact.email@example.com"')
@@ -130,7 +130,7 @@ if (!(config instanceof Object) || config instanceof Array) {
 
       // Check app name
       const appName = appInfo.name
-      
+
       if (appName === undefined) {
         console.log('ERROR: missing field "name" in config.alerts.app. The national weather service api requires an app name in order to send responses.')
         console.log('A typical "name" looks like: "name": "ApplicationName"')
@@ -140,7 +140,7 @@ if (!(config instanceof Object) || config instanceof Array) {
         console.log('WARNING: field "name" in config.alerts.app is the empty string or contains exclusively whitespace')
       }
 
-      //Check app version
+      // Check app version
       const version = appInfo.version
 
       if (version === undefined) {
@@ -152,9 +152,9 @@ if (!(config instanceof Object) || config instanceof Array) {
         console.log('WARNING: field "version" in config.alerts.app is the empty string or contains exclusively whitespace')
       }
 
-      //Check app website
+      // Check app website
       const website = appInfo.website
-      
+
       if (website === undefined) {
         console.log('ERROR: missing field "website" in config.alerts.app. The national weather service api requires an app related website in order to send responses.')
         console.log('A typical "website" looks like: "website": "https://your.app.url/"')
@@ -163,7 +163,7 @@ if (!(config instanceof Object) || config instanceof Array) {
       } else if (!configFieldValidator.validateAlertsAppWebsite(website)) {
         console.log('WARNING: field "website" in config.alerts.app in unrecognized format')
       }
-      
+
       checkKeys(appInfo, 'config.alerts.app', ['contact', 'name', 'version', 'website'])
     }
 
@@ -281,9 +281,6 @@ if (!(config instanceof Object) || config instanceof Array) {
     // check get params for api.weather.gov
     const params = alerts.params
   }
-
-
-  
 
   // Check coordinates
   const coordinates = config.coordinates
