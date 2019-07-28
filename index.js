@@ -106,7 +106,7 @@ const logger = winston.createLogger({
     new winston.transports.Console(),
     new winston.transports.File({
       filename: path.join(logDir, 'error.log'),
-      maxsize: 1000000
+      maxsize: 10000
     })
   ],
   // Starts a delayed process shutdown so the logger has time to write exceptions to files.
