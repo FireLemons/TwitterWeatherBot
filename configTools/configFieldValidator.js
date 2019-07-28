@@ -11,20 +11,6 @@ module.exports = {
     return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(contact)
   },
 
-  // Checks whether config.alerts.app.name is an empty string
-  //  @param  {string} name The given app name
-  //  @return {boolean} True if name is not an empty string false otherwise
-  validateAlertsAppName (name) {
-    return name.trim().length > 0
-  },
-
-  // Checks whether config.alerts.app.version is an empty string
-  //  @param  {string} version The given app version
-  //  @return {boolean} True if version is not an empty string false otherwise
-  validateAlertsAppVersion (version) {
-    return version.trim().length > 0
-  },
-
   // Checks whether config.alerts.app.website is a url
   //  @param  {string} website The given app website
   //  @return {boolean} True if website is is in the form of a valid url false otherwise
@@ -113,8 +99,22 @@ module.exports = {
 
   // Checks whether config.log.logDir is a valid file path
   //  @param  {string} logDir The given directory path
-  //  @
+  //  @return {boolean} true if logDir is a valid path false otherwise
   validateLogLogDir (logDir) {
     return /^(?:[\w]:[\\/]+|\.|\.\.){0,1}[\w_\-\s.]+(?:[\\/]+[a-z_\-\s0-9.]+)*$/.test(logDir)
+  },
+  
+  // Checks whether a string contains non white space characters
+  //  @param  {string} str The string to be checked
+  //  @return {boolean} True if str has length and isn't exclusively white space false otherwise
+  validateNotEmptyString(str){
+    return str.trim().length > 0
+  },
+  
+  // Checks whether a number is an integer
+  //  @param  {number} num The number to be checked
+  //  @return {boolean} True if num is an integer false otherwise
+  validateInteger(num){
+    return num === Math.floor(num)
   }
 }
