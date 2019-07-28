@@ -142,6 +142,23 @@ function checkNumber(num, path){
   return true
 }
 
+// Checks if a value is an object. Prints an error if the value is undefined or not an object
+//  @param  {any} obj The value to be checked
+//  @param  {string} path The path to obj in the config object
+//  @return {boolean} True if obj is an object
+function checkObject(obj, path){
+  if(obj === undefined){
+    let lastPeriod = path.lastIndexOf('.')
+    console.log(`ERROR: missing field "${path.substr(lastPeriod + 1)}" in ${path.substr(0, lastPeriod)}`)
+    return false
+  } else if(!(obj instanceof Object) || obj instanceof Array){
+    console.log(`ERROR: ${path} must be an object`)
+    return false
+  }
+  
+  return true
+}
+
 if (!(config instanceof Object) || config instanceof Array) {
   throw new TypeError('Config file must contain a JSON object')
 } else {
