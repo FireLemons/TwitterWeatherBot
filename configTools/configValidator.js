@@ -175,11 +175,9 @@ if (!(config instanceof Object) || config instanceof Array) {
     // Check info to be sent in user-agent header to NWS api
     const appInfo = alerts.app
 
-    if (appInfo === undefined) {
-      console.log('ERROR: Enabled alerts require an app object containing required information to send to the national weather service api for a response.')
+    if (!checkObject(appInfo, 'config.alerts.app')) {
+      console.log('The app object contains required information to send to the national weather service api for alert data')
       console.log('The "app" object is in the form:\n"app": {\n  "contact": "EMAIL ADDRESS",\n  "name": "APP NAME",\n  "version": "VERSION NO",\n  "website": "APP WEBSITE OR CONTACT WEBSITE"\n}\n')
-    } else if (!(appInfo instanceof Object) || appInfo instanceof Array) {
-      console.log('ERROR: config.alerts.app must be an object')
     } else {
       // Check contact
       const contact = appInfo.contact
@@ -355,11 +353,7 @@ if (!(config instanceof Object) || config instanceof Array) {
     // check get params for api.weather.gov
     const params = alerts.params
     
-    if (params === undefined) {
-      console.log('ERROR: Missing "params" in config.alerts');
-    } else if (!(params instanceof Object) || params instanceof Array) {
-      console.log('ERROR: config.alerts.params must be an object')
-    } else {
+    if (checkObject(params, 'config.alerts.params')) {
       let locationParamCount = 0;
       
       locationParamCount += params.area !== undefined;
@@ -390,11 +384,7 @@ if (!(config instanceof Object) || config instanceof Array) {
   // Check coordinates
   const coordinates = config.coordinates
 
-  if (coordinates === undefined) {
-    console.log('ERROR: Missing "coordinates" in config')
-  } else if (!(coordinates instanceof Object) || coordinates instanceof Array) {
-    console.log('ERROR: config.coordinates must be an object')
-  } else {
+  if (checkObject(coordinates, 'config.coordinates')){
 
     // Check elevation
     const elevation = coordinates.elevation
@@ -448,11 +438,7 @@ if (!(config instanceof Object) || config instanceof Array) {
   // Check logging
   const log = config.log
 
-  if (log === undefined) {
-    console.log('ERROR: Missing "log" in config')
-  } else if (!(log instanceof Object) || log instanceof Array) {
-    console.log('ERROR: config.log must be an object')
-  } else {
+  if (checkObject(log, 'config.log')){
     // Check log directory path
     let logFolder = log.logDir,
         validPath = checkString(logFolder, 'config.log.logDir')
@@ -475,11 +461,7 @@ if (!(config instanceof Object) || config instanceof Array) {
   // Check Open Weather Map 
   const OWM = config.open_weather_map
   
-  if(OWM === undefined){
-    console.log('ERROR: Missing "open_weather_map" in config')
-  } else if(!(OWM instanceof Object) || OWM instanceof Array) {
-    console.log('ERROR: config.open_weather_map must be an object')
-  } else {
+  if(checkObject(OWM, 'config.open_weather_map')){
     // Check get params for weather forecast
     const location = OWM.location
     
@@ -530,11 +512,7 @@ if (!(config instanceof Object) || config instanceof Array) {
   // Check Twitter
   const twitter = config.twitter
   
-  if(twitter === undefined){
-    console.log('ERROR: Missing "twitter" in config')
-  } else if(!(twitter instanceof Object) || twitter instanceof Array) {
-    console.log('ERROR: config.twitter must be an object')
-  } else {
+  if(checkObject(twitter, 'config.twitter')) {
     // Check consumer key
     let consumerKey = twitter.consumer_key
     
