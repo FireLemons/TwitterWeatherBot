@@ -7,93 +7,93 @@ const path = require('path')
 
 // Prints a hint about valid filter restrictions
 function printFilterRestrictionHint () {
-  console.log('The "restriction" field is used to determine the type of filter. Possible values for restriction are:')
-  console.log('  "after" - Filters by date')
-  console.log('    filter.path must lead to a date string')
-  console.log('    filter.value must be a number')
-  console.log('    All alerts with dates before the current time + value(hours) will be removed')
-  console.log('  "before" - Filters by date')
-  console.log('    filter.path must lead to a date string')
-  console.log('    filter.value must be a number')
-  console.log('    All alerts with dates after the current time + value(hours) will be removed')
-  console.log('  "contains" - Filters by the contents of an array')
-  console.log('    filter.path must lead to an array')
-  console.log('    filter.value must be a primitive value potentially found in the arrays filter.path leads to')
-  console.log('    All alerts with arrays containing value will be kept')
-  console.log('  "has" - Filters by whether a path exists in the object')
-  console.log('    filter.path is the path to try to access in the alert object')
-  console.log('    filter.value is true if alerts with valid paths are kept false if alerts are removed')
-  console.log('    All alerts with valid paths are kept is value is true false otherwise')
-  console.log('    This type of filter is used before the other filters')
-  console.log('  "equals" - Filters alerts by comparing primitive values')
-  console.log('    filter.path is the path to the primitve value to be compare')
-  console.log('    filter.value is the value to compare with')
-  console.log('    All alerts with values at path equal to the filter value will be kept')
-  console.log('  "matches" - Filters by testing strings in the alerts for a regex match')
-  console.log('    filter.path must lead to a string')
-  console.log('    filter.value must be a regex string')
-  console.log('    All alerts with strings at path matching value will be kept')
-  console.log('\nExample: remove all alerts that have been overridden by a later alert.')
-  console.log('{')
-  console.log('  "restriction": "has",')
-  console.log('  "path": "properties.replacedBy",')
-  console.log('  "value": 0')
-  console.log('}')
+  console.log('  The "restriction" field is used to determine the type of filter. Possible values for restriction are:')
+  console.log('    "after" - Filters by date')
+  console.log('      filter.path must lead to a date string')
+  console.log('      filter.value must be a number')
+  console.log('      All alerts with dates before the current time + value(hours) will be removed')
+  console.log('    "before" - Filters by date')
+  console.log('      filter.path must lead to a date string')
+  console.log('      filter.value must be a number')
+  console.log('      All alerts with dates after the current time + value(hours) will be removed')
+  console.log('    "contains" - Filters by the contents of an array')
+  console.log('      filter.path must lead to an array')
+  console.log('      filter.value must be a primitive value potentially found in the arrays filter.path leads to')
+  console.log('      All alerts with arrays containing value will be kept')
+  console.log('    "has" - Filters by whether a path exists in the object')
+  console.log('      filter.path is the path to try to access in the alert object')
+  console.log('      filter.value is true if alerts with valid paths are kept false if alerts are removed')
+  console.log('      All alerts with valid paths are kept is value is true false otherwise')
+  console.log('      This type of filter is used before the other filters')
+  console.log('    "equals" - Filters alerts by comparing primitive values')
+  console.log('      filter.path is the path to the primitve value to be compare')
+  console.log('      filter.value is the value to compare with')
+  console.log('      All alerts with values at path equal to the filter value will be kept')
+  console.log('    "matches" - Filters by testing strings in the alerts for a regex match')
+  console.log('      filter.path must lead to a string')
+  console.log('      filter.value must be a regex string')
+  console.log('      All alerts with strings at path matching value will be kept')
+  console.log('\n  Example: remove all alerts that have been overridden by a later alert.')
+  console.log('  {')
+  console.log('    "restriction": "has",')
+  console.log('    "path": "properties.replacedBy",')
+  console.log('    "value": 0')
+  console.log('  }')
 }
 
 // Prints a hint about valid filter paths
 function printFilterPathHint () {
   console.log('  Correct format is key.key.key')
   console.log('  For example: to access "c" in the object below')
-  console.log('  {')
-  console.log('    "a": {')
-  console.log('      "b": {')
-  console.log('        "c": 1')
+  console.log('    {')
+  console.log('      "a": {')
+  console.log('        "b": {')
+  console.log('          "c": 1')
+  console.log('        }')
   console.log('      }')
   console.log('    }')
-  console.log('  }')
-  console.log('Path would be "a.b.c"')
+  console.log('  Path would be "a.b.c"')
 }
 
 // Prints a hint about valid elevation values
 function printElevationHint () {
-  console.log('"elevation" is the elevation of the area in meters')
-  console.log('evevations are between -413(Dead Sea Depression) and 8848(Peak of Mt.Everest) meters')
-  console.log('A typical "elevation" looks like: "elevation": 200')
+  console.log('  "elevation" is the elevation of the area in meters')
+  console.log('  evevations are between -413(Dead Sea Depression) and 8848(Peak of Mt.Everest) meters')
+  console.log('  A typical "elevation" looks like: "elevation": 200')
 }
 
 // Prints a hint about valid latitude values
 function printLatitudeHint () {
-  console.log('"lat" is the north latitude(north is positive, south is negative) in degrees')
-  console.log('latitudes are between -90 and 90 degrees')
-  console.log('A typical "lat" looks like: "lat": 40.596')
+  console.log('  "lat" is the north latitude(north is positive, south is negative) in degrees')
+  console.log('  latitudes are between -90 and 90 degrees')
+  console.log('  A typical "lat" looks like: "lat": 40.596')
 }
 
 // Prints a hint about valid longitude values
 function printLongitudeHint () {
-  console.log('"long" is the longitude west(west is negative, east is positive) in degrees')
-  console.log('longitudes are between -180 and 180 degrees')
-  console.log('A typical "long" looks like: "long": -90.596')
+  console.log('  "long" is the longitude west(west is negative, east is positive) in degrees')
+  console.log('  longitudes are between -180 and 180 degrees')
+  console.log('  A typical "long" looks like: "long": -90.596')
 }
 
 // Prints a hint about valid log directory paths
 function printLogDirectoryHint () {
-  console.log('"logDir" is the path to the directory to store logs in')
-  console.log('A typical "logDir" looks like: "logDir": "logs"')
+  console.log('  "logDir" is the path to the directory to store logs in')
+  console.log('  A typical "logDir" looks like: "logDir": "logs"')
 }
 
 // Prints a hint about valid location parameters
 function printOpenWeatherMapsLocationHint(){
-  console.log('"location" contains get parameters to send to api.openweathermap.org/2.5/forecast to specify forecast location');
-  console.log('Valid key value pairs are:');
-  console.log('  "q": "CITY_NAME,ISO_3166_COUNTRY_CODE"');
-  console.log('  OR');
-  console.log('  "id": "CITY_ID"');
-  console.log('  OR');
-  console.log('  "lat": "LATITIUDE",');
-  console.log('  "lon": "LONGITUDE"');
-  console.log('  OR');
-  console.log('  "zip": "ZIP_CODE,ISO_3166_COUNTRY_CODE"');
+  console.log('  "location" contains get parameters to send to api.openweathermap.org/2.5/forecast to specify forecast location');
+  console.log('  Valid key value pairs are:');
+  console.log('    "q": "CITY_NAME,ISO_3166_COUNTRY_CODE"');
+  console.log('    OR');
+  console.log('    "id": "CITY_ID"');
+  console.log('    OR');
+  console.log('    "lat": "LATITIUDE",');
+  console.log('    "lon": "LONGITUDE"');
+  console.log('    OR');
+  console.log('    "zip": "ZIP_CODE,ISO_3166_COUNTRY_CODE"');
 }
 
 // Checks an object for unrecognized keys. Prints out a warning for each unrecognized key.
@@ -108,8 +108,8 @@ function checkKeys (object, path, validKeys) {
   }
 }
 
-// Checks if str is a string. Prints an error if str is undefined or not a string
-//  @param  {string} str The string to be checked
+// Checks if a value is a string. Prints an error if the value is undefined or not a string
+//  @param  {any} str The value to be checked
 //  @param  {string} path The path to str in the config object
 //  @return {boolean} True if str is a string
 function checkString(str, path){
@@ -119,6 +119,23 @@ function checkString(str, path){
     return false
   } else if(typeof str !== 'string'){
     console.log(`ERROR: ${path} must be a string`)
+    return false
+  }
+  
+  return true
+}
+
+// Checks if a value is a number. Prints an error if the value is undefined or not a number
+//  @param  {any} num The value to be checked
+//  @param  {string} path The path to num in the config object
+//  @return {boolean} True if num is a number
+function checkNumber(num, path){
+  if(num === undefined){
+    let lastPeriod = path.lastIndexOf('.')
+    console.log(`ERROR: missing field "${path.substr(lastPeriod + 1)}" in ${path.substr(0, lastPeriod)}`)
+    return false
+  } else if(isNaN(num)){
+    console.log(`ERROR: ${path} must be a number`)
     return false
   }
   
@@ -230,14 +247,9 @@ if (!(config instanceof Object) || config instanceof Array) {
         if (!(filter instanceof Object) || filter instanceof Array) {
           console.log('ERROR:   Each filter of config.alerts.filters must be an object')
         } else {
-          const valid = {
-            path: true,
-            value: null
-          }
-          
           // Check filter restriction
           let restriction = filter.restriction,
-          let validRestriction = checkString(restriction, `config.alerts.filters[i].restriction`)
+              validRestriction = checkString(restriction, `config.alerts.filters[i].restriction`)
 
           if (validRestriction && !configFieldValidator.validateAlertsFiltersRestriction(filter.restriction)) {
             console.log(`ERROR:   config.alerts.filters[${i}].restriction has unknown filter restriction: ${filter.restriction}`)
@@ -253,7 +265,7 @@ if (!(config instanceof Object) || config instanceof Array) {
           const path = filter.path
           let validPath = checkString(path, `config.alerts.filters[i].path`)
           
-          if (validPath && !configFieldValidator.validateAlertsFiltersPath(filter.path)) { // Filter path wrong format
+          if (validPath && !configFieldValidator.validateAlertsFiltersPath(path)) { // Filter path wrong format
             console.log(`ERROR:   config.alerts.filters[${i}].path is in incorrect format`)
 
             valid.path = false
@@ -264,50 +276,53 @@ if (!(config instanceof Object) || config instanceof Array) {
           }
           
           // Check values
+          let value = filter.value,
+              validValue = true
+          
           if (validRestriction) {
             try {
-              valid.value = configFieldValidator.validateAlertsFiltersValue(filter.restriction, filter.value)
+              validValue = configFieldValidator.validateAlertsFiltersValue(restriction, value)
             } catch (e) {
               if (e instanceof ReferenceError) {
-                console.log(`ERROR:   Invalid filter #${i + 1} "${filter.restriction}". Filter value missing.`)
+                console.log(`ERROR:   Invalid filter config.alerts.filters[${i}] "${restriction}". Filter value missing.`)
               } else if (e instanceof TypeError) {
-                console.log(`ERROR:   Invalid filter #${i + 1} "${filter.restriction}". ${e.message}`)
+                console.log(`ERROR:   Invalid filter config.alerts.filters[${i}] "${restriction}". ${e.message}`)
               }
             }
             
-            if (valid.path) {
-              switch (filter.restriction) {
+            if (validPath) {
+              switch (restriction) {
                 case 'after':
-                  if (valid.value) {
-                    console.log(`INFO:   Filter #${i + 1} will remove all alerts with dates at alert.${filter.path} that are before the time when alerts are fetched + ${filter.value} hour(s).`)
+                  if (validValue) {
+                    console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts with dates at alert.${path} that are before the time when alerts are fetched + ${filter.value} hour(s).`)
                   }
                   break
                 case 'before':
-                  if (valid.value) {
-                    console.log(`INFO:   Filter #${i + 1} will remove all alerts with dates at alert.${filter.path} that are after the time when alerts are fetched + ${filter.value} hour(s).`)
+                  if (validValue) {
+                    console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts with dates at alert.${path} that are after the time when alerts are fetched + ${filter.value} hour(s).`)
                   }
 
                   break
                 case 'contains':
-                  if (valid.value) {
-                    console.log(`INFO:   Filter #${i + 1} will remove all alerts with arrays at alert.${filter.path} not containing the value ${filter.value}.`)
+                  if (validValue) {
+                    console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts with arrays at alert.${path} not containing the value ${filter.value}.`)
                   }
 
                   break
                 case 'equals':
-                  if (valid.value) {
-                    console.log(`INFO:   Filter #${i + 1} will remove all alerts with values at alert.${filter.path} equal(strict equality) to ${filter.value}.`)
+                  if (validValue) {
+                    console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts with values at alert.${path} equal(strict equality) to ${filter.value}.`)
                   }
 
                   break
                 case 'has':
-                  console.log(`INFO:   Filter #${i + 1} will remove all alerts where alert.${filter.path} ${filter.value ? 'does not contain' : 'contains'} a value.`)
+                  console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts where alert.${filter.path} ${value ? 'does not contain' : 'contains'} a value.`)
                   break
                 case 'matches':
-                  if (valid.value) {
-                    console.log(`INFO:   Filter #${i + 1} will remove all alerts with strings at alert.${filter.path} not matching the regex ${filter.value}.`)
+                  if (validValue) {
+                    console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts with strings at alert.${path} not matching the regex ${filter.value}.`)
                   } else {
-                    console.log(`ERROR:   Invalid filter #${i + 1} "matches". Filter value is invalid regex.`)
+                    console.log(`ERROR:   Invalid filter config.alerts.filters[${i}] "matches". Filter value is invalid regex.`)
                   }
 
                   break
@@ -363,69 +378,54 @@ if (!(config instanceof Object) || config instanceof Array) {
   } else if (!(coordinates instanceof Object) || coordinates instanceof Array) {
     console.log('ERROR: config.coordinates must be an object')
   } else {
-    let validElevation = true
-    let validLatitude = true
-    let validLongitude = true
 
     // Check elevation
-    if (coordinates.elevation === undefined) {
-      console.log('ERROR: Missing field "elevation" in config.coordinates')
-      printElevationHint()
-
-      validElevation = false
-    } else if (isNaN(coordinates.elevation)) {
-      console.log('ERROR: Field "elevation" in config.coordinates must be a number')
-      printElevationHint()
-
-      validElevation = false
-    } else if (!configFieldValidator.validateCoordinatesElevation(coordinates.elevation)) {
+    const elevation = coordinates.elevation
+    let validElevation = checkNumber(elevation, 'config.coordinates.elevation')
+    
+    if (validElevation && !configFieldValidator.validateCoordinatesElevation(elevation)) {
       console.log('ERROR: Field "elevation" in config.coordinates must be between -413 and 8848')
-      printElevationHint()
 
       validElevation = false
+    }
+    
+    if(!validElevation){
+      printElevationHint()
     }
 
     // Check latitude
-    if (coordinates.lat === undefined) {
-      console.log('ERROR: Missing field "lat" in config.coordinates')
-      printLatitudeHint()
-
-      validLatitude = false
-    } else if (isNaN(coordinates.lat)) {
-      console.log('ERROR: Field "lat" in config.coordinates must be a number')
-      printLatitudeHint()
-
-      validLatitude = false
-    } else if (!configFieldValidator.validateCoordinatesLat(coordinates.lat)) {
+    const latitude = coordinates.lat
+    let validLatitude = checkNumber(latitude, 'config.coordinates.lat')
+    
+    if (validLatitude && !configFieldValidator.validateCoordinatesLat(latitude)) {
       console.log('ERROR: Field "lat" in config.coordinates must be between -90 and 90')
-      printLatitudeHint()
 
       validLatitude = false
+    }
+    
+    if(!validLatitude){
+      printLatitudeHint()
     }
 
     // Check longitude
-    if (coordinates.long === undefined) {
-      console.log('ERROR: Missing field "long" in config.coordinates')
-      printLongitudeHint()
-
-      validLongitude = false
-    } else if (isNaN(coordinates.long)) {
-      console.log('ERROR: Field "long" in config.coordinates must be a number')
-      printLongitudeHint()
-
-      validLongitude = false
-    } else if (!configFieldValidator.validateCoordinatesLong(coordinates.long)) {
+    const longitude = coordinates.long
+    let validLongitude = checkNumber(longitude, 'config.coordinates.longitude')
+    
+    if (validLongitude && !configFieldValidator.validateCoordinatesLong(longitude)) {
       console.log('ERROR: Field "long" in config.coordinates must be between -180 and 180')
-      printLongitudeHint()
 
       validLongitude = false
+    }
+    
+    if(!validLongitude){
+      printLongitudeHint()
+    }
+
+    if (validElevation && validLatitude && validLongitude) {
+      console.log(`INFO: Observer position aka coordinates set as ${elevation}m in elevation, ${Math.abs(latitude)}° ${latitude < 0 ? 'S' : 'N'}, ${Math.abs(longitude)}° ${longitude < 0 ? 'W' : 'E'}`)
     }
 
     checkKeys(coordinates, 'config.coordinates', ['elevation', 'lat', 'long'])
-
-    if (validElevation && validLatitude && validLongitude) {
-      console.log(`INFO: Observer position aka coordinates set as ${coordinates.elevation}m in elevation, ${Math.abs(coordinates.lat)}° ${coordinates.lat < 0 ? 'S' : 'N'}, ${Math.abs(coordinates.long)}° ${coordinates.long < 0 ? 'W' : 'E'}`)
-    }
   }
 
   // Check logging
@@ -549,11 +549,7 @@ if (!(config instanceof Object) || config instanceof Array) {
     // Check local weather station id
     let localStationID = twitter.localStationID
     
-    if(localStationID === undefined){
-      console.log('ERROR: Missing field "localStationID" in config.twitter')
-    } else if(isNaN(localStationID)){
-      console.log('ERROR: config.twitter.localStationID must be a number')
-    } else if(!configFieldValidator.validateInteger(localStationID)){
+    if(checkNumber(localStationID, config.twitter.localStationID) && !configFieldValidator.validateInteger(localStationID)){
       console.log('ERROR: config.twitter.localStationID must be an integer')
     }
     
