@@ -96,7 +96,7 @@ function printOpenWeatherMapsLocationHint(){
   console.log('  "zip": "ZIP_CODE,ISO_3166_COUNTRY_CODE"');
 }
 
-// Checks and object for unrecognized keys. Prints out warning for each unrecognized key.
+// Checks an object for unrecognized keys. Prints out a warning for each unrecognized key.
 //  @param  {object} object The object to check keys for
 //  @param  {string} path The path to the object in the config
 //  @param  {array} validKeys A list of recognized keys
@@ -106,6 +106,23 @@ function checkKeys (object, path, validKeys) {
       console.log(`WARNING: Unrecognized key "${key}" in ${path}`)
     }
   }
+}
+
+// Checks if str is a string. Prints an error if str is undefined or not a string
+//  @param  {string} str The string to be checked
+//  @param  {string} path The path to str in the config object
+//  @return {boolean} True if str is a string
+function checkString(str, path){
+  if(str === undefined){
+    let lastPeriod = path.lastIndexOf('.')
+    console.log(`ERROR: missing field "${path.substr(lastPeriod + 1)}" in ${path.substr(0, lastPeriod)}`)
+    return false
+  } else if(typeof str !== 'string'){
+    console.log(`ERROR: ${path} must be a string`)
+    return false
+  }
+  
+  return true
 }
 
 if (!(config instanceof Object) || config instanceof Array) {
@@ -150,7 +167,7 @@ if (!(config instanceof Object) || config instanceof Array) {
         console.log('A typical "name" looks like: "name": "ApplicationName"')
       } else if (typeof appName !== 'string') {
         console.log('ERROR: field "name" in config.alerts.app must be a string.')
-      } else if (!configFieldValidator.validateAlertsAppName(appName)) {
+      } else if (!configFieldValidator.validateNotEmptyString(appName)) {
         console.log('WARNING: field "name" in config.alerts.app is the empty string or contains exclusively whitespace')
       }
 
@@ -162,7 +179,7 @@ if (!(config instanceof Object) || config instanceof Array) {
         console.log('A typical "version" looks like: "version": "vX.Y"')
       } else if (typeof version !== 'string' && isNaN(version)) {
         console.log('ERROR: field "version" in config.alerts.app must be a string or a number.')
-      } else if (typeof version === 'string' && !configFieldValidator.validateAlertsAppVersion(version)) {
+      } else if (typeof version === 'string' && !configFieldValidator.validateNotEmptyString(version)) {
         console.log('WARNING: field "version" in config.alerts.app is the empty string or contains exclusively whitespace')
       }
 
@@ -482,6 +499,68 @@ if (!(config instanceof Object) || config instanceof Array) {
     }
     
     checkKeys(OWM, 'config.open_weather_map', ['location', 'key'])
+  }
+  
+  // Check Twitter
+  const twitter = config.twitter
+  
+  if(twitter === undefined){
+    console.log('ERROR: Missing "twitter" in config')
+  } else if(!(twitter instanceof Object) || twitter instanceof Array) {
+    console.log('ERROR: config.twitter must be an object')
+  } else {
+    // Check consumer key
+    let consumerKey = twitter.consumer_key
+    
+    if(consumerKey === undefined){
+      console.log('ERROR: Missing field "consumer_key" in config.twitter')
+    } else if(typeof consumerKey !== 'string'){
+      console.log('ERROR: config.twitter.consumer_key must be a string')
+    } else if(!configFieldValidator.validateNotEmptyString(consumerKey)){
+      console.log('ERROR: field "consumer_key" in config.twitter is the empty string or contains exclusively whitespace')
+    }
+    
+    // Check consumer secret
+    let consumerSecret = twitter.consumer_secret
+    
+    if(consumerSecret === undefined){
+      console.log('ERROR: Missing field "consumer_secret" in config.twitter')
+    } else if(typeof consumerSecret !== 'string') {
+      console.log('ERROR: config.twitter.consumer_key must be a string')
+    } else if(!configFieldValidator.validateNotEmptyString(consumerSecret)) {
+      console.log('ERROR: field "consumer_secret" in config.twitter is the empty string or contains exclusively whitespace')
+    }
+    
+    // Check access token key
+    let accessTokenKey = twitter.access_token_key
+    
+    if(checkString(accessTokenKey, 'config.twitter.access_token_key') && !configFieldValidator.validateNotEmptyString(accessTokenKey)){
+      console.log('ERROR: field "access_token_key" in config.twitter is the empty string or contains exclusively whitespace')
+    }
+    
+    // Check access token secret
+    let accessTokenSecret = twitter.access_token_secret
+    
+    if(accessTokenSecret === undefined){
+      console.log('ERROR: Missing field "access_token_secret" in config.twitter')
+    } else if(typeof accessTokenSecret !== 'string'){
+      console.log('ERROR: config.twitter.access_token_secret must be a string')
+    } else if(!configFieldValidator.validateNotEmptyString(accessTokenSecret)){
+      console.log('ERROR: field "access_token_secret" in config.twitter is the empty string or contains exclusively whitespace')
+    }
+    
+    // Check local weather station id
+    let localStationID = twitter.localStationID
+    
+    if(localStationID === undefined){
+      console.log('ERROR: Missing field "localStationID" in config.twitter')
+    } else if(isNaN(localStationID)){
+      console.log('ERROR: config.twitter.localStationID must be a number')
+    } else if(!configFieldValidator.validateInteger(localStationID)){
+      console.log('ERROR: config.twitter.localStationID must be an integer')
+    }
+    
+    checkKeys(twitter, 'config.twitter', ['consumer_key', 'consumer_secret', 'access_token_key', 'access_token_secret', 'localStationID'])
   }
 
   checkKeys(config, 'config', ['alerts', 'coordinates', 'log', 'open_weather_map', 'twitter'])
