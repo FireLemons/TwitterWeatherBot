@@ -3,7 +3,9 @@
 /** @fileoverview Checks the bot configuration file for mistakes. */
 const config = require('../config.json')
 const configFieldValidator = require('./configFieldValidator.js')
+const fs = require('fs')
 const path = require('path')
+const promise = require('../promise.js')
 
 // Prints a hint about valid filter restrictions
 function printFilterRestrictionHint () {
@@ -83,17 +85,17 @@ function printLogDirectoryHint () {
 }
 
 // Prints a hint about valid location parameters
-function printOpenWeatherMapsLocationHint(){
-  console.log('  "location" contains get parameters to send to api.openweathermap.org/2.5/forecast to specify forecast location');
-  console.log('  Valid key value pairs are:');
-  console.log('    "q": "CITY_NAME,ISO_3166_COUNTRY_CODE"');
-  console.log('    OR');
-  console.log('    "id": "CITY_ID"');
-  console.log('    OR');
-  console.log('    "lat": "LATITIUDE",');
-  console.log('    "lon": "LONGITUDE"');
-  console.log('    OR');
-  console.log('    "zip": "ZIP_CODE,ISO_3166_COUNTRY_CODE"');
+function printOpenWeatherMapsLocationHint () {
+  console.log('  "location" contains get parameters to send to api.openweathermap.org/2.5/forecast to specify forecast location')
+  console.log('  Valid key value pairs are:')
+  console.log('    "q": "CITY_NAME,ISO_3166_COUNTRY_CODE"')
+  console.log('    OR')
+  console.log('    "id": "CITY_ID"')
+  console.log('    OR')
+  console.log('    "lat": "LATITIUDE",')
+  console.log('    "lon": "LONGITUDE"')
+  console.log('    OR')
+  console.log('    "zip": "ZIP_CODE,ISO_3166_COUNTRY_CODE"')
 }
 
 // Checks an object for unrecognized keys. Prints out a warning for each unrecognized key.
@@ -112,16 +114,16 @@ function checkKeys (object, path, validKeys) {
 //  @param  {any} str The value to be checked
 //  @param  {string} path The path to str in the config object
 //  @return {boolean} True if str is a string
-function checkString(str, path){
-  if(str === undefined){
-    let lastPeriod = path.lastIndexOf('.')
+function checkString (str, path) {
+  if (str === undefined) {
+    const lastPeriod = path.lastIndexOf('.')
     console.log(`ERROR: missing field "${path.substr(lastPeriod + 1)}" in ${path.substr(0, lastPeriod)}`)
     return false
-  } else if(typeof str !== 'string'){
+  } else if (typeof str !== 'string') {
     console.log(`ERROR: ${path} must be a string`)
     return false
   }
-  
+
   return true
 }
 
@@ -129,16 +131,16 @@ function checkString(str, path){
 //  @param  {any} num The value to be checked
 //  @param  {string} path The path to num in the config object
 //  @return {boolean} True if num is a number
-function checkNumber(num, path){
-  if(num === undefined){
-    let lastPeriod = path.lastIndexOf('.')
+function checkNumber (num, path) {
+  if (num === undefined) {
+    const lastPeriod = path.lastIndexOf('.')
     console.log(`ERROR: missing field "${path.substr(lastPeriod + 1)}" in ${path.substr(0, lastPeriod)}`)
     return false
-  } else if(isNaN(num)){
+  } else if (isNaN(num)) {
     console.log(`ERROR: ${path} must be a number`)
     return false
   }
-  
+
   return true
 }
 
@@ -146,16 +148,16 @@ function checkNumber(num, path){
 //  @param  {any} obj The value to be checked
 //  @param  {string} path The path to obj in the config object
 //  @return {boolean} True if obj is an object
-function checkObject(obj, path){
-  if(obj === undefined){
-    let lastPeriod = path.lastIndexOf('.')
+function checkObject (obj, path) {
+  if (obj === undefined) {
+    const lastPeriod = path.lastIndexOf('.')
     console.log(`ERROR: missing field "${path.substr(lastPeriod + 1)}" in ${path.substr(0, lastPeriod)}`)
     return false
-  } else if(!(obj instanceof Object) || obj instanceof Array){
+  } else if (!(obj instanceof Object) || obj instanceof Array) {
     console.log(`ERROR: ${path} must be an object`)
     return false
   }
-  
+
   return true
 }
 
@@ -182,14 +184,14 @@ if (!(config instanceof Object) || config instanceof Array) {
       // Check contact
       const contact = appInfo.contact
       let validContact = checkString(contact, 'config.alerts.app.contact')
-      
+
       if (validContact && !configFieldValidator.validateAlertsAppContact(appInfo.contact)) {
         console.log('WARNING: field "contact" in config.alerts.app is typically an email address')
-        
+
         validContact = false
       }
 
-      if(!validContact){
+      if (!validContact) {
         console.log('The national weather service api requires contact information in order get alert data')
         console.log('A typical "contact" looks like: "contact": "contact.email@example.com"')
       }
@@ -197,14 +199,14 @@ if (!(config instanceof Object) || config instanceof Array) {
       // Check app name
       const appName = appInfo.name
       let validAppName = checkString(appName, 'config.alerts.app.name')
-      
+
       if (validAppName && !configFieldValidator.validateNotEmptyString(appName)) {
         console.log('WARNING: field "name" in config.alerts.app is the empty string or contains exclusively whitespace')
-        
+
         validAppName = false
       }
 
-      if(!validAppName){
+      if (!validAppName) {
         console.log('The national weather service api requires an app name in order to get alert data')
         console.log('A typical "name" looks like: "name": "ApplicationName"')
       }
@@ -215,32 +217,32 @@ if (!(config instanceof Object) || config instanceof Array) {
 
       if (version === undefined) {
         console.log('ERROR: missing field "version" in config.alerts.app')
-        
+
         validVersion = false
       } else if (typeof version !== 'string' && isNaN(version)) {
         console.log('ERROR: field "version" in config.alerts.app must be a string or a number.')
-        
+
         validVersion = false
       } else if (typeof version === 'string' && !configFieldValidator.validateNotEmptyString(version)) {
         console.log('WARNING: config.alerts.app.version is the empty string or contains exclusively whitespace')
-        
+
         validVersion = false
       }
-      
-      if(!validVersion){
+
+      if (!validVersion) {
         console.log('The national weather service api requires an app version in order to get alert data')
         console.log('A typical "version" looks like: "version": "vX.Y"')
       }
 
       // Check app website
       const website = appInfo.website
-      let validWebsite = checkString(website, 'config.alerts.app.website')
+      const validWebsite = checkString(website, 'config.alerts.app.website')
 
       if (validWebsite && !configFieldValidator.validateAlertsAppWebsite(website)) {
         console.log('WARNING: config.alerts.app.website is in an unrecognized format')
       }
-      
-      if(!validWebsite){
+
+      if (!validWebsite) {
         console.log('The national weather service api requires an app related website in order to get alert data')
         console.log('A typical "website" looks like: "website": "https://your.app.url/"')
       }
@@ -263,37 +265,37 @@ if (!(config instanceof Object) || config instanceof Array) {
           console.log('ERROR:   Each filter of config.alerts.filters must be an object')
         } else {
           // Check filter restriction
-          let restriction = filter.restriction,
-              validRestriction = checkString(restriction, `config.alerts.filters[i].restriction`)
+          const restriction = filter.restriction
+          let validRestriction = checkString(restriction, `config.alerts.filters[i].restriction`)
 
           if (validRestriction && !configFieldValidator.validateAlertsFiltersRestriction(filter.restriction)) {
             console.log(`ERROR:   config.alerts.filters[${i}].restriction has unknown filter restriction: ${filter.restriction}`)
 
             validRestriction = false
           }
-          
-          if(!validRestriction){
+
+          if (!validRestriction) {
             printFilterRestrictionHint()
           }
 
           // Check filter path
           const path = filter.path
           let validPath = checkString(path, `config.alerts.filters[i].path`)
-          
+
           if (validPath && !configFieldValidator.validateAlertsFiltersPath(path)) { // Filter path wrong format
             console.log(`ERROR:   config.alerts.filters[${i}].path is in incorrect format`)
 
-            valid.path = false
+            validPath = false
           }
-          
-          if(!validPath){
+
+          if (!validPath) {
             printFilterPathHint()
           }
-          
+
           // Check values
-          let value = filter.value,
-              validValue = true
-          
+          const value = filter.value
+          let validValue = true
+
           if (validRestriction) {
             try {
               validValue = configFieldValidator.validateAlertsFiltersValue(restriction, value)
@@ -304,7 +306,7 @@ if (!(config instanceof Object) || config instanceof Array) {
                 console.log(`ERROR:   Invalid filter config.alerts.filters[${i}] "${restriction}". ${e.message}`)
               }
             }
-            
+
             if (validPath) {
               switch (restriction) {
                 case 'after':
@@ -344,39 +346,39 @@ if (!(config instanceof Object) || config instanceof Array) {
               }
             }
           }
-          
+
           checkKeys(filter, `config.alerts.filters[${i}]`, ['restriction', 'path', 'value'])
         }
       })
     }
-    
+
     // check get params for api.weather.gov
     const params = alerts.params
-    
+
     if (checkObject(params, 'config.alerts.params')) {
-      let locationParamCount = 0;
-      
-      locationParamCount += params.area !== undefined;
-      locationParamCount += params.point !== undefined;
-      locationParamCount += params.region !== undefined;
-      locationParamCount += params.region_type !== undefined;
-      locationParamCount += params.zone !== undefined;
-      
-      if(locationParamCount > 1){
-        console.log('ERROR: 2 or more of these keys are invalid: area, point, region, region_type, zone in config.alerts.params');
+      let locationParamCount = 0
+
+      locationParamCount += params.area !== undefined
+      locationParamCount += params.point !== undefined
+      locationParamCount += params.region !== undefined
+      locationParamCount += params.region_type !== undefined
+      locationParamCount += params.zone !== undefined
+
+      if (locationParamCount > 1) {
+        console.log('ERROR: 2 or more of these keys are invalid: area, point, region, region_type, zone in config.alerts.params')
       } else {
-        let alertQueryParams = '';
-        
+        let alertQueryParams = ''
+
         for (const paramName in params) {
           if (Object.prototype.hasOwnProperty.call(params, paramName)) {
             alertQueryParams += '&' + paramName + '=' + params[paramName]
           }
         }
-        
-        console.log(`INFO: Weather alert url is https://api.weather.gov/alerts?${alertQueryParams.substr(1)}`);
-        console.log('WARNING: Validation of config.alerts.params is very limited. The best way to verify params is to visit the above URL.');
+
+        console.log(`INFO: Weather alert url is https://api.weather.gov/alerts?${alertQueryParams.substr(1)}`)
+        console.log('WARNING: Validation of config.alerts.params is very limited. The best way to verify params is to visit the above URL.')
       }
-      
+
       checkKeys(params, 'config.alerts.params', ['active', 'start', 'end', 'status', 'message_type', 'event', 'code', 'region_type', 'point', 'region', 'area', 'zone', 'urgency', 'severity', 'certainty', 'limit', 'cursor'])
     }
   }
@@ -384,47 +386,46 @@ if (!(config instanceof Object) || config instanceof Array) {
   // Check coordinates
   const coordinates = config.coordinates
 
-  if (checkObject(coordinates, 'config.coordinates')){
-
+  if (checkObject(coordinates, 'config.coordinates')) {
     // Check elevation
     const elevation = coordinates.elevation
     let validElevation = checkNumber(elevation, 'config.coordinates.elevation')
-    
+
     if (validElevation && !configFieldValidator.validateCoordinatesElevation(elevation)) {
       console.log('ERROR: Field "elevation" in config.coordinates must be between -413 and 8848')
 
       validElevation = false
     }
-    
-    if(!validElevation){
+
+    if (!validElevation) {
       printElevationHint()
     }
 
     // Check latitude
     const latitude = coordinates.lat
     let validLatitude = checkNumber(latitude, 'config.coordinates.lat')
-    
+
     if (validLatitude && !configFieldValidator.validateCoordinatesLat(latitude)) {
       console.log('ERROR: Field "lat" in config.coordinates must be between -90 and 90')
 
       validLatitude = false
     }
-    
-    if(!validLatitude){
+
+    if (!validLatitude) {
       printLatitudeHint()
     }
 
     // Check longitude
     const longitude = coordinates.long
     let validLongitude = checkNumber(longitude, 'config.coordinates.longitude')
-    
+
     if (validLongitude && !configFieldValidator.validateCoordinatesLong(longitude)) {
       console.log('ERROR: Field "long" in config.coordinates must be between -180 and 180')
 
       validLongitude = false
     }
-    
-    if(!validLongitude){
+
+    if (!validLongitude) {
       printLongitudeHint()
     }
 
@@ -438,116 +439,116 @@ if (!(config instanceof Object) || config instanceof Array) {
   // Check logging
   const log = config.log
 
-  if (checkObject(log, 'config.log')){
+  if (checkObject(log, 'config.log')) {
     // Check log directory path
-    let logFolder = log.logDir,
-        validPath = checkString(logFolder, 'config.log.logDir')
-    
+    const logFolder = log.logDir
+    let validPath = checkString(logFolder, 'config.log.logDir')
+
     if (validPath && !configFieldValidator.validateLogLogDir(log.logDir)) {
       console.log('ERROR: Field "logDir" in config.log not recognized as a valid file path')
-      
+
       validPath = false
     } else {
       console.log(`INFO: Log directory set as: ${path.resolve('../' + log.logDir)}`)
     }
-    
-    if(!validPath){
+
+    if (!validPath) {
       printLogDirectoryHint()
     }
 
     checkKeys(log, 'config.log', ['logDir'])
   }
 
-  // Check Open Weather Map 
+  // Check Open Weather Map
   const OWM = config.open_weather_map
-  
-  if(checkObject(OWM, 'config.open_weather_map')){
+
+  if (checkObject(OWM, 'config.open_weather_map')) {
     // Check get params for weather forecast
     const location = OWM.location
-    
-    let paramsValid = true,
-        keyValid = true
-    
-    if(location === undefined){
+
+    let paramsValid = true
+    let keyValid = true
+
+    if (location === undefined) {
       console.log('ERROR: missing "location" in config.open_weather_map')
       printOpenWeatherMapsLocationHint()
-      
-      paramsValid = false;
-    } else if(!(location instanceof Object) || location instanceof Array){
+
+      paramsValid = false
+    } else if (!(location instanceof Object) || location instanceof Array) {
       console.log('ERROR: config.open_weather_map.location must be an object')
       printOpenWeatherMapsLocationHint()
-      
-      paramsValid = false;
+
+      paramsValid = false
     } else {
       checkKeys(location, 'config.open_weather_map.location', ['q', 'id', 'lat', 'lon', 'zip'])
     }
-    
-    //Check api key
+
+    // Check api key
     const apiKey = OWM.key
-    
+
     keyValid = checkString(apiKey, 'config.open_weather_map.key')
-    
-    if(keyValid && !configFieldValidator.validateNotEmptyString(apiKey)){
+
+    if (keyValid && !configFieldValidator.validateNotEmptyString(apiKey)) {
       console.log('ERROR: field "key" in config.open_weather_map is the empty string or contains exclusively whitespace')
-      
+
       keyValid = false
     }
-    
-    if(paramsValid && keyValid){
+
+    if (paramsValid && keyValid) {
       let OWMQueryParams = ''
-      
+
       for (const paramName in location) {
         if (Object.prototype.hasOwnProperty.call(location, paramName)) {
           OWMQueryParams += '&' + paramName + '=' + location[paramName]
         }
       }
-    
+
       console.log(`INFO: Forecast data URL is https://api.openweathermap.org/data/2.5/forecast?${OWMQueryParams.substr(1)}&units=metric&APPID=${OWM.key}`)
-      console.log('WARNING: Validation of config.open_weather_map is very limited. The best way to verify config.open_weather_map is to visit the above URL.');
+      console.log('WARNING: Validation of config.open_weather_map is very limited. The best way to verify config.open_weather_map is to visit the above URL.')
     }
-    
+
     checkKeys(OWM, 'config.open_weather_map', ['location', 'key'])
   }
-  
+
   // Check Twitter
   const twitter = config.twitter
-  
-  if(checkObject(twitter, 'config.twitter')) {
+
+  if (checkObject(twitter, 'config.twitter')) {
     // Check consumer key
-    let consumerKey = twitter.consumer_key
-    
-    if(checkString(consumerKey, 'config.twitter.consumer_key') && !configFieldValidator.validateNotEmptyString(consumerKey)){
+    const consumerKey = twitter.consumer_key
+
+    if (checkString(consumerKey, 'config.twitter.consumer_key') && !configFieldValidator.validateNotEmptyString(consumerKey)) {
       console.log('ERROR: field "consumer_key" in config.twitter is the empty string or contains exclusively whitespace')
     }
-    
+
     // Check consumer secret
-    let consumerSecret = twitter.consumer_secret
-    
-    if(checkString(consumerSecret, 'config.twitter.consumer_key') && !configFieldValidator.validateNotEmptyString(consumerSecret)) {
+    const consumerSecret = twitter.consumer_secret
+
+    if (checkString(consumerSecret, 'config.twitter.consumer_key') && !configFieldValidator.validateNotEmptyString(consumerSecret)) {
       console.log('ERROR: field "consumer_secret" in config.twitter is the empty string or contains exclusively whitespace')
     }
-    
+
     // Check access token key
-    let accessTokenKey = twitter.access_token_key
-    
-    if(checkString(accessTokenKey, 'config.twitter.access_token_key') && !configFieldValidator.validateNotEmptyString(accessTokenKey)){
+    const accessTokenKey = twitter.access_token_key
+
+    if (checkString(accessTokenKey, 'config.twitter.access_token_key') && !configFieldValidator.validateNotEmptyString(accessTokenKey)) {
       console.log('ERROR: field "access_token_key" in config.twitter is the empty string or contains exclusively whitespace')
     }
-    
+
     // Check access token secret
-    let accessTokenSecret = twitter.access_token_secret
-    
-    if(checkString(accessTokenSecret, 'config.twitter.access_token_secret') && !configFieldValidator.validateNotEmptyString(accessTokenSecret)){
+    const accessTokenSecret = twitter.access_token_secret
+
+    if (checkString(accessTokenSecret, 'config.twitter.access_token_secret') && !configFieldValidator.validateNotEmptyString(accessTokenSecret)) {
       console.log('ERROR: field "access_token_secret" in config.twitter is the empty string or contains exclusively whitespace')
     }
-    
+
     // Check local weather station id
-    let localStationID = twitter.localStationID
-    
-    if(checkNumber(localStationID, config.twitter.localStationID) && !configFieldValidator.validateInteger(localStationID)){
+    const localStationID = twitter.localStationID
+
+    if (checkNumber(localStationID, config.twitter.localStationID) && !configFieldValidator.validateInteger(localStationID)) {
       console.log('ERROR: config.twitter.localStationID must be an integer')
     }
-    
+
     checkKeys(twitter, 'config.twitter', ['consumer_key', 'consumer_secret', 'access_token_key', 'access_token_secret', 'localStationID'])
   }
 
