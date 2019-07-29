@@ -176,6 +176,7 @@ if (!(config instanceof Object) || config instanceof Array) {
 
     // Check info to be sent in user-agent header to NWS api
     const appInfo = alerts.app
+    let validAppInfo = true
 
     if (!checkObject(appInfo, 'config.alerts.app')) {
       console.log('The app object contains required information to send to the national weather service api for alert data')
@@ -246,7 +247,8 @@ if (!(config instanceof Object) || config instanceof Array) {
         console.log('The national weather service api requires an app related website in order to get alert data')
         console.log('A typical "website" looks like: "website": "https://your.app.url/"')
       }
-
+      
+      validAppInfo = validContact && validAppName && validVersion && validWebsite
       checkKeys(appInfo, 'config.alerts.app', ['contact', 'name', 'version', 'website'])
     }
 
@@ -354,6 +356,8 @@ if (!(config instanceof Object) || config instanceof Array) {
 
     // check get params for api.weather.gov
     const params = alerts.params
+    let validParams = true,
+        alertUrl;
 
     if (checkObject(params, 'config.alerts.params')) {
       let locationParamCount = 0
@@ -366,6 +370,8 @@ if (!(config instanceof Object) || config instanceof Array) {
 
       if (locationParamCount > 1) {
         console.log('ERROR: 2 or more of these keys are invalid: area, point, region, region_type, zone in config.alerts.params')
+        
+        validParams = false
       } else {
         let alertQueryParams = ''
 
@@ -374,12 +380,32 @@ if (!(config instanceof Object) || config instanceof Array) {
             alertQueryParams += '&' + paramName + '=' + params[paramName]
           }
         }
-
-        console.log(`INFO: Weather alert url is https://api.weather.gov/alerts?${alertQueryParams.substr(1)}`)
-        console.log('WARNING: Validation of config.alerts.params is very limited. The best way to verify params is to visit the above URL.')
+        
+        alertUrl = `https://api.weather.gov/alerts?${alertQueryParams.substr(1)}`
+        console.log(`INFO: Weather alert url is ${alertUrl}`)
       }
 
       checkKeys(params, 'config.alerts.params', ['active', 'start', 'end', 'status', 'message_type', 'event', 'code', 'region_type', 'point', 'region', 'area', 'zone', 'urgency', 'severity', 'certainty', 'limit', 'cursor'])
+    }
+    
+    if(validParams && validAppInfo){
+      console.log('INFO: Fetching alerts from alert URL...')
+      
+      promise.getJSONPromise(alertUrl, {
+        "headers": {
+          "User-Agent": `${config.alerts.app.name}/v${config.alerts.app.version} (${config.alerts.app.website}; ${config.alerts.app.contact})`
+        }
+      }).then((alerts) => {
+        fs.writeFile('./alerts.json', JSON.stringify(alerts), (error) => {
+          if(error){
+            console.log('ERROR: Failed to save alerts to file')
+            throw error
+          } else {
+            console.log(`INFO: Alert data written to ${path.resolve('./alerts.json')}`)
+            console.log('WARNING: Alert filters were not tested in getting the alert data')
+          }
+        })
+      })
     }
   }
 
