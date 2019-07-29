@@ -11,7 +11,7 @@ module.exports = {
   getJSONPromise (url, params) {
     return new Promise(function (resolve, reject) {
       const req = https.get(url, params, (res) => {
-        // reject on bad or not json
+        // reject on bad status or not json
         const { statusCode } = res
         const contentType = res.headers['content-type']
 
