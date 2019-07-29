@@ -10,7 +10,7 @@ module.exports = {
   //  @return {Promise} A promise that is fulfilled when json from the request is parsed into an object
   getJSONPromise (url, params) {
     return new Promise(function (resolve, reject) {
-      const req = https.get(url, params, (res) => {
+        const handleResponse = (res) => {
         // reject on bad status or not json
         const { statusCode } = res
         const contentType = res.headers['content-type']
@@ -37,7 +37,9 @@ module.exports = {
 
           resolve(json)
         })
-      })
+      }
+        
+      const req = params ? https.get(url, params, handleResponse) : https.get(url, handleResponse)
 
       // reject on request error
       req.on('error', (err) => {

@@ -391,20 +391,27 @@ if (!(config instanceof Object) || config instanceof Array) {
     if(validParams && validAppInfo){
       console.log('INFO: Fetching alerts from alert URL...')
       
-      promise.getJSONPromise(alertUrl, {
+      let alertPromise = promise.getJSONPromise(alertUrl, {
         "headers": {
           "User-Agent": `${config.alerts.app.name}/v${config.alerts.app.version} (${config.alerts.app.website}; ${config.alerts.app.contact})`
         }
-      }).then((alerts) => {
+      })
+      
+      alertPromise.then((alerts) => {
         fs.writeFile('./alerts.json', JSON.stringify(alerts), (error) => {
           if(error){
             console.log('ERROR: Failed to save alerts to file')
             throw error
           } else {
             console.log(`INFO: Alert data written to ${path.resolve('./alerts.json')}`)
-            console.log('WARNING: Alert filters were not tested in getting the alert data')
+            console.log('WARNING: Alert filters were not tested in fetching the alert data')
           }
         })
+      })
+      
+      alertPromise.catch((error) => {
+        console.log('ERROR: Failed to fetch alert data')
+        console.log(error)
       })
     }
   }
@@ -529,8 +536,28 @@ if (!(config instanceof Object) || config instanceof Array) {
         }
       }
 
-      console.log(`INFO: Forecast data URL is https://api.openweathermap.org/data/2.5/forecast?${OWMQueryParams.substr(1)}&units=metric&APPID=${OWM.key}`)
-      console.log('WARNING: Validation of config.open_weather_map is very limited. The best way to verify config.open_weather_map is to visit the above URL.')
+      let forecastDataUrl = `https://api.openweathermap.org/data/2.5/forecast?${OWMQueryParams.substr(1)}&units=metric&APPID=${OWM.key}`
+      
+      console.log(`INFO: Forecast data URL is ${forecastDataUrl}`)
+      console.log('INFO: Fetching forecast data from URL...')
+      
+      let forecastPromise = promise.getJSONPromise(forecastDataUrl)
+      
+      forecastPromise.then((data) => {
+        fs.writeFile('./forecastData.json', JSON.stringify(data), (error) => {
+          if(error){
+            console.log('ERROR: Failed to save forecast data to file')
+            throw error
+          } else {
+            console.log(`INFO: Forecast data written to ${path.resolve('./forecastData.json')}`)
+          }
+        })
+      })
+      
+      forecastPromise.catch((error) => {
+        console.log('ERROR: Failed to fetch weather request data')
+        console.log(error)
+      })
     }
 
     checkKeys(OWM, 'config.open_weather_map', ['location', 'key'])
@@ -580,5 +607,3 @@ if (!(config instanceof Object) || config instanceof Array) {
 
   checkKeys(config, 'config', ['alerts', 'coordinates', 'log', 'open_weather_map', 'twitter'])
 }
-
-console.log('INFO: Errors / warnings displayed above if any were present.')
