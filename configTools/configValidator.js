@@ -6,6 +6,7 @@ const configFieldValidator = require('./configFieldValidator.js')
 const fs = require('fs')
 const path = require('path')
 const promise = require('../promise.js')
+const Twitter = require('twitter')
 
 // Prints a hint about valid filter restrictions
 function printFilterRestrictionHint () {
@@ -569,30 +570,56 @@ if (!(config instanceof Object) || config instanceof Array) {
   if (checkObject(twitter, 'config.twitter')) {
     // Check consumer key
     const consumerKey = twitter.consumer_key
-
-    if (checkString(consumerKey, 'config.twitter.consumer_key') && !configFieldValidator.validateNotEmptyString(consumerKey)) {
+    let validConsumerKey = checkString(consumerKey, 'config.twitter.consumer_key')
+    
+    if (validConsumerKey && !configFieldValidator.validateNotEmptyString(consumerKey)) {
       console.log('ERROR: field "consumer_key" in config.twitter is the empty string or contains exclusively whitespace')
     }
 
     // Check consumer secret
     const consumerSecret = twitter.consumer_secret
-
-    if (checkString(consumerSecret, 'config.twitter.consumer_key') && !configFieldValidator.validateNotEmptyString(consumerSecret)) {
+    let validConsumerSecret = checkString(consumerSecret, 'config.twitter.consumer_key')
+    
+    if (validConsumerSecret && !configFieldValidator.validateNotEmptyString(consumerSecret)) {
       console.log('ERROR: field "consumer_secret" in config.twitter is the empty string or contains exclusively whitespace')
     }
 
     // Check access token key
     const accessTokenKey = twitter.access_token_key
+    let validAccessTokenKey = checkString(accessTokenKey, 'config.twitter.access_token_key')
 
-    if (checkString(accessTokenKey, 'config.twitter.access_token_key') && !configFieldValidator.validateNotEmptyString(accessTokenKey)) {
+    if (validAccessTokenKey && !configFieldValidator.validateNotEmptyString(accessTokenKey)) {
       console.log('ERROR: field "access_token_key" in config.twitter is the empty string or contains exclusively whitespace')
     }
 
     // Check access token secret
     const accessTokenSecret = twitter.access_token_secret
+    let validAccessTokenSecret = checkString(accessTokenSecret, 'config.twitter.access_token_secret')
 
-    if (checkString(accessTokenSecret, 'config.twitter.access_token_secret') && !configFieldValidator.validateNotEmptyString(accessTokenSecret)) {
+    if (validAccessTokenSecret && !configFieldValidator.validateNotEmptyString(accessTokenSecret)) {
       console.log('ERROR: field "access_token_secret" in config.twitter is the empty string or contains exclusively whitespace')
+    }
+
+    if(validConsumerKey && validConsumerSecret && validAccessTokenKey && validAccessTokenSecret){
+      console.log('INFO: Sending test tweet...')
+      
+      let twitter = new Twitter({
+        consumer_key: config.twitter.consumer_key,
+        consumer_secret: config.twitter.consumer_secret,
+        access_token_key: config.twitter.access_token_key,
+        access_token_secret: config.twitter.access_token_secret
+      })
+      
+      let twitterPromise = twitter.post('statuses/update', { status: `Test at ${new Date().toString()}` })
+      
+      twitterPromise.then((tweet) => {
+        console.log('INFO: Tweet received. Check Twitter for a test status update.')
+      })
+      
+      twitterPromise.catch((error) => {
+        console.log('ERROR: Failed to send test tweet using config credentials')
+        console.log(error)
+      })
     }
 
     // Check local weather station id
