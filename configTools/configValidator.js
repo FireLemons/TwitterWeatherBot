@@ -574,6 +574,8 @@ if (!(config instanceof Object) || config instanceof Array) {
     
     if (validConsumerKey && !configFieldValidator.validateNotEmptyString(consumerKey)) {
       console.log('ERROR: field "consumer_key" in config.twitter is the empty string or contains exclusively whitespace')
+      
+      validConsumerKey = false
     }
 
     // Check consumer secret
@@ -582,6 +584,8 @@ if (!(config instanceof Object) || config instanceof Array) {
     
     if (validConsumerSecret && !configFieldValidator.validateNotEmptyString(consumerSecret)) {
       console.log('ERROR: field "consumer_secret" in config.twitter is the empty string or contains exclusively whitespace')
+      
+      validConsumerSecret = false
     }
 
     // Check access token key
@@ -590,6 +594,8 @@ if (!(config instanceof Object) || config instanceof Array) {
 
     if (validAccessTokenKey && !configFieldValidator.validateNotEmptyString(accessTokenKey)) {
       console.log('ERROR: field "access_token_key" in config.twitter is the empty string or contains exclusively whitespace')
+      
+      validAccessTokenKey = false
     }
 
     // Check access token secret
@@ -598,19 +604,23 @@ if (!(config instanceof Object) || config instanceof Array) {
 
     if (validAccessTokenSecret && !configFieldValidator.validateNotEmptyString(accessTokenSecret)) {
       console.log('ERROR: field "access_token_secret" in config.twitter is the empty string or contains exclusively whitespace')
+      
+      validAccessTokenSecret = false
     }
 
+    let twitterClient;
+    
     if(validConsumerKey && validConsumerSecret && validAccessTokenKey && validAccessTokenSecret){
       console.log('INFO: Sending test tweet...')
       
-      let twitter = new Twitter({
+      twitterClient = new Twitter({
         consumer_key: config.twitter.consumer_key,
         consumer_secret: config.twitter.consumer_secret,
         access_token_key: config.twitter.access_token_key,
         access_token_secret: config.twitter.access_token_secret
       })
       
-      let twitterPromise = twitter.post('statuses/update', { status: `Test at ${new Date().toString()}` })
+      let twitterPromise = twitterClient.post('statuses/update', { status: `Test at ${new Date().toString()}` })
       
       twitterPromise.then((tweet) => {
         console.log('INFO: Tweet received. Check Twitter for a test status update.')
@@ -623,13 +633,44 @@ if (!(config instanceof Object) || config instanceof Array) {
     }
 
     // Check local weather station id
-    const localStationID = twitter.localStationID
-
-    if (checkNumber(localStationID, config.twitter.localStationID) && !configFieldValidator.validateInteger(localStationID)) {
-      console.log('ERROR: config.twitter.localStationID must be an integer')
+    const localStationHandle = twitter.localStationHandle
+    let validStationHandle = checkString(localStationHandle, 'config.twitter.localStationHandle')
+    
+    if (validStationHandle && !configFieldValidator.validateNotEmptyString(localStationHandle)) {
+      console.log('ERROR: config.twitter.localStationHandle must be a string')
+      
+      validStationHandle = false
+    }
+    
+    if(validStationHandle && twitterClient){
+      console.log(`INFO: Attempting to fetch tweets from ${localStationHandle}...`)
+      
+      let twitterPromise = twitterClient.get('statuses/user_timeline', {
+        "count": 10,
+        "exclude_replies": true,
+        "trim_user": true,
+        "screen_name": localStationHandle
+      })
+      
+      twitterPromise.then((posts) => {
+        fs.writeFile('./localTwitterPosts.json', JSON.stringify(posts), (error) => {
+          if(error){
+            console.log('ERROR: Failed to save twitter posts of local weather station to file')
+            throw error
+          } else {
+            console.log(`INFO: Some twitter posts of ${localStationHandle} written to ${path.resolve('./localTwitterPosts.json')}`)
+          }
+        })
+      })
+      
+      twitterPromise.catch((error) => {
+        console.log(`ERROR: Failed to fetch tweets from ${localStationHandle}`)
+        console.log('  Are you sure you enetered the correct twitter handle?')
+        console.log(error)
+      })
     }
 
-    checkKeys(twitter, 'config.twitter', ['consumer_key', 'consumer_secret', 'access_token_key', 'access_token_secret', 'localStationID'])
+    checkKeys(twitter, 'config.twitter', ['consumer_key', 'consumer_secret', 'access_token_key', 'access_token_secret', 'localStationHandle'])
   }
 
   checkKeys(config, 'config', ['alerts', 'coordinates', 'log', 'open_weather_map', 'twitter'])
