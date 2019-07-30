@@ -5,7 +5,7 @@ const util = require('./util.js')
 
 module.exports = class TweetWeather {
   constructor (config, logger, stats, weatherTools) {
-    this.localStationAccount = config.localStationID
+    this.localStationAccount = config.localStationHandle
     this.logger = logger
     this.stats = stats
     this.weatherTools = weatherTools
@@ -37,10 +37,10 @@ module.exports = class TweetWeather {
   // Retweets all of another twitter account's tweets mad in the past hour
   retweetLocalStationTweets () {
     const params = {
-      count: 10,
-      exclude_replies: true,
-      trim_user: true,
-      user_id: this.localStationAccount
+      "count": 10,
+      "exclude_replies": true,
+      "trim_user": true,
+      "screen_name": this.localStationAccount
     }
 
     this.twitterClient.get('statuses/user_timeline', params, (error, tweets, response) => {
@@ -94,7 +94,7 @@ module.exports = class TweetWeather {
   //  @param  {boolean} isLate True if the bot missed a twitter update. False otherwise.
   tweetForecast (parsedWeatherData, isLate) {
     try {
-      const forecast = this.weatherTools.getForecast(parsedWeatherData)
+      const forecast = this.weatherTools.getForecastMessage(parsedWeatherData)
       this.logger.info('Created forecast')
 
       let message = forecast

@@ -2,6 +2,7 @@
 
 const celestial = require('./celestial.js')
 const https = require('https')
+const promise = require('./promise.js')
 const util = require('./util.js')
 
 // Shortened descriptions and symbols for weather condition codes
@@ -235,7 +236,7 @@ module.exports = class Weather {
   // Generates the default forecast message.
   //  @param  {object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
   //  @return {string} A message describing the condition, temperature, and wind for the next 9 hours. Max 142 characters.
-  getForecast (parsedWeatherData) {
+  getForecastMessage (parsedWeatherData) {
     const forecastData = parsedWeatherData.list.slice(0, 3)
     let defaultForecast = (Math.random() > 0.000228310502) ? 'Forecast' : 'Fourcast'
 
@@ -473,8 +474,8 @@ module.exports = class Weather {
 
     https.get(this.alertURL,
       {
-        headers: {
-          'User-Agent': `${this.alertAppInfo.name}/v${this.alertAppInfo.version} (${this.alertAppInfo.website}; ${this.alertAppInfo.contact})`
+        "headers": {
+          "User-Agent": `${this.alertAppInfo.name}/v${this.alertAppInfo.version} (${this.alertAppInfo.website}; ${this.alertAppInfo.contact})`
         }
       }, (res) => {
         const { statusCode } = res
