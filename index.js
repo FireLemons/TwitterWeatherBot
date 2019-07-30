@@ -244,6 +244,10 @@ if (config.alerts && !config.alerts.disabled) {
   const onWeatherAlertLoaded = (parsedWeatherAlertData) => {
     const alerts = weatherTools.filterAlerts(parsedWeatherAlertData.features)
 
+    if(!alerts.length){
+      stats.lastAlertUpdate = new Date();
+    }
+
     alerts.forEach((alertData) => {
       const alertMessage = tweetWeather.getAlertMessage(alertData)
 
