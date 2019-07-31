@@ -9,6 +9,33 @@ const util = require('./util.js')
 // See https://openweathermap.org/weather-conditions for full code information
 const weatherStatusCodeMap = require('./data/statusCodeMap.json')
 
+
+
+// Converts an angle into cardinal direction
+//  @param  {number} azimuth A number representing an angle in the range [0, 360)
+//  @return {string} A character representing a cardinal direction or 2 character representing an intercardinal direction
+function getWindDirectionAsCardinal (azimuth) {
+  switch (Math.round(azimuth / 45)) {
+    case 0:
+    case 8:
+      return '⬇️'
+    case 1:
+      return '↙️'
+    case 2:
+      return '⬅️'
+    case 3:
+      return '↖️'
+    case 4:
+      return '⬆️'
+    case 5:
+      return '↗️'
+    case 6:
+      return '➡️'
+    case 7:
+      return '↘️'
+  }
+}
+
 module.exports = class Weather {
   //  @param {object} config The contents of config.json as an object
   //  @param {object} logger A winston logger
@@ -236,7 +263,7 @@ module.exports = class Weather {
   // Generates the default forecast message.
   //  @param  {object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
   //  @return {string} A message describing the condition, temperature, and wind for the next 9 hours. Max 142 characters.
-  getForecastMessage (parsedWeatherData) {
+  generateForecastMessage (parsedWeatherData) {
     const forecastData = parsedWeatherData.list.slice(0, 3)
     let defaultForecast = (Math.random() > 0.000228310502) ? 'Forecast' : 'Fourcast'
 
@@ -249,7 +276,7 @@ module.exports = class Weather {
         },
         time: new Date(dt * 1000).toTimeString().substr(0, 2),
         wind: {
-          direction: this.getWindDirectionAsCardinal(deg),
+          direction: getWindDirectionAsCardinal(deg),
           speed: speed.toPrecision(2)
         }
       }
@@ -301,31 +328,6 @@ module.exports = class Weather {
       default: // Icon Definitions
         const iconDefinition = iconDefinitions[id - 2]
         return `${iconDefinition.icon} indicates ${iconDefinition.conditions.replace(',', ' or')}\nSee all the icon meanings at https://firelemons.github.io/COMOWeather/`
-    }
-  }
-
-  // Converts an angle into cardinal direction
-  //  @param  {number} azimuth A number representing an angle in the range [0, 360)
-  //  @return {string} A character representing a cardinal direction or 2 character representing an intercardinal direction
-  getWindDirectionAsCardinal (azimuth) {
-    switch (Math.round(azimuth / 45)) {
-      case 0:
-      case 8:
-        return '⬇️'
-      case 1:
-        return '↙️'
-      case 2:
-        return '⬅️'
-      case 3:
-        return '↖️'
-      case 4:
-        return '⬆️'
-      case 5:
-        return '↗️'
-      case 6:
-        return '➡️'
-      case 7:
-        return '↘️'
     }
   }
 
@@ -525,57 +527,9 @@ module.exports = class Weather {
   //      @param {object} parsedWeatherData: The weather data. See https://openweathermap.org/forecast5#parameter for details about the structure of the Object.
   //  @param {function} onFailure(errors) The callback to run if there is a problem with loading the data
   //      @param {Error[]} errors The error(s) causing the failure
-  loadWeather (onDataLoaded, onFailure) {
+  getForecastPromise () {
     this.logger.info('Attempt fetch weather data')
-
-    if (!(onDataLoaded instanceof Function)) {
-      throw new TypeError('Param onDataLoaded must be a function')
-    }
-
-    if (!(onFailure instanceof Function)) {
-      throw new TypeError('Param onFailure must be a function')
-    }
-
-    https.get(this.weatherRequestURL, (res) => {
-      const { statusCode } = res
-      const contentType = res.headers['content-type']
-
-      let error
-
-      if (statusCode !== 200) {
-        error = new Error(`Request Failed. Status Code: ${statusCode}`)
-      } else if (!/^application\/([a-zA-Z]+\+)*json/.test(contentType)) {
-        error = new Error(`Invalid content-type. Expected application/json but received ${contentType}`)
-      }
-
-      if (error) {
-        onFailure([
-          error
-        ])
-
-        res.resume()
-        return
-      }
-
-      res.setEncoding('utf8')
-
-      let rawData = ''
-
-      res.on('data', (chunk) => {
-        rawData += chunk
-      })
-
-      res.on('end', () => {
-        try {
-          const parsedWeatherData = JSON.parse(rawData)
-
-          onDataLoaded(parsedWeatherData)
-        } catch (e) {
-          onFailure([e])
-        }
-      })
-    }).on('error', (e) => {
-      onFailure([e])
-    })
+    
+    return promise.getJSONPromise(this.weatherRequestURL);
   }
 }

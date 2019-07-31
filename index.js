@@ -198,44 +198,41 @@ const tweetWeather = new TwitterManager(config.twitter, logger, stats, weatherTo
  *  Schedule forecasts to go out every 2 hours.
  */
 
-// Turns weather data into a twitter status and tweets it
-//  @param {object} parsedWeatherData The weather data. See https://openweathermap.org/forecast5#parameter for details about the structure of the Object.
-const onWeatherLoaded = (parsedWeatherData) => {
-  tweetWeather.tweetForecast(parsedWeatherData)
-}
-
 let retryTimeout = 0
 
-// Retries the request to ge forecast data up to three times
-//  @param {Error[]} A list of errors describing why the failure occurred
-const onFailLoadWeather = (errors) => {
-  logger.error(new Error('Failed to load weather data.'))
-
-  if (Array.isArray(errors)) {
+// Tries to fetch forecast data and tweet it
+//  @param  {boolean} isLate
+function tryFetchWeather(isLate){ 
+  weatherTools.getForecastPromise().then((forecastData) => {
+    let message = weatherTools.generateForecastMessage(forecastData)
+    //extra statement
+    message += (isLate) ? util.pickRandom(require('./data/jokes.json').late) : weatherTools.getExtra(forecastData)
+    if (message) {
+      tweetWeather.sendTweet(message)
+      stats.lastUpdate = new Date()
+    } else {
+      throw new Error('Failed to generate status message.')
+    }
+  }).catch((error) => {
     if (retryTimeout <= 262144) {
-      for (const error of errors) {
-        logger.warn(error)
-      }
-
+      logger.warn(new Error('Failed to load weather data.'))
+      logger.warn(error);
       logger.info(`Retrying fetching weather data in ${retryTimeout}ms. Retry ${(retryTimeout / 131072) + 1} of 3`)
 
       setTimeout(() => {
-        weatherTools.loadWeather(onWeatherLoaded, onFailLoadWeather)
+        tryFetchWeather()
       }, retryTimeout)
 
-      retryTimeout += 131072
+        retryTimeout += 131072
     } else {
-      for (const error of errors) {
-        logger.error(error)
-      }
+      logger.error(new Error('Failed to load weather data.'))
+      logger.error(error);
 
       const failureMessage = util.pickRandom(require('./data/jokes.json').error)
 
       tweetWeather.sendTweet(failureMessage)
     }
-  } else {
-    logger.error(new Error(`Expected param 'errors' to be array of Error objects. Got ${typeof errors} instead.`))
-  }
+  })
 }
 
 if (config.alerts && !config.alerts.disabled) {
@@ -306,48 +303,14 @@ if (config.alerts && !config.alerts.disabled) {
 // Detect if computer fell asleep
 if (new Date() - stats.lastUpdate > 7620000) { // 7620000ms = 2 hours 7 minutes
   logger.warn(new Error('Missed scheduled twitter update. Presumably by waking from sleep.'))
-
-  const onWeatherLoadedLate = (parsedWeatherData) => {
-    tweetWeather.tweetForecast(parsedWeatherData, true)
-  }
-
-  const onFailLoadWeatherLate = (errors) => {
-    logger.error(new Error('Failed to load weather data.'))
-
-    if (Array.isArray(errors)) {
-      if (retryTimeout <= 262144) {
-        for (const error of errors) {
-          logger.warn(error)
-        }
-
-        logger.info(`Retrying fetching weather data in ${retryTimeout}ms. Retry ${(retryTimeout / 131072) + 1} of 3`)
-
-        setTimeout(() => {
-          weatherTools.loadWeather(onWeatherLoadedLate, onFailLoadWeatherLate)
-        }, retryTimeout)
-
-        retryTimeout += 131072
-      } else {
-        for (const error of errors) {
-          logger.error(error)
-        }
-
-        const failureMessage = util.pickRandom(require('./data/jokes.json').error)
-
-        tweetWeather.sendTweet(failureMessage)
-      }
-    } else {
-      logger.error(new Error(`Expected param 'errors' to be array of Error objects. Got ${typeof errors} instead.`))
-    }
-  }
-
-  weatherTools.loadWeather(onWeatherLoadedLate, onFailLoadWeatherLate)
+  
+  tryFetchWeather(true)
 }
 
 schedule.scheduleJob('0 */2 * * *', function () {
   retryTimeout = 0
 
-  weatherTools.loadWeather(onWeatherLoaded, onFailLoadWeather)
+  tryFetchWeather()
 })
 
 if (config.twitter.localStationID) {

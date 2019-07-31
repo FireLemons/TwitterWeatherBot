@@ -79,6 +79,10 @@ module.exports = class TweetWeather {
   // Tweets weather messages
   //  @param {string} message The message to be sent(max length 280).
   sendTweet (message) {
+    if (message.length > 280) {
+      throw new Error(`Message too long: ${message}`)
+    }
+    
     this.twitterClient.post('statuses/update', { status: message }, (error, tweet, response) => {
       if (error) {
         this.logger.error(error)
@@ -87,42 +91,5 @@ module.exports = class TweetWeather {
       this.logger.info(`Tweeted ${message}.`)
       this.logger.info(`Recieved ${response}`)
     })
-  }
-
-  // Send regular forecast message
-  //  @param  {object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
-  //  @param  {boolean} isLate True if the bot missed a twitter update. False otherwise.
-  tweetForecast (parsedWeatherData, isLate) {
-    try {
-      const forecast = this.weatherTools.getForecastMessage(parsedWeatherData)
-      this.logger.info('Created forecast')
-
-      let message = forecast
-      const extra = (isLate) ? util.pickRandom(require('./data/jokes.json').late) : this.weatherTools.getExtra(parsedWeatherData)
-      this.logger.info(`Generated ${extra}`)
-
-      message += extra
-
-      if (message.length > 280) {
-        throw new Error(`Message too long: ${message}`)
-      }
-
-      if (message) {
-        this.sendTweet(message)
-        
-        switch(message.charAt(0)){
-            case 'A':
-                this.stats.lastAlertUpdate = new Date()
-                break;
-            case 'F':
-                this.stats.lastUpdate = new Date()
-                break;
-        }
-      } else {
-        throw new Error('Failed to generate status message.')
-      }
-    } catch (e) {
-      this.logger.error(e)
-    }
   }
 }
