@@ -530,6 +530,6 @@ module.exports = class Weather {
   getForecastPromise () {
     this.logger.info('Attempt fetch weather data')
     
-    return promise.getJSONPromise(this.weatherRequestURL);
+    return promise.getJSONPromiseGet(this.weatherRequestURL);
   }
 }
