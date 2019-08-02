@@ -201,7 +201,7 @@ const tweetWeather = new TwitterManager(config.twitter, logger, stats, weatherTo
 let retryTimeout = 0
 
 // Tries to fetch forecast data and tweet it
-//  @param  {boolean} isLate
+//  @param  {boolean} isLate true if the last scheduled forecast was missed otherwise false
 function tryFetchWeather(isLate){ 
   weatherTools.getForecastPromise().then((forecastData) => {
     let message = weatherTools.generateForecastMessage(forecastData)
@@ -236,57 +236,44 @@ function tryFetchWeather(isLate){
 }
 
 if (config.alerts && !config.alerts.disabled) {
-  // Turns weather alert data into a twitter status and tweets it
-  //  @param {object} parsedWeatherAlertData The alert data. See https://www.weather.gov/documentation/services-web-api#/default/get_alerts for more information.
-  const onWeatherAlertLoaded = (parsedWeatherAlertData) => {
-    const alerts = weatherTools.filterAlerts(parsedWeatherAlertData.features)
-
-    if(!alerts.length){
-      stats.lastAlertUpdate = new Date();
-    }
-
-    alerts.forEach((alertData) => {
-      const alertMessage = tweetWeather.getAlertMessage(alertData)
-
-      if (alertMessage) {
-        tweetWeather.sendTweet(alertMessage)
-      } else if (!alertMessage) {
-        logger.error(new Error('Failure in generating alert message'))
-        logger.error(alertData)
-      }
-    })
-  }
-
   let retryAlertTimeout = 0
+  
+  function tryFetchAlerts(){
+    weatherTools.getWeatherAlertsPromise().then((alertData) => {
+      const alerts = weatherTools.filterAlerts(alertData.features)
+      
+      if(!alerts.length){
+        stats.lastAlertUpdate = new Date();
+      }
 
-  // Retries the request to ge forecast data up to three times
-  //  @param {Error[]} A list of errors describing why the failure occurred
-  const onFailLoadWeatherAlert = (errors) => {
-    logger.error(new Error('Failed to load weather alert data.'))
+      alerts.forEach((alertData) => {
+        const alertMessage = tweetWeather.getAlertMessage(alertData)
 
-    if (Array.isArray(errors)) {
-      if (retryAlertTimeout <= 262144) {
-        for (const error of errors) {
-          logger.warn(error)
+        if (alertMessage) {
+          tweetWeather.sendTweet(alertMessage)
+        } else if (!alertMessage) {
+          logger.error(new Error('Failure in generating alert message'))
+          logger.error(alertData)
         }
-
-        logger.info(`Retrying fetching weather data in ${retryAlertTimeout}ms. Retry ${(retryAlertTimeout / 131072) + 1} of 3`)
+      })
+    }).catch((error) => {
+      if (retryAlertTimeout <= 262144) {
+        logger.warn(new Error('Failed to load weather alert data.'))
+        logger.warn(error)
+        logger.info(`Retrying fetching weather alert data in ${retryAlertTimeout}ms. Retry ${(retryAlertTimeout / 131072) + 1} of 3`)
 
         setTimeout(() => {
-          weatherTools.loadWeather(onWeatherAlertLoaded, onFailLoadWeatherAlert)
+          tryFetchAlerts()
         }, retryAlertTimeout)
 
         retryAlertTimeout += 131072
       } else {
-        for (const error of errors) {
-          logger.error(error)
-        }
+        logger.error(new Error('Failed to load weather alert data.'))
+        logger.error(error);
 
         tweetWeather.sendTweet('Failed to fetch weather alert data. There could be a weather alert currently.')
       }
-    } else {
-      logger.error(new Error(`Expected param 'errors' to be array of Error objects. Got ${typeof errors} instead.`))
-    }
+    })
   }
 
   if (new Date() - stats.lastAlertUpdate > 22020000) { // 22020000ms = 6 hours 7 minutes
@@ -296,7 +283,7 @@ if (config.alerts && !config.alerts.disabled) {
   schedule.scheduleJob('0 */6 * * *', function () {
     retryAlertTimeout = 0
 
-    weatherTools.loadWeatherAlerts(onWeatherAlertLoaded, onFailLoadWeatherAlert)
+    tryFetchAlerts()
   })
 }
 

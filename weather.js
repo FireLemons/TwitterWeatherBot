@@ -463,63 +463,15 @@ module.exports = class Weather {
   //      @param {object} parsedWeatherAlertData: The alert data. See https://www.weather.gov/documentation/services-web-api#/default/get_alerts for more information.
   //  @param {function} onFailure(errors) The callback to run if there is a problem with loading the data
   //      @param {Error[]} errors The error(s) causing the failure
-  loadWeatherAlerts (onDataLoaded, onFailure) {
+  getWeatherAlertsPromise () {
     this.logger.info('Attempt fetch weather alerts')
 
-    if (!(onDataLoaded instanceof Function)) {
-      throw new TypeError('Param onDataLoaded must be a function')
-    }
-
-    if (!(onFailure instanceof Function)) {
-      throw new TypeError('Param onFailure must be a function')
-    }
-
-    https.get(this.alertURL,
-      {
-        "headers": {
-          "User-Agent": `${this.alertAppInfo.name}/v${this.alertAppInfo.version} (${this.alertAppInfo.website}; ${this.alertAppInfo.contact})`
-        }
-      }, (res) => {
-        const { statusCode } = res
-        const contentType = res.headers['content-type']
-
-        let error
-
-        if (statusCode !== 200) {
-          error = new Error(`Request Failed. Status Code: ${statusCode}`)
-        } else if (!/^application\/([a-zA-Z]+\+)*json/.test(contentType)) {
-          error = new Error(`Invalid content-type. Expected application/json but received ${contentType}`)
-        }
-
-        if (error) {
-          onFailure([
-            error
-          ])
-
-          res.resume()
-          return
-        }
-
-        res.setEncoding('utf8')
-
-        let rawData = ''
-
-        res.on('data', (chunk) => {
-          rawData += chunk
-        })
-
-        res.on('end', () => {
-          try {
-            const parsedWeatherAlertData = JSON.parse(rawData)
-
-            onDataLoaded(parsedWeatherAlertData)
-          } catch (e) {
-            onFailure([e])
-          }
-        })
-      }).on('error', (e) => {
-      onFailure([e])
-    })
+    return promise.getJSONPromiseGet(this.alertURL,
+    {
+      "headers": {
+        "User-Agent": `${this.alertAppInfo.name}/v${this.alertAppInfo.version} (${this.alertAppInfo.website}; ${this.alertAppInfo.contact})`
+      }
+    });
   }
 
   // Sends the get request for weather forecasts.
@@ -530,6 +482,6 @@ module.exports = class Weather {
   getForecastPromise () {
     this.logger.info('Attempt fetch weather data')
     
-    return promise.getJSONPromiseGet(this.weatherRequestURL);
+    return promise.getJSONPromisePost(this.weatherRequestURL);
   }
 }
