@@ -252,11 +252,13 @@ function tryFetchWeather (isLate) {
         .then((tweet) => {
           stats.lastUpdate = new Date()
           
-          if(!stats[extra.type]){
-            stats[extra.type] = 0;
-          }
+          if(!isLate){
+            if(!stats[extra.type]){
+              stats[extra.type] = 0;
+            }
         
-          stats[extra.type] += 1
+            stats[extra.type] += 1
+          }
         }).catch((error) => {
           logger.error('Failed to send forecast update')
           onFailure(error)
