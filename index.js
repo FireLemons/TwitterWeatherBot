@@ -215,7 +215,7 @@ function tryFetchWeather (isLate) {
       logger.info(`Retrying fetching weather data in ${retryTimeout}ms. Retry ${(retryTimeout / 131072) + 1} of 3`)
 
       setTimeout(() => {
-        tryFetchWeather()
+        tryFetchWeather(isLate)
       }, retryTimeout)
 
       retryTimeout += 131072
