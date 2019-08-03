@@ -83,13 +83,6 @@ module.exports = class TweetWeather {
       throw new Error(`Message too long: ${message}`)
     }
     
-    this.twitterClient.post('statuses/update', { status: message }, (error, tweet, response) => {
-      if (error) {
-        this.logger.error(error)
-      }
-
-      this.logger.info(`Tweeted ${message}.`)
-      this.logger.info(`Recieved ${response}`)
-    })
+    return this.twitterClient.post('statuses/update', { status: message })
   }
 }

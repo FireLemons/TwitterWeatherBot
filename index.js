@@ -209,7 +209,11 @@ function tryFetchWeather (isLate) {
     message += (isLate) ? util.pickRandom(require('./data/jokes.json').late) : weatherTools.getExtra(forecastData)
     if (message) {
       tweetWeather.sendTweet(message)
-      stats.lastUpdate = new Date()
+        .then((tweet) => {
+          stats.lastUpdate = new Date()
+        }).catch((error) => {
+          throw error
+        })
     } else {
       throw new Error('Failed to generate status message.')
     }
@@ -231,6 +235,10 @@ function tryFetchWeather (isLate) {
       const failureMessage = util.pickRandom(require('./data/jokes.json').error)
 
       tweetWeather.sendTweet(failureMessage)
+        .catch((error) => {
+          logger.error('Failed to send failure tweet for forecast')
+          logger.error(error)
+        })
     }
   })
 }
@@ -251,6 +259,13 @@ if (config.alerts && !config.alerts.disabled) {
 
         if (alertMessage) {
           tweetWeather.sendTweet(alertMessage)
+            .then((tweet) => {
+              stats.lastAlertUpdate = new Date()
+            })
+            .catch((error) => {
+              logger.error('Failed to send weather alert tweet')
+              logger.error(error)
+            })
         } else if (!alertMessage) {
           logger.error(new Error('Failure in generating alert message'))
           logger.error(alertData)
@@ -272,6 +287,10 @@ if (config.alerts && !config.alerts.disabled) {
         logger.error(error)
 
         tweetWeather.sendTweet('Failed to fetch weather alert data. There could be a weather alert currently.')
+          .catch((error) => {
+            logger.error('Failed to send weather alert failure message')
+            logger.error(error)
+          })
       }
     })
   }
