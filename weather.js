@@ -1,15 +1,12 @@
 'use strict'
 
 const celestial = require('./celestial.js')
-const https = require('https')
 const promise = require('./promise.js')
 const util = require('./util.js')
 
 // Shortened descriptions and symbols for weather condition codes
 // See https://openweathermap.org/weather-conditions for full code information
 const weatherStatusCodeMap = require('./data/statusCodeMap.json')
-
-
 
 // Converts an angle into cardinal direction
 //  @param  {number} azimuth A number representing an angle in the range [0, 360)
@@ -324,7 +321,7 @@ module.exports = class Weather {
       case 0:
         return 'The beaufort scale is a way of measuring wind speed based on observing things blown by the wind rather than using instruments.'
       case 1:
-        return 'The pressure displayed is at ground level. Columbia is ${this.coordinates.elevation}m above sea level.'
+        return `The pressure displayed is at ground level. Columbia is ${this.coordinates.elevation}m above sea level.`
       default: // Icon Definitions
         const iconDefinition = iconDefinitions[id - 2]
         return `${iconDefinition.icon} indicates ${iconDefinition.conditions.replace(',', ' or')}\nSee all the icon meanings at https://firelemons.github.io/COMOWeather/`
@@ -467,11 +464,11 @@ module.exports = class Weather {
     this.logger.info('Attempt fetch weather alerts')
 
     return promise.getJSONPromiseGet(this.alertURL,
-    {
-      "headers": {
-        "User-Agent": `${this.alertAppInfo.name}/v${this.alertAppInfo.version} (${this.alertAppInfo.website}; ${this.alertAppInfo.contact})`
-      }
-    });
+      {
+        headers: {
+          'User-Agent': `${this.alertAppInfo.name}/v${this.alertAppInfo.version} (${this.alertAppInfo.website}; ${this.alertAppInfo.contact})`
+        }
+      })
   }
 
   // Sends the get request for weather forecasts.
@@ -481,7 +478,7 @@ module.exports = class Weather {
   //      @param {Error[]} errors The error(s) causing the failure
   getForecastPromise () {
     this.logger.info('Attempt fetch weather data')
-    
-    return promise.getJSONPromisePost(this.weatherRequestURL);
+
+    return promise.getJSONPromisePost(this.weatherRequestURL)
   }
 }
