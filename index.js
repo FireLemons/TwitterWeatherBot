@@ -277,7 +277,7 @@ if (config.alerts && !config.alerts.disabled) {
   }
 
   if (new Date() - stats.lastAlertUpdate > 22020000) { // 22020000ms = 6 hours 7 minutes
-    weatherTools.loadWeatherAlerts(onWeatherAlertLoaded, onFailLoadWeatherAlert)
+    tryFetchAlerts()
   }
 
   schedule.scheduleJob('0 */6 * * *', function () {
