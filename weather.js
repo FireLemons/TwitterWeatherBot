@@ -199,7 +199,7 @@ module.exports = class Weather {
       this.logger.info(`Generating extra stat: ${stat}`)
       
       extra.statement = this.getExtraStat(stat, forecastData)
-      extra.type = extra.statement.match(/^Expected ([a-zA-Z ]+):/)[1]
+      extra.type = extra.statement.match(/^Expected ([a-zA-Z]+)[: ]/)[1]
     }
     
     return extra
