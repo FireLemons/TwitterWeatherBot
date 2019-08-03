@@ -1,11 +1,12 @@
 'use strict'
 
 const config = require('./config.json')
+const Extra = require('./extra.js')
 const fs = require('fs')
 const path = require('path')
 const schedule = require('node-schedule')
 const TwitterManager = require('./tweetWeather.js')
-const WeatherManager = require('./weather.js')
+const weatherTools = require('./weather.js')
 const winston = require('winston')
 const util = require('./util.js')
 
@@ -163,10 +164,13 @@ process.on('SIGHUP', disruptHandler)
 process.on('unhandledRejection', (reason, p) => {
   logger.error(`Unhandled Rejection reason: ${JSON.stringify(reason)}`)
   console.log(p)
-});
+})
 
 // Init Weather Data Object
-const weatherTools = new WeatherManager(config, logger)
+const weatherFetcher = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+
+// Init extra statement generator
+const extraGenerator = new Extra(config.coordinates, logger)
 
 /*
  * Load stats
@@ -198,7 +202,7 @@ if (!fs.existsSync('./data/stats.json')) {
 const stats = util.getWatchedObject(_stats, saveStats)
 
 // Init Twitter Data Object
-const tweetWeather = new TwitterManager(config.twitter, logger, stats, weatherTools)
+const tweetWeather = new TwitterManager(config.twitter, logger, stats)
 
 /*
  *  Schedule forecasts to go out every 2 hours.
@@ -231,32 +235,32 @@ function tryFetchWeather (isLate) {
         })
     }
   }
-    
-  weatherTools.getForecastPromise().then((forecastData) => {
+
+  weatherFetcher.getForecastPromise().then((forecastData) => {
     let message = weatherTools.generateForecastMessage(forecastData)
     // extra statement
     if (message) {
       // extra statement
       let extra
-      
-      if(isLate){
+
+      if (isLate) {
         message += util.pickRandom(require('./data/jokes.json').late)
       } else {
-        extra = weatherTools.getExtra(forecastData)
+        extra = extraGenerator.getExtra(forecastData)
         message += extra.statement
-        
+
         logger.info(`Generated: ${JSON.stringify(extra)}`)
       }
-      
+
       tweetWeather.sendTweet(message)
         .then((tweet) => {
           stats.lastUpdate = new Date()
-          
-          if(!isLate){
-            if(!stats[extra.type]){
-              stats[extra.type] = 0;
+
+          if (!isLate) {
+            if (!stats[extra.type]) {
+              stats[extra.type] = 0
             }
-        
+
             stats[extra.type] += 1
           }
         }).catch((error) => {
@@ -298,16 +302,16 @@ if (config.alerts && !config.alerts.disabled) {
           })
       }
     }
-    
-    weatherTools.getWeatherAlertsPromise().then((alertData) => {
-      const alerts = weatherTools.filterAlerts(alertData.features)
+
+    weatherFetcher.getWeatherAlertsPromise().then((alertData) => {
+      const alerts = weatherFetcher.filterAlerts(alertData.features)
 
       if (!alerts.length) {
         stats.lastAlertUpdate = new Date()
       }
 
       alerts.forEach((alertData) => {
-        const alertMessage = tweetWeather.getAlertMessage(alertData)
+        const alertMessage = weatherTools.getAlertMessage(alertData)
 
         if (alertMessage) {
           tweetWeather.sendTweet(alertMessage)

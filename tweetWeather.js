@@ -1,14 +1,12 @@
 'use strict'
 
 const Twitter = require('twitter')
-const util = require('./util.js')
 
 module.exports = class TweetWeather {
-  constructor (config, logger, stats, weatherTools) {
+  constructor (config, logger, stats) {
     this.localStationAccount = config.localStationHandle
     this.logger = logger
     this.stats = stats
-    this.weatherTools = weatherTools
     this.twitterClient = new Twitter({
       consumer_key: config.consumer_key,
       consumer_secret: config.consumer_secret,
@@ -17,30 +15,13 @@ module.exports = class TweetWeather {
     })
   }
 
-  // Generates a severe weather alert warning if there is an ongoing alert
-  //  @param  {object} parsedAlertData The weather alert data Object recieved from api.weather.gov
-  //  @return {string} A weather alert warning to be posted to twitter.
-  getAlertMessage (parsedAlertData) {
-    try {
-      const message = this.weatherTools.getAlertMessage(parsedAlertData)
-
-      if (message.length > 280) {
-        throw new Error(`Message too long: ${message}`)
-      }
-
-      return message
-    } catch (e) {
-      this.logger.error(e)
-    }
-  }
-
   // Retweets all of another twitter account's tweets mad in the past hour
   retweetLocalStationTweets () {
     const params = {
-      "count": 10,
-      "exclude_replies": true,
-      "trim_user": true,
-      "screen_name": this.localStationAccount
+      count: 10,
+      exclude_replies: true,
+      trim_user: true,
+      screen_name: this.localStationAccount
     }
 
     this.twitterClient.get('statuses/user_timeline', params, (error, tweets, response) => {
@@ -82,7 +63,7 @@ module.exports = class TweetWeather {
     if (message.length > 280) {
       throw new Error(`Message too long: ${message}`)
     }
-    
+
     return this.twitterClient.post('statuses/update', { status: message })
   }
 }
