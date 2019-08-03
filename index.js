@@ -178,14 +178,14 @@ const saveStats = () => {
 
 if (!fs.existsSync('./data/stats.json')) {
   _stats = {
-    "lastAlertUpdate": new Date(),
-    "lastUpdate": new Date()
+    lastAlertUpdate: new Date(),
+    lastUpdate: new Date()
   }
 
   saveStats()
 } else {
   _stats = require('./data/stats.json')
-  _stats.lastAlertUpdate = new Date(_stats.lastAlertUpdate);
+  _stats.lastAlertUpdate = new Date(_stats.lastAlertUpdate)
   _stats.lastUpdate = new Date(_stats.lastUpdate)
 }
 
@@ -202,10 +202,10 @@ let retryTimeout = 0
 
 // Tries to fetch forecast data and tweet it
 //  @param  {boolean} isLate true if the last scheduled forecast was missed otherwise false
-function tryFetchWeather(isLate){ 
+function tryFetchWeather (isLate) {
   weatherTools.getForecastPromise().then((forecastData) => {
     let message = weatherTools.generateForecastMessage(forecastData)
-    //extra statement
+    // extra statement
     message += (isLate) ? util.pickRandom(require('./data/jokes.json').late) : weatherTools.getExtra(forecastData)
     if (message) {
       tweetWeather.sendTweet(message)
@@ -216,17 +216,17 @@ function tryFetchWeather(isLate){
   }).catch((error) => {
     if (retryTimeout <= 262144) {
       logger.warn(new Error('Failed to load weather data.'))
-      logger.warn(error);
+      logger.warn(error)
       logger.info(`Retrying fetching weather data in ${retryTimeout}ms. Retry ${(retryTimeout / 131072) + 1} of 3`)
 
       setTimeout(() => {
         tryFetchWeather()
       }, retryTimeout)
 
-        retryTimeout += 131072
+      retryTimeout += 131072
     } else {
       logger.error(new Error('Failed to load weather data.'))
-      logger.error(error);
+      logger.error(error)
 
       const failureMessage = util.pickRandom(require('./data/jokes.json').error)
 
@@ -237,13 +237,13 @@ function tryFetchWeather(isLate){
 
 if (config.alerts && !config.alerts.disabled) {
   let retryAlertTimeout = 0
-  
-  function tryFetchAlerts(){
+
+  function tryFetchAlerts () {
     weatherTools.getWeatherAlertsPromise().then((alertData) => {
       const alerts = weatherTools.filterAlerts(alertData.features)
-      
-      if(!alerts.length){
-        stats.lastAlertUpdate = new Date();
+
+      if (!alerts.length) {
+        stats.lastAlertUpdate = new Date()
       }
 
       alerts.forEach((alertData) => {
@@ -269,7 +269,7 @@ if (config.alerts && !config.alerts.disabled) {
         retryAlertTimeout += 131072
       } else {
         logger.error(new Error('Failed to load weather alert data.'))
-        logger.error(error);
+        logger.error(error)
 
         tweetWeather.sendTweet('Failed to fetch weather alert data. There could be a weather alert currently.')
       }
@@ -290,7 +290,7 @@ if (config.alerts && !config.alerts.disabled) {
 // Detect if computer fell asleep
 if (new Date() - stats.lastUpdate > 7620000) { // 7620000ms = 2 hours 7 minutes
   logger.warn(new Error('Missed scheduled twitter update. Presumably by waking from sleep.'))
-  
+
   tryFetchWeather(true)
 }
 
