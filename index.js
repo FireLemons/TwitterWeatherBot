@@ -235,11 +235,28 @@ function tryFetchWeather (isLate) {
   weatherTools.getForecastPromise().then((forecastData) => {
     let message = weatherTools.generateForecastMessage(forecastData)
     // extra statement
-    message += (isLate) ? util.pickRandom(require('./data/jokes.json').late) : weatherTools.getExtra(forecastData).statement
     if (message) {
+      // extra statement
+      let extra
+      
+      if(isLate){
+        message += util.pickRandom(require('./data/jokes.json').late)
+      } else {
+        extra = weatherTools.getExtra(forecastData)
+        message += extra.statement
+        
+        logger.info(`Generated: ${JSON.stringify(extra)}`)
+      }
+      
       tweetWeather.sendTweet(message)
         .then((tweet) => {
           stats.lastUpdate = new Date()
+          
+          if(!stats[extra.type]){
+            stats[extra.type] = 0;
+          }
+        
+          stats[extra.type] += 1
         }).catch((error) => {
           logger.error('Failed to send forecast update')
           onFailure(error)

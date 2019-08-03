@@ -164,35 +164,42 @@ module.exports = class Weather {
     const messageRoll = Math.random()
     let extra = {}
 
-    if (messageRoll < 0.01) { // joke
-      this.logger.info('Generating joke.')
-
+    if (messageRoll < 0.01) {
+      this.logger.info('Generating joke')
+      extra.type = 'joke'
       extra.statement = this.getJoke(parsedWeatherData.list[0])
-    } else if (messageRoll < 0.1) { // tutorials
-      this.logger.info('Generating tutorial.')
-      
+    } else if (messageRoll < 0.1) {
+      this.logger.info('Generating tutorial')
+      extra.type = 'tutorial'
       extra.statement = this.getTutorial()
-    } else if (messageRoll < 0.35) { // celestial info
-      this.logger.info('Generating celestial info.')
+    } else if (messageRoll < 0.35) {
       const eventRoll = Math.random()
 
       if (eventRoll < 0.6) {
+        this.logger.info('Generating sunrise')
+        extra.type = 'sunrise'
         extra.statement = celestial.getDayNight(this.coordinates)
       } else if (eventRoll < 0.8) {
+        this.logger.info('Generating lunar')
+        extra.type = 'lunar'
         extra.statement = celestial.getLunarPhase()
       } else {
+        this.logger.info('Generating season')
+        extra.type = 'season'
         extra.statement = celestial.getSeasonProgress()
       }
-    } else if (messageRoll < 0.5) { // trivia
-      this.logger.info('Generating trivia.')
-      // beaufort scale
+    } else if (messageRoll < 0.5) {
+      this.logger.info('Generating trivia')
+      extra.type = 'trivia'
       extra.statement = this.getBeaufort(parsedWeatherData.list[0].wind.speed.toPrecision(2))
-    } else { // random extra stat
-      this.logger.info('Generating extra stat.')
+    } else {
       const forecastData = parsedWeatherData.list.slice(0, 3)
-
       const stat = util.pickRandom(['precipitation', 'precipitation', 'precipitation', 'pressure', 'humidity', 'cloudiness'])
+      
+      this.logger.info(`Generating extra stat: ${stat}`)
+      
       extra.statement = this.getExtraStat(stat, forecastData)
+      extra.type = extra.statement.match(/^Expected ([a-zA-Z ]+):/)[1]
     }
     
     return extra
