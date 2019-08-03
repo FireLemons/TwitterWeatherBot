@@ -150,45 +150,52 @@ module.exports = class Weather {
 
   // Gets a random extra message to append to each update.
   //  @param  {object} parsedWeatherData The weather data Object recieved from OpenWeatherMap
-  //  @return {string} A random extra message to append to each update
+  //  @return {object} An object containing
+  //            {string} statement A random extra statement to append to each update
+  //            {string} type The type of extra statement generated
   getExtra (parsedWeatherData) {
     this.logger.info('Generating extra statement.')
 
     if (!(parsedWeatherData instanceof Object)) {
+      console.log(parsedWeatherData)
       throw new Error('Parameter parsedWeatherData must be an object')
     }
 
     const messageRoll = Math.random()
+    let extra = {}
 
     if (messageRoll < 0.01) { // joke
       this.logger.info('Generating joke.')
 
-      return this.getJoke(parsedWeatherData.list[0])
+      extra.statement = this.getJoke(parsedWeatherData.list[0])
     } else if (messageRoll < 0.1) { // tutorials
       this.logger.info('Generating tutorial.')
-      return this.getTutorial()
+      
+      extra.statement = this.getTutorial()
     } else if (messageRoll < 0.35) { // celestial info
       this.logger.info('Generating celestial info.')
       const eventRoll = Math.random()
 
       if (eventRoll < 0.6) {
-        return celestial.getDayNight(this.coordinates)
+        extra.statement = celestial.getDayNight(this.coordinates)
       } else if (eventRoll < 0.8) {
-        return celestial.getLunarPhase()
+        extra.statement = celestial.getLunarPhase()
       } else {
-        return celestial.getSeasonProgress()
+        extra.statement = celestial.getSeasonProgress()
       }
     } else if (messageRoll < 0.5) { // trivia
       this.logger.info('Generating trivia.')
       // beaufort scale
-      return this.getBeaufort(parsedWeatherData.list[0].wind.speed.toPrecision(2))
+      extra.statement = this.getBeaufort(parsedWeatherData.list[0].wind.speed.toPrecision(2))
     } else { // random extra stat
       this.logger.info('Generating extra stat.')
       const forecastData = parsedWeatherData.list.slice(0, 3)
 
       const stat = util.pickRandom(['precipitation', 'precipitation', 'precipitation', 'pressure', 'humidity', 'cloudiness'])
-      return this.getExtraStat(stat, forecastData)
+      extra.statement = this.getExtraStat(stat, forecastData)
     }
+    
+    return extra
   }
 
   // Gets an extended forecast for 3 extra stats not usually presesnt in the main forecast

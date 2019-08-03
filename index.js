@@ -159,6 +159,12 @@ var disruptHandler = (signal) => {
 process.on('SIGINT', disruptHandler)
 process.on('SIGHUP', disruptHandler)
 
+// Logs errors for unhandled promises
+process.on('unhandledRejection', (reason, p) => {
+  logger.error(`Unhandled Rejection reason: ${JSON.stringify(reason)}`)
+  console.log(p)
+});
+
 // Init Weather Data Object
 const weatherTools = new WeatherManager(config, logger)
 
@@ -203,21 +209,7 @@ let retryTimeout = 0
 // Tries to fetch forecast data and tweet it
 //  @param  {boolean} isLate true if the last scheduled forecast was missed otherwise false
 function tryFetchWeather (isLate) {
-  weatherTools.getForecastPromise().then((forecastData) => {
-    let message = weatherTools.generateForecastMessage(forecastData)
-    // extra statement
-    message += (isLate) ? util.pickRandom(require('./data/jokes.json').late) : weatherTools.getExtra(forecastData)
-    if (message) {
-      tweetWeather.sendTweet(message)
-        .then((tweet) => {
-          stats.lastUpdate = new Date()
-        }).catch((error) => {
-          throw error
-        })
-    } else {
-      throw new Error('Failed to generate status message.')
-    }
-  }).catch((error) => {
+  const onFailure = (error) => {
     if (retryTimeout <= 262144) {
       logger.warn(new Error('Failed to load weather data.'))
       logger.warn(error)
@@ -240,7 +232,21 @@ function tryFetchWeather (isLate) {
           logger.error(error)
         })
     }
-  })
+  }
+    
+  weatherTools.getForecastPromise().then((forecastData) => {
+    let message = weatherTools.generateForecastMessage(forecastData)
+    // extra statement
+    message += (isLate) ? util.pickRandom(require('./data/jokes.json').late) : weatherTools.getExtra(forecastData).statement
+    if (message) {
+      tweetWeather.sendTweet(message)
+        .then((tweet) => {
+          stats.lastUpdate = new Date()
+        }).catch(onFailure)
+    } else {
+      throw new Error('Failed to generate status message.')
+    }
+  }).catch(onFailure)
 }
 
 if (config.alerts && !config.alerts.disabled) {
