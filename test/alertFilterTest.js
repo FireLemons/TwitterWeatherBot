@@ -197,7 +197,32 @@ describe('Alert Filters', function(){
           })
         })
       })
-    })
+      
+      describe('A pair filters where keep is true in one and false in the other and all other properties are the same', function(){
+        before(function(){
+          config.alerts.filters = [
+            {
+              "restriction": "after",
+              "path": "properties.sent",
+              "value": -8,
+              "keep": false
+            },
+            {
+              "restriction": "after",
+              "path": "properties.sent",
+              "value": -8,
+              "keep": true
+            }
+          ]
+      
+          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        })
+        
+        it('should filter all the alerts', function(){
+          expect(weatherDataHandler.filterAlerts(exampleAlerts1Current.features)).to.be.empty
+        })
+      })
+    })// End filter: after tests
     
     describe('Filter: before', function(){
       describe('keep is true, value is 24', function(){
@@ -303,6 +328,35 @@ describe('Alert Filters', function(){
           })
         })
       })
-    })
+      
+      describe('A pair filters where keep is true in one and false in the other and all other properties are the same', function(){
+        before(function(){
+          config.alerts.filters = [
+            {
+              "restriction": "before",
+              "path": "properties.ends",
+              "value": -24,
+              "keep": false
+            },
+            {
+              "restriction": "before",
+              "path": "properties.ends",
+              "value": -24,
+              "keep": true
+            }
+          ]
+      
+          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        })
+        
+        it('should filter all the alerts', function(){
+          expect(weatherDataHandler.filterAlerts(exampleAlerts1Current.features)).to.be.empty
+        })
+      })
+    })// End filter: before tests
+  })// End time filter tests
+  
+  describe('Filter: contains', function(){
+    
   })
 })
