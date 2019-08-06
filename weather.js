@@ -110,16 +110,16 @@ module.exports = {
     // @param  {object[]} alerts A list of weather alerts to be filtered
     // @param  {object[]} filters A list of objects in the form
     //   {
+    //     "path": "", The PATH to the value to filter by
+    //     "value": "" The VALUE to be used for filtering
+    //     "keep": true|false True to discard all alerts not matching the filter false to discard all alerts matching the filter
     //     "restriction": "", One of the below restrictions
-    //        "after"     - Path leads to a date string. All alerts with dates before value will be removed
-    //        "before"    - Path leads to a date string. All alerts with dates after value will be removed
-    //        "contains"  - Path leads to an array. All alerts with arrays containing value will be kept
-    //        "has"       - Checks if path exits. Value specifies whether alerts with valid paths will be kept or removed.
-    //        "equals"    - Path leads to a primitive value. All alerts with value matching the value at path will be kept
-    //        "matches"   - Path leads to a string. All alerts matching the regex stored in value will be kept
-    //     "path": "", The path to the value to filter by
-    //     "value": "" The value to be used for filtering
-    //     "keep": true|false True to keep all alerts matching the filter false to discard all alerts matching the filter
+    //        "after"     - PATH leads to a date string. Matches alerts with dates after and including the current time + VALUE(hours)
+    //        "before"    - PATH leads to a date string. Matches alerts with dates before and excluding the current time + VALUE(hours)
+    //        "contains"  - PATH leads to an array. Matches alerts with arrays containing VALUE
+    //        "has"       - Matches if PATH in an alert object exits. VALUE not needed and not used
+    //        "equals"    - PATH leads to a primitive value. Matches alerts with VALUE exactly equal to the value at path
+    //        "matches"   - PATH leads to a string. Matches alerts where the string is a match for the regex stored in VALUE
     //   }
     // @return {object[]} A list of weather alerts matching the specified filters
     filterAlerts (alerts) {
@@ -127,7 +127,7 @@ module.exports = {
         throw new TypeError('Param alerts must be an array')
       }
 
-      // Either there are no filters or there's nothing to filter
+      // Return when either there are no filters or there's nothing to filter
       if (!(alerts.length && this.alertFilters && this.alertFilters.length)) {
         return alerts
       }
@@ -152,7 +152,7 @@ module.exports = {
               const referenceDate = new Date()
               referenceDate.setHours(filter.value + referenceDate.getHours())
 
-              if (referenceDate - dateAtPath < 0) {
+              if (referenceDate - dateAtPath < 0 === filter.keep) {
                 filteredAlerts.push(alertElem)
               }
             }
@@ -168,7 +168,7 @@ module.exports = {
               const referenceDate = new Date()
               referenceDate.setHours(filter.value + referenceDate.getHours())
 
-              if (referenceDate - dateAtPath > 0) {
+              if (referenceDate - dateAtPath > 0 === filter.keep) {
                 filteredAlerts.push(alertElem)
               }
             }
@@ -181,20 +181,20 @@ module.exports = {
                 throw new TypeError('Could not filter using restriction contains. Value at path not array.')
               }
 
-              if (valueAtPath.indexOf(filter.value) > -1) {
+              if (valueAtPath.indexOf(filter.value) > -1 === filter.keep) {
                 filteredAlerts.push(alertElem)
               }
             }
             break
           case 'equals':
             filterTest = (alertElem) => {
-              if (util.getValue(alertElem, filter.path) === filter.value) {
+              if ((util.getValue(alertElem, filter.path) === filter.value) === filter.keep) {
                 filteredAlerts.push(alertElem)
               }
             }
             break
           case 'has':
-            filterTest = filter.value ? (alertElem) => {
+            filterTest = filter.keep ? (alertElem) => {
               try {
                 if (util.getValue(alertElem, filter.path) !== undefined) {
                   filteredAlerts.push(alertElem)
@@ -220,7 +220,7 @@ module.exports = {
                 throw new TypeError('Could not filter using restriction mathces. Value at path not string.')
               }
 
-              if (regex.test(util.getValue(alertElem, filter.path))) {
+              if (regex.test(util.getValue(alertElem, filter.path)) === filter.keep) {
                 filteredAlerts.push(alertElem)
               }
             }
