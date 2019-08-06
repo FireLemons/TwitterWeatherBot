@@ -46,8 +46,8 @@ build/Release
 node_modules/
 jspm_packages/
 
-# Testing folder & files generated from testing
-test/
+# Instance specific files generated from testing
+test/prototype/
 configTools/*.json
 
 # TypeScript v1 declaration files

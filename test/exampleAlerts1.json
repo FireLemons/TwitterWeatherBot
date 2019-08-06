@@ -1,0 +1,1081 @@
+{
+    "@context": [
+        "https://raw.githubusercontent.com/geojson/geojson-ld/master/contexts/geojson-base.jsonld",
+        {
+            "wx": "https://api.weather.gov/ontology#",
+            "@vocab": "https://api.weather.gov/ontology#"
+        }
+    ],
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3343710-2923550",
+            "type": "Feature",
+            "geometry": null,
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3343710-2923550",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3343710-2923550",
+                "areaDesc": "Pike; Callaway; Audrain; Montgomery; Bond; Montgomery; Boone; Monroe; Macoupin; Calhoun; Fayette; Jersey; Greene; Lincoln; Ralls",
+                "geocode": {
+                    "UGC": [
+                        "MOZ036",
+                        "MOZ050",
+                        "MOZ042",
+                        "ILZ060",
+                        "ILZ064",
+                        "MOZ051",
+                        "MOZ041",
+                        "MOZ034",
+                        "ILZ059",
+                        "ILZ098",
+                        "ILZ065",
+                        "ILZ099",
+                        "ILZ058",
+                        "MOZ052",
+                        "MOZ035"
+                    ],
+                    "SAME": [
+                        "029163",
+                        "029027",
+                        "029007",
+                        "017135",
+                        "017005",
+                        "029139",
+                        "029019",
+                        "029137",
+                        "017117",
+                        "017013",
+                        "017051",
+                        "017083",
+                        "017061",
+                        "029113",
+                        "029173"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/MOZ036",
+                    "https://api.weather.gov/zones/forecast/MOZ050",
+                    "https://api.weather.gov/zones/forecast/MOZ042",
+                    "https://api.weather.gov/zones/forecast/ILZ060",
+                    "https://api.weather.gov/zones/forecast/ILZ064",
+                    "https://api.weather.gov/zones/forecast/MOZ051",
+                    "https://api.weather.gov/zones/forecast/MOZ041",
+                    "https://api.weather.gov/zones/forecast/MOZ034",
+                    "https://api.weather.gov/zones/forecast/ILZ059",
+                    "https://api.weather.gov/zones/forecast/ILZ098",
+                    "https://api.weather.gov/zones/forecast/ILZ065",
+                    "https://api.weather.gov/zones/forecast/ILZ099",
+                    "https://api.weather.gov/zones/forecast/ILZ058",
+                    "https://api.weather.gov/zones/forecast/MOZ052",
+                    "https://api.weather.gov/zones/forecast/MOZ035"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3342966-2922634",
+                        "identifier": "NWS-IDP-PROD-3342966-2922634",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-01-28T15:49:00-06:00"
+                    },
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3342966-2922635",
+                        "identifier": "NWS-IDP-PROD-3342966-2922635",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-01-28T15:49:00-06:00"
+                    }
+                ],
+                "sent": "2019-01-29T03:46:00-06:00",
+                "effective": "2019-01-29T03:46:00-06:00",
+                "onset": "2019-01-29T18:00:00-06:00",
+                "expires": "2019-01-29T16:00:00-06:00",
+                "ends": "2019-01-30T14:00:00-06:00",
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Likely",
+                "urgency": "Expected",
+                "event": "Wind Chill Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Wind Chill Warning issued January 29 at 3:46AM CST expiring January 30 at 2:00PM CST by NWS St Louis MO",
+                "description": "* WHAT...Dangerously cold wind chills expected. Wind chills as\nlow as 30 below zero expected.\n\n* WHERE...Portions of central, east central and northeast Missouri\nand southwest Illinois.\n\n* WHEN...From 6 PM Tuesday to 2 PM CST Wednesday.\n\n* ADDITIONAL DETAILS...The cold wind chills could cause\nfrostbite on exposed skin in as little as 30 minutes.",
+                "instruction": "A Wind Chill Warning means the combination of very cold air and\nstrong winds will create dangerously low wind chill values. This\nwill result in frost bite and lead to hypothermia or death if\nprecautions are not taken. If you must venture outdoors, be\ncertain to dress properly, with several layers of light-weight,\nloose fitting clothing and making sure that all exposed skin is\ncovered.",
+                "response": "Prepare",
+                "parameters": {
+                    "NWSheadline": [
+                        "WIND CHILL WARNING REMAINS IN EFFECT FROM 6 PM THIS EVENING TO 2 PM CST WEDNESDAY"
+                    ],
+                    "HazardType": [
+                        "Dangerously Cold Wind Chill"
+                    ],
+                    "VTEC": [
+                        "/O.CON.KLSX.WC.W.0001.190130T0000Z-190130T2000Z/"
+                    ],
+                    "PIL": [
+                        "LSXWSWLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-01-30T14:00:00-06:00"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3343066-2922761",
+            "type": "Feature",
+            "geometry": null,
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3343066-2922761",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3343066-2922761",
+                "areaDesc": "Pike; Moniteau; Pike; Cole; Shelby; Audrain; Callaway; Adams; Brown; Osage; Marion; Montgomery; Boone; Monroe; Lewis; Knox; Ralls",
+                "geocode": {
+                    "UGC": [
+                        "MOZ036",
+                        "MOZ047",
+                        "ILZ097",
+                        "MOZ048",
+                        "MOZ026",
+                        "MOZ042",
+                        "MOZ050",
+                        "ILZ095",
+                        "ILZ096",
+                        "MOZ049",
+                        "MOZ027",
+                        "MOZ051",
+                        "MOZ041",
+                        "MOZ034",
+                        "MOZ019",
+                        "MOZ018",
+                        "MOZ035"
+                    ],
+                    "SAME": [
+                        "029163",
+                        "029135",
+                        "017149",
+                        "029051",
+                        "029205",
+                        "029007",
+                        "029027",
+                        "017001",
+                        "017009",
+                        "029151",
+                        "029127",
+                        "029139",
+                        "029019",
+                        "029137",
+                        "029111",
+                        "029103",
+                        "029173"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/MOZ036",
+                    "https://api.weather.gov/zones/forecast/MOZ047",
+                    "https://api.weather.gov/zones/forecast/ILZ097",
+                    "https://api.weather.gov/zones/forecast/MOZ048",
+                    "https://api.weather.gov/zones/forecast/MOZ026",
+                    "https://api.weather.gov/zones/forecast/MOZ042",
+                    "https://api.weather.gov/zones/forecast/MOZ050",
+                    "https://api.weather.gov/zones/forecast/ILZ095",
+                    "https://api.weather.gov/zones/forecast/ILZ096",
+                    "https://api.weather.gov/zones/forecast/MOZ049",
+                    "https://api.weather.gov/zones/forecast/MOZ027",
+                    "https://api.weather.gov/zones/forecast/MOZ051",
+                    "https://api.weather.gov/zones/forecast/MOZ041",
+                    "https://api.weather.gov/zones/forecast/MOZ034",
+                    "https://api.weather.gov/zones/forecast/MOZ019",
+                    "https://api.weather.gov/zones/forecast/MOZ018",
+                    "https://api.weather.gov/zones/forecast/MOZ035"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3342291-2921734",
+                        "identifier": "NWS-IDP-PROD-3342291-2921734",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-01-28T09:11:00-06:00"
+                    }
+                ],
+                "sent": "2019-01-28T18:01:00-06:00",
+                "effective": "2019-01-28T18:01:00-06:00",
+                "onset": "2019-01-28T18:01:00-06:00",
+                "expires": "2019-01-28T19:15:00-06:00",
+                "ends": "2019-01-28T18:00:00-06:00",
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Moderate",
+                "certainty": "Likely",
+                "urgency": "Expected",
+                "event": "Wind Advisory",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Wind Advisory issued January 28 at 6:01PM CST expiring January 28 at 6:00PM CST by NWS St Louis MO",
+                "description": "While northwest wind gusts of 30 to 35 MPH will be possible early\nthis evening, these gusts will continue to diminish through the\nevening.",
+                "instruction": "",
+                "response": "Execute",
+                "parameters": {
+                    "NWSheadline": [
+                        "WIND ADVISORY WILL EXPIRE AT 6 PM CST THIS EVENING"
+                    ],
+                    "VTEC": [
+                        "/O.EXP.KLSX.WI.Y.0002.000000T0000Z-190129T0000Z/"
+                    ],
+                    "PIL": [
+                        "LSXNPWLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-01-28T18:00:00-06:00"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3342966-2922634",
+            "type": "Feature",
+            "geometry": null,
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3342966-2922634",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3342966-2922634",
+                "areaDesc": "Pike; Callaway; Audrain; Montgomery; Bond; Montgomery; Boone; Monroe; Macoupin; Calhoun; Fayette; Jersey; Greene; Lincoln; Ralls",
+                "geocode": {
+                    "UGC": [
+                        "MOZ036",
+                        "MOZ050",
+                        "MOZ042",
+                        "ILZ060",
+                        "ILZ064",
+                        "MOZ051",
+                        "MOZ041",
+                        "MOZ034",
+                        "ILZ059",
+                        "ILZ098",
+                        "ILZ065",
+                        "ILZ099",
+                        "ILZ058",
+                        "MOZ052",
+                        "MOZ035"
+                    ],
+                    "SAME": [
+                        "029163",
+                        "029027",
+                        "029007",
+                        "017135",
+                        "017005",
+                        "029139",
+                        "029019",
+                        "029137",
+                        "017117",
+                        "017013",
+                        "017051",
+                        "017083",
+                        "017061",
+                        "029113",
+                        "029173"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/MOZ036",
+                    "https://api.weather.gov/zones/forecast/MOZ050",
+                    "https://api.weather.gov/zones/forecast/MOZ042",
+                    "https://api.weather.gov/zones/forecast/ILZ060",
+                    "https://api.weather.gov/zones/forecast/ILZ064",
+                    "https://api.weather.gov/zones/forecast/MOZ051",
+                    "https://api.weather.gov/zones/forecast/MOZ041",
+                    "https://api.weather.gov/zones/forecast/MOZ034",
+                    "https://api.weather.gov/zones/forecast/ILZ059",
+                    "https://api.weather.gov/zones/forecast/ILZ098",
+                    "https://api.weather.gov/zones/forecast/ILZ065",
+                    "https://api.weather.gov/zones/forecast/ILZ099",
+                    "https://api.weather.gov/zones/forecast/ILZ058",
+                    "https://api.weather.gov/zones/forecast/MOZ052",
+                    "https://api.weather.gov/zones/forecast/MOZ035"
+                ],
+                "references": [],
+                "sent": "2019-01-28T15:49:00-06:00",
+                "effective": "2019-01-28T15:49:00-06:00",
+                "onset": "2019-01-29T18:00:00-06:00",
+                "expires": "2019-01-29T04:00:00-06:00",
+                "ends": "2019-01-30T14:00:00-06:00",
+                "status": "Actual",
+                "messageType": "Alert",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Likely",
+                "urgency": "Expected",
+                "event": "Wind Chill Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Wind Chill Warning issued January 28 at 3:49PM CST expiring January 30 at 2:00PM CST by NWS St Louis MO",
+                "description": "* WHAT...Dangerously cold wind chills expected. Wind chills as\nlow as 30 below zero expected.\n\n* WHERE...Portions of central, east central and northeast\nMissouri and south central and southwest Illinois.\n\n* WHEN...From 6 PM Tuesday to 2 PM CST Wednesday.\n\n* ADDITIONAL DETAILS...The cold wind chills could cause\nfrostbite on exposed skin in as little as 30 minutes.",
+                "instruction": "A Wind Chill Warning means the combination of very cold air and\nstrong winds will create dangerously low wind chill values. This\nwill result in frost bite and lead to hypothermia or death if\nprecautions are not taken. If you must venture outdoors, be\ncertain to dress properly, with several layers of light-weight,\nloose fitting clothing and making sure that all exposed skin is\ncovered.",
+                "response": "Prepare",
+                "parameters": {
+                    "NWSheadline": [
+                        "WIND CHILL WARNING IN EFFECT FROM 6 PM TUESDAY TO 2 PM CST WEDNESDAY"
+                    ],
+                    "HazardType": [
+                        "Dangerously Cold Wind Chill"
+                    ],
+                    "VTEC": [
+                        "/O.NEW.KLSX.WC.W.0001.190130T0000Z-190130T2000Z/"
+                    ],
+                    "PIL": [
+                        "LSXWSWLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-01-30T14:00:00-06:00"
+                    ]
+                },
+                "replacedBy": "https://api.weather.gov/alerts/NWS-IDP-PROD-3343710-2923550",
+                "replacedAt": "2019-01-29T03:46:00-06:00"
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3342966-2922635",
+            "type": "Feature",
+            "geometry": null,
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3342966-2922635",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3342966-2922635",
+                "areaDesc": "Pike; Callaway; Audrain; Montgomery; Bond; Montgomery; Boone; Monroe; Macoupin; Calhoun; Fayette; Jersey; Greene; Lincoln; Ralls",
+                "geocode": {
+                    "UGC": [
+                        "MOZ036",
+                        "MOZ050",
+                        "MOZ042",
+                        "ILZ060",
+                        "ILZ064",
+                        "MOZ051",
+                        "MOZ041",
+                        "MOZ034",
+                        "ILZ059",
+                        "ILZ098",
+                        "ILZ065",
+                        "ILZ099",
+                        "ILZ058",
+                        "MOZ052",
+                        "MOZ035"
+                    ],
+                    "SAME": [
+                        "029163",
+                        "029027",
+                        "029007",
+                        "017135",
+                        "017005",
+                        "029139",
+                        "029019",
+                        "029137",
+                        "017117",
+                        "017013",
+                        "017051",
+                        "017083",
+                        "017061",
+                        "029113",
+                        "029173"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/MOZ036",
+                    "https://api.weather.gov/zones/forecast/MOZ050",
+                    "https://api.weather.gov/zones/forecast/MOZ042",
+                    "https://api.weather.gov/zones/forecast/ILZ060",
+                    "https://api.weather.gov/zones/forecast/ILZ064",
+                    "https://api.weather.gov/zones/forecast/MOZ051",
+                    "https://api.weather.gov/zones/forecast/MOZ041",
+                    "https://api.weather.gov/zones/forecast/MOZ034",
+                    "https://api.weather.gov/zones/forecast/ILZ059",
+                    "https://api.weather.gov/zones/forecast/ILZ098",
+                    "https://api.weather.gov/zones/forecast/ILZ065",
+                    "https://api.weather.gov/zones/forecast/ILZ099",
+                    "https://api.weather.gov/zones/forecast/ILZ058",
+                    "https://api.weather.gov/zones/forecast/MOZ052",
+                    "https://api.weather.gov/zones/forecast/MOZ035"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3341800-2921058",
+                        "identifier": "NWS-IDP-PROD-3341800-2921058",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-01-28T03:00:00-06:00"
+                    }
+                ],
+                "sent": "2019-01-28T15:49:00-06:00",
+                "effective": "2019-01-28T15:49:00-06:00",
+                "onset": "2019-01-29T18:00:00-06:00",
+                "expires": "2019-01-28T16:04:40-06:00",
+                "ends": "2019-01-31T12:00:00-06:00",
+                "status": "Actual",
+                "messageType": "Cancel",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Past",
+                "event": "Wind Chill Watch",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "The Wind Chill Watch has been replaced. Please see the latest information from NWS St Louis MO on this developing situation.",
+                "description": "The Wind Chill Watch has been replaced. Please see the latest information from NWS St Louis MO on this developing situation.",
+                "instruction": "A Wind Chill Warning means the combination of very cold air and\nstrong winds will create dangerously low wind chill values. This\nwill result in frost bite and lead to hypothermia or death if\nprecautions are not taken. If you must venture outdoors, be\ncertain to dress properly, with several layers of light-weight,\nloose fitting clothing and making sure that all exposed skin is\ncovered.",
+                "response": "Monitor",
+                "parameters": {
+                    "NWSheadline": [
+                        "WIND CHILL WARNING IN EFFECT FROM 6 PM TUESDAY TO 2 PM CST WEDNESDAY"
+                    ],
+                    "HazardType": [
+                        "Dangerously Cold Wind Chill"
+                    ],
+                    "VTEC": [
+                        "/O.UPG.KLSX.WC.A.0001.190130T0000Z-190131T1800Z/"
+                    ],
+                    "PIL": [
+                        "LSXWSWLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-01-31T12:00:00-06:00"
+                    ]
+                },
+                "replacedBy": "https://api.weather.gov/alerts/NWS-IDP-PROD-3343710-2923550",
+                "replacedAt": "2019-01-29T03:46:00-06:00"
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3342291-2921734",
+            "type": "Feature",
+            "geometry": null,
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3342291-2921734",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3342291-2921734",
+                "areaDesc": "Pike; Moniteau; Pike; Cole; Shelby; Audrain; Callaway; Adams; Brown; Osage; Marion; Montgomery; Boone; Monroe; Lewis; Knox; Ralls",
+                "geocode": {
+                    "UGC": [
+                        "MOZ036",
+                        "MOZ047",
+                        "ILZ097",
+                        "MOZ048",
+                        "MOZ026",
+                        "MOZ042",
+                        "MOZ050",
+                        "ILZ095",
+                        "ILZ096",
+                        "MOZ049",
+                        "MOZ027",
+                        "MOZ051",
+                        "MOZ041",
+                        "MOZ034",
+                        "MOZ019",
+                        "MOZ018",
+                        "MOZ035"
+                    ],
+                    "SAME": [
+                        "029163",
+                        "029135",
+                        "017149",
+                        "029051",
+                        "029205",
+                        "029007",
+                        "029027",
+                        "017001",
+                        "017009",
+                        "029151",
+                        "029127",
+                        "029139",
+                        "029019",
+                        "029137",
+                        "029111",
+                        "029103",
+                        "029173"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/MOZ036",
+                    "https://api.weather.gov/zones/forecast/MOZ047",
+                    "https://api.weather.gov/zones/forecast/ILZ097",
+                    "https://api.weather.gov/zones/forecast/MOZ048",
+                    "https://api.weather.gov/zones/forecast/MOZ026",
+                    "https://api.weather.gov/zones/forecast/MOZ042",
+                    "https://api.weather.gov/zones/forecast/MOZ050",
+                    "https://api.weather.gov/zones/forecast/ILZ095",
+                    "https://api.weather.gov/zones/forecast/ILZ096",
+                    "https://api.weather.gov/zones/forecast/MOZ049",
+                    "https://api.weather.gov/zones/forecast/MOZ027",
+                    "https://api.weather.gov/zones/forecast/MOZ051",
+                    "https://api.weather.gov/zones/forecast/MOZ041",
+                    "https://api.weather.gov/zones/forecast/MOZ034",
+                    "https://api.weather.gov/zones/forecast/MOZ019",
+                    "https://api.weather.gov/zones/forecast/MOZ018",
+                    "https://api.weather.gov/zones/forecast/MOZ035"
+                ],
+                "references": [],
+                "sent": "2019-01-28T09:11:00-06:00",
+                "effective": "2019-01-28T09:11:00-06:00",
+                "onset": "2019-01-28T09:11:00-06:00",
+                "expires": "2019-01-28T18:00:00-06:00",
+                "ends": "2019-01-28T18:00:00-06:00",
+                "status": "Actual",
+                "messageType": "Alert",
+                "category": "Met",
+                "severity": "Moderate",
+                "certainty": "Likely",
+                "urgency": "Expected",
+                "event": "Wind Advisory",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Wind Advisory issued January 28 at 9:11AM CST expiring January 28 at 6:00PM CST by NWS St Louis MO",
+                "description": "The National Weather Service in Saint Louis has issued a Wind\nAdvisory, which is in effect until 6 PM CST this evening.\n\n* WINDS...Northwest 15 to 25 mph with gusts up to 45 mph.\n\n* TIMING...Strong and gusty winds will develop this morning and\ncontinue into the afternoon.\n\n* IMPACTS...Gusty winds will blow around unsecured objects. Tree\nlimbs could be blown down and a few power outages may result.",
+                "instruction": "A Wind Advisory is issued when sustained winds are forecast to be\n30 to 39 mph or gusts will range between 45 and 57 mph. Winds of\nthese magnitudes may cause minor property damage without extra\nprecautions. Motorists in high profile vehicles should use\ncaution until the winds diminish.",
+                "response": "Execute",
+                "parameters": {
+                    "NWSheadline": [
+                        "WIND ADVISORY IN EFFECT UNTIL 6 PM CST THIS EVENING"
+                    ],
+                    "VTEC": [
+                        "/O.NEW.KLSX.WI.Y.0002.190128T1511Z-190129T0000Z/"
+                    ],
+                    "PIL": [
+                        "LSXNPWLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-01-28T18:00:00-06:00"
+                    ]
+                },
+                "replacedBy": "https://api.weather.gov/alerts/NWS-IDP-PROD-3343066-2922761",
+                "replacedAt": "2019-01-28T18:01:00-06:00"
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3341800-2921058",
+            "type": "Feature",
+            "geometry": null,
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3341800-2921058",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3341800-2921058",
+                "areaDesc": "Moniteau; Cole; Shelby; Audrain; Brown; Washington; Monroe; St. Charles; Bond; Monroe; Montgomery; Calhoun; St. Louis City; Greene; Knox; Lincoln; Pike; Warren; Pike; Gasconade; Franklin; St. Clair; Callaway; Adams; Montgomery; Osage; Marion; Crawford; Madison; Boone; Macoupin; Jefferson; Clinton; Marion; St. Louis; Jersey; Lewis; Fayette; Ralls",
+                "geocode": {
+                    "UGC": [
+                        "MOZ047",
+                        "MOZ048",
+                        "MOZ026",
+                        "MOZ042",
+                        "ILZ096",
+                        "MOZ073",
+                        "ILZ102",
+                        "MOZ061",
+                        "ILZ064",
+                        "MOZ034",
+                        "MOZ051",
+                        "ILZ098",
+                        "MOZ064",
+                        "ILZ058",
+                        "MOZ018",
+                        "MOZ052",
+                        "MOZ036",
+                        "MOZ060",
+                        "ILZ097",
+                        "MOZ059",
+                        "MOZ062",
+                        "ILZ101",
+                        "MOZ050",
+                        "ILZ095",
+                        "ILZ060",
+                        "MOZ049",
+                        "MOZ027",
+                        "MOZ072",
+                        "ILZ100",
+                        "MOZ041",
+                        "ILZ059",
+                        "MOZ065",
+                        "ILZ069",
+                        "ILZ070",
+                        "MOZ063",
+                        "ILZ099",
+                        "MOZ019",
+                        "ILZ065",
+                        "MOZ035"
+                    ],
+                    "SAME": [
+                        "029135",
+                        "029051",
+                        "029205",
+                        "029007",
+                        "017009",
+                        "029221",
+                        "017133",
+                        "029183",
+                        "017005",
+                        "029137",
+                        "029139",
+                        "017013",
+                        "029510",
+                        "017061",
+                        "029103",
+                        "029113",
+                        "029163",
+                        "029219",
+                        "017149",
+                        "029073",
+                        "029071",
+                        "017163",
+                        "029027",
+                        "017001",
+                        "017135",
+                        "029151",
+                        "029127",
+                        "029055",
+                        "017119",
+                        "029019",
+                        "017117",
+                        "029099",
+                        "017027",
+                        "017121",
+                        "029189",
+                        "017083",
+                        "029111",
+                        "017051",
+                        "029173"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/MOZ047",
+                    "https://api.weather.gov/zones/forecast/MOZ048",
+                    "https://api.weather.gov/zones/forecast/MOZ026",
+                    "https://api.weather.gov/zones/forecast/MOZ042",
+                    "https://api.weather.gov/zones/forecast/ILZ096",
+                    "https://api.weather.gov/zones/forecast/MOZ073",
+                    "https://api.weather.gov/zones/forecast/ILZ102",
+                    "https://api.weather.gov/zones/forecast/MOZ061",
+                    "https://api.weather.gov/zones/forecast/ILZ064",
+                    "https://api.weather.gov/zones/forecast/MOZ034",
+                    "https://api.weather.gov/zones/forecast/MOZ051",
+                    "https://api.weather.gov/zones/forecast/ILZ098",
+                    "https://api.weather.gov/zones/forecast/MOZ064",
+                    "https://api.weather.gov/zones/forecast/ILZ058",
+                    "https://api.weather.gov/zones/forecast/MOZ018",
+                    "https://api.weather.gov/zones/forecast/MOZ052",
+                    "https://api.weather.gov/zones/forecast/MOZ036",
+                    "https://api.weather.gov/zones/forecast/MOZ060",
+                    "https://api.weather.gov/zones/forecast/ILZ097",
+                    "https://api.weather.gov/zones/forecast/MOZ059",
+                    "https://api.weather.gov/zones/forecast/MOZ062",
+                    "https://api.weather.gov/zones/forecast/ILZ101",
+                    "https://api.weather.gov/zones/forecast/MOZ050",
+                    "https://api.weather.gov/zones/forecast/ILZ095",
+                    "https://api.weather.gov/zones/forecast/ILZ060",
+                    "https://api.weather.gov/zones/forecast/MOZ049",
+                    "https://api.weather.gov/zones/forecast/MOZ027",
+                    "https://api.weather.gov/zones/forecast/MOZ072",
+                    "https://api.weather.gov/zones/forecast/ILZ100",
+                    "https://api.weather.gov/zones/forecast/MOZ041",
+                    "https://api.weather.gov/zones/forecast/ILZ059",
+                    "https://api.weather.gov/zones/forecast/MOZ065",
+                    "https://api.weather.gov/zones/forecast/ILZ069",
+                    "https://api.weather.gov/zones/forecast/ILZ070",
+                    "https://api.weather.gov/zones/forecast/MOZ063",
+                    "https://api.weather.gov/zones/forecast/ILZ099",
+                    "https://api.weather.gov/zones/forecast/MOZ019",
+                    "https://api.weather.gov/zones/forecast/ILZ065",
+                    "https://api.weather.gov/zones/forecast/MOZ035"
+                ],
+                "references": [],
+                "sent": "2019-01-28T03:00:00-06:00",
+                "effective": "2019-01-28T03:00:00-06:00",
+                "onset": "2019-01-29T18:00:00-06:00",
+                "expires": "2019-01-28T15:00:00-06:00",
+                "ends": "2019-01-31T12:00:00-06:00",
+                "status": "Actual",
+                "messageType": "Alert",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Likely",
+                "urgency": "Future",
+                "event": "Wind Chill Watch",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Wind Chill Watch issued January 28 at 3:00AM CST expiring January 31 at 12:00PM CST by NWS St Louis MO",
+                "description": "* WHAT...Dangerously cold wind chills possible. Wind chills as low\nas 40 below zero possible.\n\n* WHERE...Portions of central, east central and northeast Missouri\nand west central and southwestern Illinois.\n\n* WHEN...From Tuesday evening through Thursday morning.\n\n* ADDITIONAL DETAILS...The dangerously cold wind chills could\ncause frostbite on exposed skin in as little as 10 minutes.",
+                "instruction": "A Wind Chill Watch is advanced notice that there is the potential\nfor a combination of very cold air and strong winds to create\ndangerously low wind chill values. Monitor the latest forecasts\nand warnings for updates on this situation.",
+                "response": "Monitor",
+                "parameters": {
+                    "NWSheadline": [
+                        "WIND CHILL WATCH IN EFFECT FROM TUESDAY EVENING THROUGH THURSDAY MORNING"
+                    ],
+                    "HazardType": [
+                        "Dangerously Cold Wind Chill"
+                    ],
+                    "VTEC": [
+                        "/O.NEW.KLSX.WC.A.0001.190130T0000Z-190131T1800Z/"
+                    ],
+                    "PIL": [
+                        "LSXWSWLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-01-31T12:00:00-06:00"
+                    ]
+                },
+                "replacedBy": "https://api.weather.gov/alerts/NWS-IDP-PROD-3342966-2922635",
+                "replacedAt": "2019-01-28T15:49:00-06:00"
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3333247-2913345",
+            "type": "Feature",
+            "geometry": null,
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3333247-2913345",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3333247-2913345",
+                "areaDesc": "Moniteau; Shelby; Cole; Callaway; Audrain; Adams; Brown; Marion; Osage; Boone; Monroe; Lewis; Knox; Ralls",
+                "geocode": {
+                    "UGC": [
+                        "MOZ047",
+                        "MOZ026",
+                        "MOZ048",
+                        "MOZ050",
+                        "MOZ042",
+                        "ILZ095",
+                        "ILZ096",
+                        "MOZ027",
+                        "MOZ049",
+                        "MOZ041",
+                        "MOZ034",
+                        "MOZ019",
+                        "MOZ018",
+                        "MOZ035"
+                    ],
+                    "SAME": [
+                        "029135",
+                        "029205",
+                        "029051",
+                        "029027",
+                        "029007",
+                        "017001",
+                        "017009",
+                        "029127",
+                        "029151",
+                        "029019",
+                        "029137",
+                        "029111",
+                        "029103",
+                        "029173"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/MOZ047",
+                    "https://api.weather.gov/zones/forecast/MOZ026",
+                    "https://api.weather.gov/zones/forecast/MOZ048",
+                    "https://api.weather.gov/zones/forecast/MOZ050",
+                    "https://api.weather.gov/zones/forecast/MOZ042",
+                    "https://api.weather.gov/zones/forecast/ILZ095",
+                    "https://api.weather.gov/zones/forecast/ILZ096",
+                    "https://api.weather.gov/zones/forecast/MOZ027",
+                    "https://api.weather.gov/zones/forecast/MOZ049",
+                    "https://api.weather.gov/zones/forecast/MOZ041",
+                    "https://api.weather.gov/zones/forecast/MOZ034",
+                    "https://api.weather.gov/zones/forecast/MOZ019",
+                    "https://api.weather.gov/zones/forecast/MOZ018",
+                    "https://api.weather.gov/zones/forecast/MOZ035"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3332193-2912452",
+                        "identifier": "NWS-IDP-PROD-3332193-2912452",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-01-22T15:48:00-06:00"
+                    },
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3333080-2913187",
+                        "identifier": "NWS-IDP-PROD-3333080-2913187",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-01-23T03:50:00-06:00"
+                    }
+                ],
+                "sent": "2019-01-23T06:01:00-06:00",
+                "effective": "2019-01-23T06:01:00-06:00",
+                "onset": "2019-01-23T06:01:00-06:00",
+                "expires": "2019-01-23T07:15:00-06:00",
+                "ends": "2019-01-23T06:00:00-06:00",
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Moderate",
+                "certainty": "Likely",
+                "urgency": "Expected",
+                "event": "Winter Weather Advisory",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Winter Weather Advisory issued January 23 at 6:01AM CST expiring January 23 at 6:00AM CST by NWS St Louis MO",
+                "description": "The wintry mix has ended across across much of the area. Roads\nremain icy from the freezing rain and snow overnight, so use extra\ncaution during your morning commute.",
+                "instruction": "",
+                "response": "Execute",
+                "parameters": {
+                    "NWSheadline": [
+                        "WINTER WEATHER ADVISORY WILL EXPIRE AT 6 AM CST EARLY THIS MORNING"
+                    ],
+                    "VTEC": [
+                        "/O.EXP.KLSX.WW.Y.0005.000000T0000Z-190123T1200Z/"
+                    ],
+                    "PIL": [
+                        "LSXWSWLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-01-23T06:00:00-06:00"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3333080-2913187",
+            "type": "Feature",
+            "geometry": null,
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3333080-2913187",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3333080-2913187",
+                "areaDesc": "Moniteau; Shelby; Cole; Callaway; Audrain; Adams; Brown; Marion; Osage; Boone; Monroe; Lewis; Knox; Ralls",
+                "geocode": {
+                    "UGC": [
+                        "MOZ047",
+                        "MOZ026",
+                        "MOZ048",
+                        "MOZ050",
+                        "MOZ042",
+                        "ILZ095",
+                        "ILZ096",
+                        "MOZ027",
+                        "MOZ049",
+                        "MOZ041",
+                        "MOZ034",
+                        "MOZ019",
+                        "MOZ018",
+                        "MOZ035"
+                    ],
+                    "SAME": [
+                        "029135",
+                        "029205",
+                        "029051",
+                        "029027",
+                        "029007",
+                        "017001",
+                        "017009",
+                        "029127",
+                        "029151",
+                        "029019",
+                        "029137",
+                        "029111",
+                        "029103",
+                        "029173"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/MOZ047",
+                    "https://api.weather.gov/zones/forecast/MOZ026",
+                    "https://api.weather.gov/zones/forecast/MOZ048",
+                    "https://api.weather.gov/zones/forecast/MOZ050",
+                    "https://api.weather.gov/zones/forecast/MOZ042",
+                    "https://api.weather.gov/zones/forecast/ILZ095",
+                    "https://api.weather.gov/zones/forecast/ILZ096",
+                    "https://api.weather.gov/zones/forecast/MOZ027",
+                    "https://api.weather.gov/zones/forecast/MOZ049",
+                    "https://api.weather.gov/zones/forecast/MOZ041",
+                    "https://api.weather.gov/zones/forecast/MOZ034",
+                    "https://api.weather.gov/zones/forecast/MOZ019",
+                    "https://api.weather.gov/zones/forecast/MOZ018",
+                    "https://api.weather.gov/zones/forecast/MOZ035"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3332193-2912452",
+                        "identifier": "NWS-IDP-PROD-3332193-2912452",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-01-22T15:48:00-06:00"
+                    }
+                ],
+                "sent": "2019-01-23T03:50:00-06:00",
+                "effective": "2019-01-23T03:50:00-06:00",
+                "onset": "2019-01-23T03:50:00-06:00",
+                "expires": "2019-01-23T06:00:00-06:00",
+                "ends": "2019-01-23T06:00:00-06:00",
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Moderate",
+                "certainty": "Likely",
+                "urgency": "Expected",
+                "event": "Winter Weather Advisory",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Winter Weather Advisory issued January 23 at 3:50AM CST expiring January 23 at 6:00AM CST by NWS St Louis MO",
+                "description": "* WHAT...Mixed wintry precipitation expected of snow, freezing\nrain and freezing drizzle. Additional snowfall amounts will be\nunder 1 inch and a light glaze of ice is expected. Precipitation\nwill end early this morning.\n\n* WHERE...Portions of central and northeast Missouri and west\ncentral Illinois.\n\n* WHEN...Until 6 am this morning.\n\n* ADDITIONAL DETAILS...Plan on slippery road conditions.",
+                "instruction": "A Winter Weather Advisory is issued for a variety of winter\nweather conditions, such as snow, blowing snow, sleet, or\nfreezing drizzle and rain. It only takes a small amount of wintry\nprecipitation to make roads, bridges, sidewalks, and parking lots\nicy and dangerous. It is often difficult to tell when ice begins\nto form, so do not be caught off guard.\n\nIn Illinois, the latest road conditions can be obtained on the\nInternet at www.gettingaroundillinois.com. In Missouri, call 1-\n888-275-6636 for road information.",
+                "response": "Execute",
+                "parameters": {
+                    "NWSheadline": [
+                        "WINTER WEATHER ADVISORY REMAINS IN EFFECT UNTIL 6 AM CST EARLY THIS MORNING"
+                    ],
+                    "VTEC": [
+                        "/O.CON.KLSX.WW.Y.0005.000000T0000Z-190123T1200Z/"
+                    ],
+                    "PIL": [
+                        "LSXWSWLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-01-23T06:00:00-06:00"
+                    ]
+                },
+                "replacedBy": "https://api.weather.gov/alerts/NWS-IDP-PROD-3333247-2913345",
+                "replacedAt": "2019-01-23T06:01:00-06:00"
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3332193-2912452",
+            "type": "Feature",
+            "geometry": null,
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3332193-2912452",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3332193-2912452",
+                "areaDesc": "Moniteau; Shelby; Cole; Callaway; Audrain; Adams; Brown; Marion; Osage; Boone; Monroe; Lewis; Knox; Ralls",
+                "geocode": {
+                    "UGC": [
+                        "MOZ047",
+                        "MOZ026",
+                        "MOZ048",
+                        "MOZ050",
+                        "MOZ042",
+                        "ILZ095",
+                        "ILZ096",
+                        "MOZ027",
+                        "MOZ049",
+                        "MOZ041",
+                        "MOZ034",
+                        "MOZ019",
+                        "MOZ018",
+                        "MOZ035"
+                    ],
+                    "SAME": [
+                        "029135",
+                        "029205",
+                        "029051",
+                        "029027",
+                        "029007",
+                        "017001",
+                        "017009",
+                        "029127",
+                        "029151",
+                        "029019",
+                        "029137",
+                        "029111",
+                        "029103",
+                        "029173"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/MOZ047",
+                    "https://api.weather.gov/zones/forecast/MOZ026",
+                    "https://api.weather.gov/zones/forecast/MOZ048",
+                    "https://api.weather.gov/zones/forecast/MOZ050",
+                    "https://api.weather.gov/zones/forecast/MOZ042",
+                    "https://api.weather.gov/zones/forecast/ILZ095",
+                    "https://api.weather.gov/zones/forecast/ILZ096",
+                    "https://api.weather.gov/zones/forecast/MOZ027",
+                    "https://api.weather.gov/zones/forecast/MOZ049",
+                    "https://api.weather.gov/zones/forecast/MOZ041",
+                    "https://api.weather.gov/zones/forecast/MOZ034",
+                    "https://api.weather.gov/zones/forecast/MOZ019",
+                    "https://api.weather.gov/zones/forecast/MOZ018",
+                    "https://api.weather.gov/zones/forecast/MOZ035"
+                ],
+                "references": [],
+                "sent": "2019-01-22T15:48:00-06:00",
+                "effective": "2019-01-22T15:48:00-06:00",
+                "onset": "2019-01-23T00:00:00-06:00",
+                "expires": "2019-01-23T04:00:00-06:00",
+                "ends": "2019-01-23T06:00:00-06:00",
+                "status": "Actual",
+                "messageType": "Alert",
+                "category": "Met",
+                "severity": "Moderate",
+                "certainty": "Likely",
+                "urgency": "Expected",
+                "event": "Winter Weather Advisory",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Winter Weather Advisory issued January 22 at 3:48PM CST expiring January 23 at 6:00AM CST by NWS St Louis MO",
+                "description": "* WHAT...Mixed wintry precipitation expected of snow, freezing\nrain and drizzle. Total snow accumulations of 1 to 2 inches and\nice accumulations of a light glaze expected. Winds gusting as\nhigh as 30 mph.\n\n* WHERE...Portions of central and northeast Missouri and west\ncentral Illinois.\n\n* WHEN...From midnight tonight to 6 AM CST Wednesday.\n\n* ADDITIONAL DETAILS...Plan on slippery road conditions.",
+                "instruction": "A Winter Weather Advisory is issued for a variety of winter\nweather conditions, such as snow, blowing snow, sleet, or\nfreezing drizzle and rain. It only takes a small amount of wintry\nprecipitation to make roads, bridges, sidewalks, and parking lots\nicy and dangerous. It is often difficult to tell when ice begins\nto form, so do not be caught off guard.\n\nIn Illinois, the latest road conditions can be obtained on the\nInternet at www.gettingaroundillinois.com. In Missouri, call 1-\n888-275-6636 for road information.",
+                "response": "Execute",
+                "parameters": {
+                    "NWSheadline": [
+                        "WINTER WEATHER ADVISORY IN EFFECT FROM MIDNIGHT TONIGHT TO 6 AM CST WEDNESDAY"
+                    ],
+                    "VTEC": [
+                        "/O.NEW.KLSX.WW.Y.0005.190123T0600Z-190123T1200Z/"
+                    ],
+                    "PIL": [
+                        "LSXWSWLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-01-23T06:00:00-06:00"
+                    ]
+                },
+                "replacedBy": "https://api.weather.gov/alerts/NWS-IDP-PROD-3333247-2913345",
+                "replacedAt": "2019-01-23T06:01:00-06:00"
+            }
+        }
+    ],
+    "title": "watches, warnings, and advisories for Callaway (MOZ050) MO",
+    "updated": "2019-01-29T09:46:59+00:00",
+    "pagination": {
+        "next": "https://api.weather.gov/alerts?zone=MOZ050&cursor=eyJ0IjoxNTQ4MTkzNjgwLCJpIjoiTldTLUlEUC1QUk9ELTMzMzIxOTMtMjkxMjQ1MiJ9"
+    }
+}

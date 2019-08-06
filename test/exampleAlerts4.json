@@ -1,0 +1,3769 @@
+{
+    "@context": [
+        "https://raw.githubusercontent.com/geojson/geojson-ld/master/contexts/geojson-base.jsonld",
+        {
+            "wx": "https://api.weather.gov/ontology#",
+            "@vocab": "https://api.weather.gov/ontology#"
+        }
+    ],
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707725-3201130",
+            "type": "Feature",
+            "geometry": null,
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707725-3201130",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707725-3201130",
+                "areaDesc": "Moniteau; Cole; Brown; Shelby; Audrain; Monroe; Bond; St. Charles; Montgomery; Monroe; Calhoun; Greene; St. Louis City; Knox; Lincoln; Washington; Pike; Pike; Warren; Gasconade; Adams; St. Clair; Callaway; Marion; Madison; Osage; Franklin; Montgomery; Boone; Jefferson; Macoupin; Clinton; St. Louis; Jersey; Marion; Fayette; Lewis; Ralls",
+                "geocode": {
+                    "UGC": [
+                        "MOZ047",
+                        "MOZ048",
+                        "ILZ096",
+                        "MOZ026",
+                        "MOZ042",
+                        "ILZ102",
+                        "ILZ064",
+                        "MOZ061",
+                        "MOZ051",
+                        "MOZ034",
+                        "ILZ098",
+                        "ILZ058",
+                        "MOZ064",
+                        "MOZ018",
+                        "MOZ052",
+                        "ILZ074",
+                        "MOZ036",
+                        "ILZ097",
+                        "MOZ060",
+                        "MOZ059",
+                        "ILZ095",
+                        "ILZ101",
+                        "MOZ050",
+                        "MOZ027",
+                        "ILZ100",
+                        "MOZ049",
+                        "MOZ062",
+                        "ILZ060",
+                        "MOZ041",
+                        "MOZ065",
+                        "ILZ059",
+                        "ILZ069",
+                        "MOZ063",
+                        "ILZ099",
+                        "ILZ070",
+                        "ILZ065",
+                        "MOZ019",
+                        "MOZ035"
+                    ],
+                    "SAME": [
+                        "029135",
+                        "029051",
+                        "017009",
+                        "029205",
+                        "029007",
+                        "017133",
+                        "017005",
+                        "029183",
+                        "029139",
+                        "029137",
+                        "017013",
+                        "017061",
+                        "029510",
+                        "029103",
+                        "029113",
+                        "017189",
+                        "029163",
+                        "017149",
+                        "029219",
+                        "029073",
+                        "017001",
+                        "017163",
+                        "029027",
+                        "029127",
+                        "017119",
+                        "029151",
+                        "029071",
+                        "017135",
+                        "029019",
+                        "029099",
+                        "017117",
+                        "017027",
+                        "029189",
+                        "017083",
+                        "017121",
+                        "017051",
+                        "029111",
+                        "029173"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/MOZ047",
+                    "https://api.weather.gov/zones/forecast/MOZ048",
+                    "https://api.weather.gov/zones/forecast/ILZ096",
+                    "https://api.weather.gov/zones/forecast/MOZ026",
+                    "https://api.weather.gov/zones/forecast/MOZ042",
+                    "https://api.weather.gov/zones/forecast/ILZ102",
+                    "https://api.weather.gov/zones/forecast/ILZ064",
+                    "https://api.weather.gov/zones/forecast/MOZ061",
+                    "https://api.weather.gov/zones/forecast/MOZ051",
+                    "https://api.weather.gov/zones/forecast/MOZ034",
+                    "https://api.weather.gov/zones/forecast/ILZ098",
+                    "https://api.weather.gov/zones/forecast/ILZ058",
+                    "https://api.weather.gov/zones/forecast/MOZ064",
+                    "https://api.weather.gov/zones/forecast/MOZ018",
+                    "https://api.weather.gov/zones/forecast/MOZ052",
+                    "https://api.weather.gov/zones/forecast/ILZ074",
+                    "https://api.weather.gov/zones/forecast/MOZ036",
+                    "https://api.weather.gov/zones/forecast/ILZ097",
+                    "https://api.weather.gov/zones/forecast/MOZ060",
+                    "https://api.weather.gov/zones/forecast/MOZ059",
+                    "https://api.weather.gov/zones/forecast/ILZ095",
+                    "https://api.weather.gov/zones/forecast/ILZ101",
+                    "https://api.weather.gov/zones/forecast/MOZ050",
+                    "https://api.weather.gov/zones/forecast/MOZ027",
+                    "https://api.weather.gov/zones/forecast/ILZ100",
+                    "https://api.weather.gov/zones/forecast/MOZ049",
+                    "https://api.weather.gov/zones/forecast/MOZ062",
+                    "https://api.weather.gov/zones/forecast/ILZ060",
+                    "https://api.weather.gov/zones/forecast/MOZ041",
+                    "https://api.weather.gov/zones/forecast/MOZ065",
+                    "https://api.weather.gov/zones/forecast/ILZ059",
+                    "https://api.weather.gov/zones/forecast/ILZ069",
+                    "https://api.weather.gov/zones/forecast/MOZ063",
+                    "https://api.weather.gov/zones/forecast/ILZ099",
+                    "https://api.weather.gov/zones/forecast/ILZ070",
+                    "https://api.weather.gov/zones/forecast/ILZ065",
+                    "https://api.weather.gov/zones/forecast/MOZ019",
+                    "https://api.weather.gov/zones/forecast/MOZ035"
+                ],
+                "references": [],
+                "sent": "2019-07-15T16:24:00-05:00",
+                "effective": "2019-07-15T16:24:00-05:00",
+                "onset": "2019-07-17T13:00:00-05:00",
+                "expires": "2019-07-16T05:00:00-05:00",
+                "ends": "2019-07-20T19:00:00-05:00",
+                "status": "Actual",
+                "messageType": "Alert",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Likely",
+                "urgency": "Future",
+                "event": "Excessive Heat Watch",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Excessive Heat Watch issued July 15 at 4:24PM CDT until July 20 at 7:00PM CDT by NWS St Louis MO",
+                "description": "The National Weather Service in Saint Louis has issued an\nExcessive Heat Watch, which is in effect from Wednesday afternoon\nthrough early Saturday evening.\n\n* HEAT INDEX VALUES...As high as 105 to 110 during the late\nafternoon due to high temperatures in the middle to upper 90s,\nand dewpoints in the lower to middle 70s.\n\n* TIMING...Beginning Wednesday afternoon and continuing through\nearly Saturday evening.\n\n* IMPACTS...Dangerously high temperatures and humidity could\nquickly cause heat stress or heat stroke if precautions are\nnot taken. The very young, the elderly, those without air\nconditioning, and those participating in strenuous outdoor\nactivities will be the most susceptible. Also, car interiors\ncan reach lethal temperatures in a matter of minutes.",
+                "instruction": "An Excessive Heat Watch is advanced notice that there is the\npotential for a prolonged period of hot temperatures and high\nhumidity. This will create a dangerous situation in which heat-\nrelated illnesses are possible. Begin making preparations now, by\nmaking sure your air conditioning is in good working order or\nknow where to go to stay cool.",
+                "response": "Monitor",
+                "parameters": {
+                    "NWSheadline": [
+                        "EXCESSIVE HEAT WATCH IN EFFECT FROM WEDNESDAY AFTERNOON THROUGH EARLY SATURDAY EVENING"
+                    ],
+                    "VTEC": [
+                        "/O.NEW.KLSX.EH.A.0001.190717T1800Z-190721T0000Z/"
+                    ],
+                    "PIL": [
+                        "LSXNPWLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-07-20T19:00:00-05:00"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707644-3201095",
+            "type": "Feature",
+            "geometry": null,
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707644-3201095",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707644-3201095",
+                "areaDesc": "Clinton; Schuyler; Jackson; Leavenworth; Daviess; Harrison; Sullivan; Andrew; Platte; Worth; Johnson; Chariton; Ray; Putnam; Nodaway; Henry; Johnson; Doniphan; Cooper; Livingston; Buchanan; Saline; De Kalb; Grundy; Macon; Cass; Lafayette; Gentry; Randolph; Holt; Clay; Miami; Howard; Bates; Adair; Linn; Pettis; Atchison; Mercer; Wyandotte; Linn; Carroll; Atchison; Caldwell",
+                "geocode": {
+                    "UGC": [
+                        "MOZ021",
+                        "MOZ008",
+                        "MOZ037",
+                        "KSZ103",
+                        "MOZ014",
+                        "MOZ005",
+                        "MOZ016",
+                        "MOZ012",
+                        "MOZ028",
+                        "MOZ003",
+                        "KSZ105",
+                        "MOZ032",
+                        "MOZ030",
+                        "MOZ007",
+                        "MOZ002",
+                        "MOZ054",
+                        "MOZ044",
+                        "KSZ102",
+                        "MOZ046",
+                        "MOZ023",
+                        "MOZ020",
+                        "MOZ039",
+                        "MOZ013",
+                        "MOZ015",
+                        "MOZ025",
+                        "MOZ043",
+                        "MOZ038",
+                        "MOZ004",
+                        "MOZ033",
+                        "MOZ011",
+                        "MOZ029",
+                        "KSZ057",
+                        "MOZ040",
+                        "MOZ053",
+                        "MOZ017",
+                        "KSZ060",
+                        "MOZ045",
+                        "KSZ025",
+                        "MOZ006",
+                        "KSZ104",
+                        "MOZ024",
+                        "MOZ031",
+                        "MOZ001",
+                        "MOZ022"
+                    ],
+                    "SAME": [
+                        "029049",
+                        "029197",
+                        "029095",
+                        "020103",
+                        "029061",
+                        "029081",
+                        "029211",
+                        "029003",
+                        "029165",
+                        "029227",
+                        "020091",
+                        "029041",
+                        "029177",
+                        "029171",
+                        "029147",
+                        "029083",
+                        "029101",
+                        "020043",
+                        "029053",
+                        "029117",
+                        "029021",
+                        "029195",
+                        "029063",
+                        "029079",
+                        "029121",
+                        "029037",
+                        "029107",
+                        "029075",
+                        "029175",
+                        "029087",
+                        "029047",
+                        "020121",
+                        "029089",
+                        "029013",
+                        "029001",
+                        "020107",
+                        "029159",
+                        "020005",
+                        "029129",
+                        "020209",
+                        "029115",
+                        "029033",
+                        "029005",
+                        "029025"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/MOZ021",
+                    "https://api.weather.gov/zones/forecast/MOZ008",
+                    "https://api.weather.gov/zones/forecast/MOZ037",
+                    "https://api.weather.gov/zones/forecast/KSZ103",
+                    "https://api.weather.gov/zones/forecast/MOZ014",
+                    "https://api.weather.gov/zones/forecast/MOZ005",
+                    "https://api.weather.gov/zones/forecast/MOZ016",
+                    "https://api.weather.gov/zones/forecast/MOZ012",
+                    "https://api.weather.gov/zones/forecast/MOZ028",
+                    "https://api.weather.gov/zones/forecast/MOZ003",
+                    "https://api.weather.gov/zones/forecast/KSZ105",
+                    "https://api.weather.gov/zones/forecast/MOZ032",
+                    "https://api.weather.gov/zones/forecast/MOZ030",
+                    "https://api.weather.gov/zones/forecast/MOZ007",
+                    "https://api.weather.gov/zones/forecast/MOZ002",
+                    "https://api.weather.gov/zones/forecast/MOZ054",
+                    "https://api.weather.gov/zones/forecast/MOZ044",
+                    "https://api.weather.gov/zones/forecast/KSZ102",
+                    "https://api.weather.gov/zones/forecast/MOZ046",
+                    "https://api.weather.gov/zones/forecast/MOZ023",
+                    "https://api.weather.gov/zones/forecast/MOZ020",
+                    "https://api.weather.gov/zones/forecast/MOZ039",
+                    "https://api.weather.gov/zones/forecast/MOZ013",
+                    "https://api.weather.gov/zones/forecast/MOZ015",
+                    "https://api.weather.gov/zones/forecast/MOZ025",
+                    "https://api.weather.gov/zones/forecast/MOZ043",
+                    "https://api.weather.gov/zones/forecast/MOZ038",
+                    "https://api.weather.gov/zones/forecast/MOZ004",
+                    "https://api.weather.gov/zones/forecast/MOZ033",
+                    "https://api.weather.gov/zones/forecast/MOZ011",
+                    "https://api.weather.gov/zones/forecast/MOZ029",
+                    "https://api.weather.gov/zones/forecast/KSZ057",
+                    "https://api.weather.gov/zones/forecast/MOZ040",
+                    "https://api.weather.gov/zones/forecast/MOZ053",
+                    "https://api.weather.gov/zones/forecast/MOZ017",
+                    "https://api.weather.gov/zones/forecast/KSZ060",
+                    "https://api.weather.gov/zones/forecast/MOZ045",
+                    "https://api.weather.gov/zones/forecast/KSZ025",
+                    "https://api.weather.gov/zones/forecast/MOZ006",
+                    "https://api.weather.gov/zones/forecast/KSZ104",
+                    "https://api.weather.gov/zones/forecast/MOZ024",
+                    "https://api.weather.gov/zones/forecast/MOZ031",
+                    "https://api.weather.gov/zones/forecast/MOZ001",
+                    "https://api.weather.gov/zones/forecast/MOZ022"
+                ],
+                "references": [],
+                "sent": "2019-07-15T15:52:00-05:00",
+                "effective": "2019-07-15T15:52:00-05:00",
+                "onset": "2019-07-17T13:00:00-05:00",
+                "expires": "2019-07-16T00:00:00-05:00",
+                "ends": "2019-07-20T19:00:00-05:00",
+                "status": "Actual",
+                "messageType": "Alert",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Likely",
+                "urgency": "Future",
+                "event": "Excessive Heat Watch",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Kansas City/Pleasant HIll MO",
+                "headline": "Excessive Heat Watch issued July 15 at 3:52PM CDT until July 20 at 7:00PM CDT by NWS Kansas City/Pleasant HIll MO",
+                "description": "...A EXCESSIVE HEAT WATCH HAS BEEN ISSUED FOR WEDNESDAY AFTERNOON\nTHROUGH SATURDAY EVENING FOR THE POTENTIAL FOR A PROLONGED PERIOD\nOF DANGEROUS HEAT...\n\nThe National Weather Service in Kansas City/Pleasant Hill has\nissued an Excessive Heat Watch, which is in effect from Wednesday\nafternoon through Saturday evening.\n\n* TEMPERATURE...High temperatures will be in the mid to upper 90s\nwith night time lows in the upper 70s to near 80 degrees. Heat\nindex values will max out in 105 to 110 degree range each day.\n\n* IMPACTS...This will be the first prolonged period of heat this\nseason and as such sensitive people may not have acclimated to\nthe heat. Heat illnesses will be possible for those spending\nprolonged time outside or time indoors in non-air conditioned\nlocations. The prolonged heat could be especially dangerous for\nthose most susceptible including, young children and the\nelderly.",
+                "instruction": "An Excessive Heat Watch means that a prolonged period of hot\ntemperatures is expected. The combination of hot temperatures and\nhigh humidity will combine to create a DANGEROUS SITUATION in\nwhich heat illnesses are possible. Drink plenty of fluids, stay\nin an air-conditioned room, stay out of the sun, and check up on\nrelatives and neighbors.",
+                "response": "Monitor",
+                "parameters": {
+                    "NWSheadline": [
+                        "EXCESSIVE HEAT WATCH IN EFFECT FROM WEDNESDAY AFTERNOON THROUGH SATURDAY EVENING"
+                    ],
+                    "VTEC": [
+                        "/O.NEW.KEAX.EH.A.0001.190717T1800Z-190721T0000Z/"
+                    ],
+                    "PIL": [
+                        "EAXNPWEAX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-07-20T19:00:00-05:00"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707618-3201080",
+            "type": "Feature",
+            "geometry": null,
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707618-3201080",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707618-3201080",
+                "areaDesc": "Newton; Dallas; Maries; Bourbon; Laclede; Camden; Hickory; Jasper; Vernon; St. Clair; Miller; Crawford; Dade; Pulaski; Benton; Barton; Polk; Cherokee; Cedar; Morgan",
+                "geocode": {
+                    "UGC": [
+                        "MOZ093",
+                        "MOZ080",
+                        "MOZ058",
+                        "KSZ073",
+                        "MOZ081",
+                        "MOZ069",
+                        "MOZ068",
+                        "MOZ088",
+                        "MOZ066",
+                        "MOZ067",
+                        "MOZ057",
+                        "KSZ097",
+                        "MOZ089",
+                        "MOZ070",
+                        "MOZ055",
+                        "MOZ077",
+                        "MOZ079",
+                        "KSZ101",
+                        "MOZ078",
+                        "MOZ056"
+                    ],
+                    "SAME": [
+                        "029145",
+                        "029059",
+                        "029125",
+                        "020011",
+                        "029105",
+                        "029029",
+                        "029085",
+                        "029097",
+                        "029217",
+                        "029185",
+                        "029131",
+                        "020037",
+                        "029057",
+                        "029169",
+                        "029015",
+                        "029011",
+                        "029167",
+                        "020021",
+                        "029039",
+                        "029141"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/MOZ093",
+                    "https://api.weather.gov/zones/forecast/MOZ080",
+                    "https://api.weather.gov/zones/forecast/MOZ058",
+                    "https://api.weather.gov/zones/forecast/KSZ073",
+                    "https://api.weather.gov/zones/forecast/MOZ081",
+                    "https://api.weather.gov/zones/forecast/MOZ069",
+                    "https://api.weather.gov/zones/forecast/MOZ068",
+                    "https://api.weather.gov/zones/forecast/MOZ088",
+                    "https://api.weather.gov/zones/forecast/MOZ066",
+                    "https://api.weather.gov/zones/forecast/MOZ067",
+                    "https://api.weather.gov/zones/forecast/MOZ057",
+                    "https://api.weather.gov/zones/forecast/KSZ097",
+                    "https://api.weather.gov/zones/forecast/MOZ089",
+                    "https://api.weather.gov/zones/forecast/MOZ070",
+                    "https://api.weather.gov/zones/forecast/MOZ055",
+                    "https://api.weather.gov/zones/forecast/MOZ077",
+                    "https://api.weather.gov/zones/forecast/MOZ079",
+                    "https://api.weather.gov/zones/forecast/KSZ101",
+                    "https://api.weather.gov/zones/forecast/MOZ078",
+                    "https://api.weather.gov/zones/forecast/MOZ056"
+                ],
+                "references": [],
+                "sent": "2019-07-15T15:45:00-05:00",
+                "effective": "2019-07-15T15:45:00-05:00",
+                "onset": "2019-07-17T12:00:00-05:00",
+                "expires": "2019-07-16T07:00:00-05:00",
+                "ends": "2019-07-20T23:00:00-05:00",
+                "status": "Actual",
+                "messageType": "Alert",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Likely",
+                "urgency": "Future",
+                "event": "Excessive Heat Watch",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Springfield MO",
+                "headline": "Excessive Heat Watch issued July 15 at 3:45PM CDT until July 20 at 11:00PM CDT by NWS Springfield MO",
+                "description": "The National Weather Service in Springfield has issued an\nExcessive Heat Watch, which is in effect from Wednesday afternoon\nthrough Saturday evening.\n\n* TEMPERATURE...Highs in the middle 90s with heat index values\naround 103 to 108 are expected Wednesday through Friday.\n\n* IMPACTS...A prolonged period of hot weather can increase the\nrisk of heat related illness, including heat exhaustion and heat\nstroke. The very young, the elderly, and those without access\nto air conditioning will be especially vulnerable.",
+                "instruction": "An Excessive Heat Watch means that a prolonged period of hot\ntemperatures is expected. The combination of hot temperatures and\nhigh humidity will combine to create a DANGEROUS SITUATION in\nwhich heat illnesses are possible. Drink plenty of fluids, stay\nin an air-conditioned room, stay out of the sun, and check up on\nrelatives and neighbors.",
+                "response": "Monitor",
+                "parameters": {
+                    "NWSheadline": [
+                        "EXCESSIVE HEAT WATCH IN EFFECT FROM WEDNESDAY AFTERNOON THROUGH SATURDAY EVENING"
+                    ],
+                    "VTEC": [
+                        "/O.NEW.KSGF.EH.A.0001.190717T1700Z-190721T0400Z/"
+                    ],
+                    "PIL": [
+                        "SGFNPWSGF"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-07-20T23:00:00-05:00"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707589-3201066",
+            "type": "Feature",
+            "geometry": null,
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707589-3201066",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707589-3201066",
+                "areaDesc": "Reynolds; Madison; Iron",
+                "geocode": {
+                    "UGC": [
+                        "MOZ099",
+                        "MOZ085",
+                        "MOZ084"
+                    ],
+                    "SAME": [
+                        "029179",
+                        "029123",
+                        "029093"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/MOZ099",
+                    "https://api.weather.gov/zones/forecast/MOZ085",
+                    "https://api.weather.gov/zones/forecast/MOZ084"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3705803-3200068",
+                        "identifier": "NWS-IDP-PROD-3705803-3200068",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T16:16:00-05:00"
+                    },
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706852-3200670",
+                        "identifier": "NWS-IDP-PROD-3706852-3200670",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-15T04:21:00-05:00"
+                    },
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3704781-3199451",
+                        "identifier": "NWS-IDP-PROD-3704781-3199451",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T02:35:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T15:36:00-05:00",
+                "effective": "2019-07-15T15:36:00-05:00",
+                "onset": "2019-07-15T15:36:00-05:00",
+                "expires": "2019-07-16T05:00:00-05:00",
+                "ends": "2019-07-16T19:00:00-05:00",
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Possible",
+                "urgency": "Future",
+                "event": "Flash Flood Watch",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Flash Flood Watch issued July 15 at 3:36PM CDT until July 16 at 7:00PM CDT by NWS St Louis MO",
+                "description": "The Flash Flood Watch continues for\n\n* a portion of southeast Missouri...including the following\ncounties...Iron MO...Madison MO and Reynolds MO.\n\n* through Tuesday evening\n\n* Remnants of Tropical Storm Barry will continue to impact the\nregion through Tuesday. Locally heavy rainfall will be possible,\nespecially in and around embedded thunderstorms. Between 1 and 2\ninches of rain has fallen so far. An additional inch with\nlocally higher amounts are possible tonight through Tuesday in\nthe watch area.\n\n* Heavy rainfall will result in flooding of low lying or poor\ndrainage areas...and ultimately dangerous flash flooding on\nsmaller creeks and streams. Significant rises on larger\nstreams and rivers will also be possible.",
+                "instruction": "A Flash Flood Watch is advanced notice that conditions are\nfavorable that may lead to flash flooding. People in the Watch\narea, especially in flood prone areas, should use this time to\nmake preparations just in case. Stay informed, and be ready for\nquick action if flooding is observed or if a Flash Flood Warning\nis issued.",
+                "response": "Monitor",
+                "parameters": {
+                    "NWSheadline": [
+                        "FLASH FLOOD WATCH REMAINS IN EFFECT THROUGH TUESDAY EVENING"
+                    ],
+                    "VTEC": [
+                        "/O.CON.KLSX.FF.A.0014.000000T0000Z-190717T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "LSXFFALSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-07-16T19:00:00-05:00"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707577-3201056",
+            "type": "Feature",
+            "geometry": null,
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707577-3201056",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707577-3201056",
+                "areaDesc": "Dyer; Greene; Weakley; Crockett; Gibson; Obion; Pemiscot; Clay; Lake; Dunklin",
+                "geocode": {
+                    "UGC": [
+                        "TNZ019",
+                        "ARZ018",
+                        "TNZ003",
+                        "TNZ051",
+                        "TNZ020",
+                        "TNZ002",
+                        "MOZ115",
+                        "ARZ009",
+                        "TNZ001",
+                        "MOZ113"
+                    ],
+                    "SAME": [
+                        "047045",
+                        "005055",
+                        "047183",
+                        "047033",
+                        "047053",
+                        "047131",
+                        "029155",
+                        "005021",
+                        "047095",
+                        "029069"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/TNZ019",
+                    "https://api.weather.gov/zones/forecast/ARZ018",
+                    "https://api.weather.gov/zones/forecast/TNZ003",
+                    "https://api.weather.gov/zones/forecast/TNZ051",
+                    "https://api.weather.gov/zones/forecast/TNZ020",
+                    "https://api.weather.gov/zones/forecast/TNZ002",
+                    "https://api.weather.gov/zones/forecast/MOZ115",
+                    "https://api.weather.gov/zones/forecast/ARZ009",
+                    "https://api.weather.gov/zones/forecast/TNZ001",
+                    "https://api.weather.gov/zones/forecast/MOZ113"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706791-3200633",
+                        "identifier": "NWS-IDP-PROD-3706791-3200633",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-15T03:19:00-05:00"
+                    },
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3705566-3199939",
+                        "identifier": "NWS-IDP-PROD-3705566-3199939",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T14:50:00-05:00"
+                    },
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3704867-3199482",
+                        "identifier": "NWS-IDP-PROD-3704867-3199482",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T03:33:00-05:00"
+                    },
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3703466-3198593",
+                        "identifier": "NWS-IDP-PROD-3703466-3198593",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-13T14:45:00-05:00"
+                    },
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3702671-3198057",
+                        "identifier": "NWS-IDP-PROD-3702671-3198057",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-13T03:39:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T15:30:00-05:00",
+                "effective": "2019-07-15T15:30:00-05:00",
+                "onset": "2019-07-15T15:30:00-05:00",
+                "expires": "2019-07-15T23:30:00-05:00",
+                "ends": "2019-07-16T19:00:00-05:00",
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Possible",
+                "urgency": "Future",
+                "event": "Flash Flood Watch",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Memphis TN",
+                "headline": "Flash Flood Watch issued July 15 at 3:30PM CDT until July 16 at 7:00PM CDT by NWS Memphis TN",
+                "description": "...Training bands of moderate rainfall from the remnants of\nTropical Depression Barry will hring a risk of Flash Flooding\nthrough Tuesday...\n\n.The remnant low pressure system from Tropical Depression Barry\nwill lift into the Ozarks and lower Ohio River through Tuesday\nnight. Extended periods of moderate rainfall will present an\nrisk of flash flooding that will persist into Tuesday.\n\nThe Flash Flood Watch continues for\n\n* Portions of East Arkansas, Southeast Missouri, and West\nTennessee, including the following areas, in East Arkansas,\nClay and Greene. In Southeast Missouri, Dunklin and Pemiscot.\nIn West Tennessee, Crockett, Dyer, Gibson, Lake, Obion, and\nWeakley.\n\n* Through Tuesday evening\n\n* 2 to 3 inches of rainfall, with localized 4 inch amounts.\n\n* Flash flooding could lead to live threatening situations for\nmotorists and individuals exposed to low lying areas or\nrapidly rising creeks and rivers.",
+                "instruction": "A Flash Flood Watch means that conditions may develop that lead\nto flash flooding. Flash flooding is a VERY DANGEROUS SITUATION.\n\nYou should monitor later forecasts and be prepared to take action\nshould Flash Flood Warnings be issued.",
+                "response": "Monitor",
+                "parameters": {
+                    "NWSheadline": [
+                        "FLASH FLOOD WATCH REMAINS IN EFFECT THROUGH TUESDAY EVENING"
+                    ],
+                    "VTEC": [
+                        "/O.CON.KMEG.FF.A.0006.000000T0000Z-190717T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "MEGFFAMEG"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-07-16T19:00:00-05:00"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707528-3201026",
+            "type": "Feature",
+            "geometry": null,
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707528-3201026",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707528-3201026",
+                "areaDesc": "Des Moines; Cedar; Henderson; Henry; Putnam; Keokuk; Dubuque; Iowa; Stephenson; Benton; Jo Daviess; Jones; Clark; Washington; Clinton; Whiteside; Delaware; Mercer; Scotland; Jefferson; Johnson; Carroll; Henry; Hancock; Bureau; Van Buren; Buchanan; Scott; Warren; McDonough; Louisa; Linn; Muscatine; Rock Island; Lee; Jackson",
+                "geocode": {
+                    "UGC": [
+                        "IAZ089",
+                        "IAZ065",
+                        "ILZ025",
+                        "ILZ016",
+                        "ILZ018",
+                        "IAZ076",
+                        "IAZ042",
+                        "IAZ063",
+                        "ILZ002",
+                        "IAZ051",
+                        "ILZ001",
+                        "IAZ053",
+                        "MOZ010",
+                        "IAZ077",
+                        "IAZ066",
+                        "ILZ009",
+                        "IAZ041",
+                        "ILZ024",
+                        "MOZ009",
+                        "IAZ087",
+                        "IAZ064",
+                        "ILZ007",
+                        "IAZ088",
+                        "ILZ034",
+                        "ILZ017",
+                        "IAZ098",
+                        "IAZ040",
+                        "IAZ068",
+                        "ILZ026",
+                        "ILZ035",
+                        "IAZ078",
+                        "IAZ052",
+                        "IAZ067",
+                        "ILZ015",
+                        "IAZ099",
+                        "IAZ054"
+                    ],
+                    "SAME": [
+                        "019057",
+                        "019031",
+                        "017071",
+                        "017073",
+                        "017155",
+                        "019107",
+                        "019061",
+                        "019095",
+                        "017177",
+                        "019011",
+                        "017085",
+                        "019105",
+                        "029045",
+                        "019183",
+                        "019045",
+                        "017195",
+                        "019055",
+                        "017131",
+                        "029199",
+                        "019101",
+                        "019103",
+                        "017015",
+                        "019087",
+                        "017067",
+                        "017011",
+                        "019177",
+                        "019019",
+                        "019163",
+                        "017187",
+                        "017109",
+                        "019115",
+                        "019113",
+                        "019139",
+                        "017161",
+                        "019111",
+                        "019097"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/IAZ089",
+                    "https://api.weather.gov/zones/forecast/IAZ065",
+                    "https://api.weather.gov/zones/forecast/ILZ025",
+                    "https://api.weather.gov/zones/forecast/ILZ016",
+                    "https://api.weather.gov/zones/forecast/ILZ018",
+                    "https://api.weather.gov/zones/forecast/IAZ076",
+                    "https://api.weather.gov/zones/forecast/IAZ042",
+                    "https://api.weather.gov/zones/forecast/IAZ063",
+                    "https://api.weather.gov/zones/forecast/ILZ002",
+                    "https://api.weather.gov/zones/forecast/IAZ051",
+                    "https://api.weather.gov/zones/forecast/ILZ001",
+                    "https://api.weather.gov/zones/forecast/IAZ053",
+                    "https://api.weather.gov/zones/forecast/MOZ010",
+                    "https://api.weather.gov/zones/forecast/IAZ077",
+                    "https://api.weather.gov/zones/forecast/IAZ066",
+                    "https://api.weather.gov/zones/forecast/ILZ009",
+                    "https://api.weather.gov/zones/forecast/IAZ041",
+                    "https://api.weather.gov/zones/forecast/ILZ024",
+                    "https://api.weather.gov/zones/forecast/MOZ009",
+                    "https://api.weather.gov/zones/forecast/IAZ087",
+                    "https://api.weather.gov/zones/forecast/IAZ064",
+                    "https://api.weather.gov/zones/forecast/ILZ007",
+                    "https://api.weather.gov/zones/forecast/IAZ088",
+                    "https://api.weather.gov/zones/forecast/ILZ034",
+                    "https://api.weather.gov/zones/forecast/ILZ017",
+                    "https://api.weather.gov/zones/forecast/IAZ098",
+                    "https://api.weather.gov/zones/forecast/IAZ040",
+                    "https://api.weather.gov/zones/forecast/IAZ068",
+                    "https://api.weather.gov/zones/forecast/ILZ026",
+                    "https://api.weather.gov/zones/forecast/ILZ035",
+                    "https://api.weather.gov/zones/forecast/IAZ078",
+                    "https://api.weather.gov/zones/forecast/IAZ052",
+                    "https://api.weather.gov/zones/forecast/IAZ067",
+                    "https://api.weather.gov/zones/forecast/ILZ015",
+                    "https://api.weather.gov/zones/forecast/IAZ099",
+                    "https://api.weather.gov/zones/forecast/IAZ054"
+                ],
+                "references": [],
+                "sent": "2019-07-15T15:13:00-05:00",
+                "effective": "2019-07-15T15:13:00-05:00",
+                "onset": "2019-07-17T13:00:00-05:00",
+                "expires": "2019-07-15T23:15:00-05:00",
+                "ends": "2019-07-20T19:00:00-05:00",
+                "status": "Actual",
+                "messageType": "Alert",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Likely",
+                "urgency": "Future",
+                "event": "Excessive Heat Watch",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Quad Cities IA IL",
+                "headline": "Excessive Heat Watch issued July 15 at 3:13PM CDT until July 20 at 7:00PM CDT by NWS Quad Cities IA IL",
+                "description": "...An Extended Period of Heat and Humidity...\n\n.A hot and humid airmass will build across the Midwest by midweek.\nTemperatures in the 90s will combine with humidity to push heat\ninduces into the 100 to 110 range, especially from Thursday\nthrough Saturday. It is possible this heat will continue into the\nlate weekend, but confidence of this remains low at this time.\n\nThe National Weather Service in Quad Cities has issued an\nExcessive Heat Watch, which is in effect from Wednesday afternoon\nthrough Saturday evening.\n\n* Heat Index Values...Ranging from 100 to 110 due to temperatures\nin the mid to upper 90s...and dewpoints in the low to mid 70s.\n\n* Timing...Wednesday Afternoon through Saturday Evening.\n\n* Impacts...Heat-related illnesses may occur due to the prolonged\nperiod of heat and humidity.",
+                "instruction": "An Excessive Heat Watch means that a prolonged period of hot\ntemperatures and high humidity is possible.  This combination\ncould create a dangerous situation in which heat illnesses are\nlikely.  Monitor later forecasts for updated information.",
+                "response": "Monitor",
+                "parameters": {
+                    "NWSheadline": [
+                        "EXCESSIVE HEAT WATCH IN EFFECT FROM WEDNESDAY AFTERNOON THROUGH SATURDAY EVENING"
+                    ],
+                    "VTEC": [
+                        "/O.NEW.KDVN.EH.A.0001.190717T1800Z-190721T0000Z/"
+                    ],
+                    "PIL": [
+                        "DVNNPWDVN"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-07-20T19:00:00-05:00"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707505-3201012",
+            "type": "Feature",
+            "geometry": null,
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707505-3201012",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707505-3201012",
+                "areaDesc": "Scott; Union; Stoddard; Alexander; Graves; Mississippi; Ripley; McCracken; Massac; Carter; Johnson; Ballard; Pulaski; Butler; Wayne; Fulton; Bollinger; Cape Girardeau; New Madrid; Hickman; Carlisle",
+                "geocode": {
+                    "UGC": [
+                        "MOZ111",
+                        "ILZ088",
+                        "MOZ110",
+                        "ILZ092",
+                        "KYZ006",
+                        "MOZ112",
+                        "MOZ108",
+                        "KYZ005",
+                        "ILZ094",
+                        "MOZ107",
+                        "ILZ089",
+                        "KYZ004",
+                        "ILZ093",
+                        "MOZ109",
+                        "MOZ100",
+                        "KYZ001",
+                        "MOZ086",
+                        "MOZ087",
+                        "MOZ114",
+                        "KYZ002",
+                        "KYZ003"
+                    ],
+                    "SAME": [
+                        "029201",
+                        "017181",
+                        "029207",
+                        "017003",
+                        "021083",
+                        "029133",
+                        "029181",
+                        "021145",
+                        "017127",
+                        "029035",
+                        "017087",
+                        "021007",
+                        "017153",
+                        "029023",
+                        "029223",
+                        "021075",
+                        "029017",
+                        "029031",
+                        "029143",
+                        "021105",
+                        "021039"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/MOZ111",
+                    "https://api.weather.gov/zones/forecast/ILZ088",
+                    "https://api.weather.gov/zones/forecast/MOZ110",
+                    "https://api.weather.gov/zones/forecast/ILZ092",
+                    "https://api.weather.gov/zones/forecast/KYZ006",
+                    "https://api.weather.gov/zones/forecast/MOZ112",
+                    "https://api.weather.gov/zones/forecast/MOZ108",
+                    "https://api.weather.gov/zones/forecast/KYZ005",
+                    "https://api.weather.gov/zones/forecast/ILZ094",
+                    "https://api.weather.gov/zones/forecast/MOZ107",
+                    "https://api.weather.gov/zones/forecast/ILZ089",
+                    "https://api.weather.gov/zones/forecast/KYZ004",
+                    "https://api.weather.gov/zones/forecast/ILZ093",
+                    "https://api.weather.gov/zones/forecast/MOZ109",
+                    "https://api.weather.gov/zones/forecast/MOZ100",
+                    "https://api.weather.gov/zones/forecast/KYZ001",
+                    "https://api.weather.gov/zones/forecast/MOZ086",
+                    "https://api.weather.gov/zones/forecast/MOZ087",
+                    "https://api.weather.gov/zones/forecast/MOZ114",
+                    "https://api.weather.gov/zones/forecast/KYZ002",
+                    "https://api.weather.gov/zones/forecast/KYZ003"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3703539-3198626",
+                        "identifier": "NWS-IDP-PROD-3703539-3198626",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-13T15:24:00-05:00"
+                    },
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3704866-3199481",
+                        "identifier": "NWS-IDP-PROD-3704866-3199481",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T03:33:00-05:00"
+                    },
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706809-3200644",
+                        "identifier": "NWS-IDP-PROD-3706809-3200644",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-15T03:40:00-05:00"
+                    },
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3705562-3199937",
+                        "identifier": "NWS-IDP-PROD-3705562-3199937",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T14:47:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T15:10:00-05:00",
+                "effective": "2019-07-15T15:10:00-05:00",
+                "onset": "2019-07-15T15:10:00-05:00",
+                "expires": "2019-07-15T23:15:00-05:00",
+                "ends": "2019-07-16T19:00:00-05:00",
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Possible",
+                "urgency": "Future",
+                "event": "Flash Flood Watch",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Paducah KY",
+                "headline": "Flash Flood Watch issued July 15 at 3:10PM CDT until July 16 at 7:00PM CDT by NWS Paducah KY",
+                "description": "...Heavy Rainfall from the Remnants of Barry Will Bring the\nPotential for Flash Flooding through Tuesday...\n\nThe Flash Flood Watch continues for\n\n* Portions of southern Illinois, western Kentucky, and southeast\nMissouri, including the following areas, in southern Illinois,\nAlexander, Johnson, Massac, Pulaski, and Union. In western\nKentucky, Ballard, Carlisle, Fulton, Graves, Hickman, and\nMcCracken. In southeast Missouri, Bollinger, Butler, Cape\nGirardeau, Carter, Mississippi, New Madrid, Ripley, Scott,\nStoddard, and Wayne MO.\n\n* Through Tuesday evening\n\n* Heavy rainfall from the remnants of Tropical Storm Barry will\ncontinue to affect the region. Rainfall of 1 to 3 inches has\nalready fallen in the watch area and an additional 1 to 2 inches\nis forecast. Rainfall totals are forecast to range mostly from\ntwo to four inches across the watch area, with isolated higher\namounts possible.\n\n* Flash flooding could lead to life threatening situations for\nmotorists and individuals exposed to low lying areas or\nrapidly rising creeks and rivers.",
+                "instruction": "A Flash Flood Watch means that conditions may develop that lead\nto flash flooding. Flash flooding is a very dangerous situation.\n\nYou should monitor later forecasts and be prepared to take action\nshould Flash Flood Warnings be issued.",
+                "response": "Monitor",
+                "parameters": {
+                    "NWSheadline": [
+                        "FLASH FLOOD WATCH REMAINS IN EFFECT THROUGH TUESDAY EVENING"
+                    ],
+                    "VTEC": [
+                        "/O.CON.KPAH.FF.A.0008.000000T0000Z-190717T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "PAHFFAPAH"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-07-16T19:00:00-05:00"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707230-3200914",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -91.989999999999995,
+                            38.490000000000002
+                        ],
+                        [
+                            -92.019999999999996,
+                            38.490000000000002
+                        ],
+                        [
+                            -92.019999999999996,
+                            38.469999999999999
+                        ],
+                        [
+                            -92.039999999999992,
+                            38.530000000000001
+                        ],
+                        [
+                            -92.019999999999996,
+                            38.530000000000001
+                        ],
+                        [
+                            -91.989999999999995,
+                            38.490000000000002
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707230-3200914",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707230-3200914",
+                "areaDesc": "Osage, MO; Cole, MO",
+                "geocode": {
+                    "UGC": [
+                        "MOC151",
+                        "MOC051"
+                    ],
+                    "SAME": [
+                        "029151",
+                        "029051"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC151",
+                    "https://api.weather.gov/zones/county/MOC051"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3705173-3199684",
+                        "identifier": "NWS-IDP-PROD-3705173-3199684",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T09:47:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T11:55:00-05:00",
+                "effective": "2019-07-15T11:55:00-05:00",
+                "onset": "2019-07-15T11:55:00-05:00",
+                "expires": "2019-07-16T11:55:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Flood Warning issued July 15 at 11:55AM CDT by NWS St Louis MO",
+                "description": "...The flood warning continues for the following river in Missouri..\n\nOsage River near Mari-Osa Campground\n\nRiver forecasts are based on observed precipitation and forecast\nprecipitation for the next 24 hours.\n\nThe Flood Warning continues for\nthe Osage River near Mari-Osa Campground\n* until further notice.\n* At  7:30 AM Monday the stage was 21.5 feet.\n* Flood stage is 19.0 feet.\n* Minor flooding is forecast.\n* The river is forecast to continue falling to a stage of 21.1 feet\nby tomorrow morning.",
+                "instruction": "Rainfall heavier than forecast could cause river levels to rise even\nhigher than predicted.  The National Weather Service will monitor\nthis developing situation and issue follow up statements as\nconditions or forecasts change.\n\nSafety message:  Never drive cars, trucks, or sport utility vehicles\nthrough flooded areas.  The water may be too deep to allow for safe\npassage.\n\nThis product, along with additional weather and stream information,\nis available at http://water.weather.gov/ahps2/index.php?wfo=lsx.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KLSX.FL.W.0140.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "LSXFLSLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707206-3200895",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -89.590000000000003,
+                            37.689999999999998
+                        ],
+                        [
+                            -89.350000000000009,
+                            37.689999999999998
+                        ],
+                        [
+                            -89.340000000000003,
+                            37.439999999999998
+                        ],
+                        [
+                            -89.409999999999997,
+                            37.25
+                        ],
+                        [
+                            -89.590000000000003,
+                            37.229999900000003
+                        ],
+                        [
+                            -89.63000000000001,
+                            37.32
+                        ],
+                        [
+                            -89.590000000000003,
+                            37.689999999999998
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707206-3200895",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707206-3200895",
+                "areaDesc": "Scott, MO; Union, IL; Alexander, IL; Jackson, IL; Cape Girardeau, MO; Perry, MO",
+                "geocode": {
+                    "UGC": [
+                        "MOC201",
+                        "ILC181",
+                        "ILC003",
+                        "ILC077",
+                        "MOC031",
+                        "MOC157"
+                    ],
+                    "SAME": [
+                        "029201",
+                        "017181",
+                        "017003",
+                        "017077",
+                        "029031",
+                        "029157"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC201",
+                    "https://api.weather.gov/zones/county/ILC181",
+                    "https://api.weather.gov/zones/county/ILC003",
+                    "https://api.weather.gov/zones/county/ILC077",
+                    "https://api.weather.gov/zones/county/MOC031",
+                    "https://api.weather.gov/zones/county/MOC157"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706230-3200315",
+                        "identifier": "NWS-IDP-PROD-3706230-3200315",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T19:26:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T11:25:00-05:00",
+                "effective": "2019-07-15T11:25:00-05:00",
+                "onset": "2019-07-15T11:25:00-05:00",
+                "expires": "2019-07-16T15:24:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Paducah KY",
+                "headline": "Flood Warning issued July 15 at 11:25AM CDT by NWS Paducah KY",
+                "description": "...The flood warning continues for the following rivers in\nIllinois...Missouri...\n\nMississippi River at Cape Girardeau and Thebes\n\n.Moderate flooding continues on the Mississippi River at Cape Girardeau\nwhile minor flooding continues at Thebes. At both locations, water levels\ncontinue to fall slowly. Cape Girardeau is forecast to fall into minor\nflooding late Tuesday morning. Flooding will continue until further notice\nat both locations.\n\nThe Flood Warning continues for\nthe Mississippi River at Cape Girardeau\n* until further notice.\n* At 11:00 AM Monday the stage was 37.2 feet.\n* Flood Stage is 32.0 feet.\n* Moderate flooding is occurring and Moderate flooding is forecast.\n* Forecast...The River will continue to fall to a stage of 37.0 feet\nby Tuesday morning.\n* Impact...At 38.0 Feet...The flood gate at Broadway closes.",
+                "instruction": "SAFETY MESSAGE...\n\nNever drive cars...trucks or sport utility vehicles through flooded\nareas. The water may be too deep to allow safe passage. Never allow\nchildren to play in or near flood waters. Stay tuned to NOAA Weather\nRadio or your local media for further statements and possible updated\nforecasts.\n\nAdditional information is available at\nhttp://www.crh.noaa.gov/ahps2/index.php?wfo=pah /lower case/",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KPAH.FL.W.0054.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "PAHFLSPAH"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707205-3200894",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -89.590000000000003,
+                            37.229999900000003
+                        ],
+                        [
+                            -89.409999999999997,
+                            37.25
+                        ],
+                        [
+                            -89.289999999999992,
+                            37.130000000000003
+                        ],
+                        [
+                            -89.459999899999985,
+                            37.090000000000003
+                        ],
+                        [
+                            -89.590000000000003,
+                            37.229999900000003
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707205-3200894",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707205-3200894",
+                "areaDesc": "Scott, MO; Alexander, IL",
+                "geocode": {
+                    "UGC": [
+                        "MOC201",
+                        "ILC003"
+                    ],
+                    "SAME": [
+                        "029201",
+                        "017003"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC201",
+                    "https://api.weather.gov/zones/county/ILC003"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706231-3200316",
+                        "identifier": "NWS-IDP-PROD-3706231-3200316",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T19:26:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T11:25:00-05:00",
+                "effective": "2019-07-15T11:25:00-05:00",
+                "onset": "2019-07-15T11:25:00-05:00",
+                "expires": "2019-07-16T15:24:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Paducah KY",
+                "headline": "Flood Warning issued July 15 at 11:25AM CDT by NWS Paducah KY",
+                "description": "...The flood warning continues for the following rivers in\nIllinois...Missouri...\n\nMississippi River at Cape Girardeau and Thebes\n\n.Moderate flooding continues on the Mississippi River at Cape Girardeau\nwhile minor flooding continues at Thebes. At both locations, water levels\ncontinue to fall slowly. Cape Girardeau is forecast to fall into minor\nflooding late Tuesday morning. Flooding will continue until further notice\nat both locations.\n\nThe Flood Warning continues for\nthe Mississippi River at Thebes\n* until further notice.\n* At 11:00 AM Monday the stage was 36.0 feet.\n* Flood Stage is 33.0 feet.\n* Minor flooding is occurring and Minor flooding is forecast.\n* Forecast...The River will continue to fall to a stage of 35.5 feet\nby Tuesday morning.\n* Impact...At 34.0 Feet...The town of Thebes begins to flood.",
+                "instruction": "SAFETY MESSAGE...\n\nNever drive cars...trucks or sport utility vehicles through flooded\nareas. The water may be too deep to allow safe passage. Never allow\nchildren to play in or near flood waters. Stay tuned to NOAA Weather\nRadio or your local media for further statements and possible updated\nforecasts.\n\nAdditional information is available at\nhttp://www.crh.noaa.gov/ahps2/index.php?wfo=pah /lower case/",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KPAH.FL.W.0055.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "PAHFLSPAH"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707182-3200877",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -94.310000000000002,
+                            39.25
+                        ],
+                        [
+                            -94.170000000000002,
+                            39.219999999999999
+                        ],
+                        [
+                            -94.150000000000006,
+                            39.159999899999995
+                        ],
+                        [
+                            -94.200000000000003,
+                            39.179999999999993
+                        ],
+                        [
+                            -94.319999899999999,
+                            39.179999999999993
+                        ],
+                        [
+                            -94.310000000000002,
+                            39.25
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707182-3200877",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707182-3200877",
+                "areaDesc": "Jackson, MO; Ray, MO; Clay, MO",
+                "geocode": {
+                    "UGC": [
+                        "MOC095",
+                        "MOC177",
+                        "MOC047"
+                    ],
+                    "SAME": [
+                        "029095",
+                        "029177",
+                        "029047"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC095",
+                    "https://api.weather.gov/zones/county/MOC177",
+                    "https://api.weather.gov/zones/county/MOC047"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3705135-3199660",
+                        "identifier": "NWS-IDP-PROD-3705135-3199660",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T09:38:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T11:01:00-05:00",
+                "effective": "2019-07-15T11:01:00-05:00",
+                "onset": "2019-07-15T11:01:00-05:00",
+                "expires": "2019-07-16T11:00:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Kansas City/Pleasant HIll MO",
+                "headline": "Flood Warning issued July 15 at 11:01AM CDT by NWS Kansas City/Pleasant HIll MO",
+                "description": "...The Flood Warning continues for the following rivers in Kansas...\nMissouri...\n\nMissouri River at St Joseph affecting Doniphan...Andrew and\nBuchanan Counties.\n\nMissouri River at Sibley affecting Clay...Jackson and Ray Counties.\n\nMissouri River at Napoleon affecting Jackson...Lafayette and Ray\nCounties.\n\nMissouri River at Waverly affecting Carroll...Lafayette and Saline\nCounties.\n\nMissouri River At Miami affecting Carroll...Chariton and Saline\nCounties.\n\nMissouri River at Glasgow affecting Chariton...Howard and Saline\nCounties.\n\nMissouri River at Boonville affecting Cooper and Howard Counties.\n\nThe Flood Warning continues for\nThe Missouri River at Sibley.\n* until further notice.\n* At  7:23 AM Monday the stage was 23.7 feet.\n* Flood stage is 22.0 feet.\n* Minor flooding is occurring and Minor flooding is forecast.\n* Forecast...The river will continue rising to near 24.2 feet by\nearly Friday morning then begin falling.\n* At 22.0 feet...Low-lying rural areas along the river and outside of\nlevee protection flood.",
+                "instruction": "Do not drive through flowing water. Nearly half of all flood\nfatalities are vehicle related. As little as 6 inches of water may\ncause you to lose control of your vehicle. Two feet of water will\ncarry most vehicles away.This product along with additional weather\nand stream information is available at www.weather.gov/kc/.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KEAX.FL.W.0121.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "EAXFLSEAX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707180-3200875",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -95.010000000000005,
+                            39.909999900000003
+                        ],
+                        [
+                            -94.890000000000001,
+                            39.900000000000006
+                        ],
+                        [
+                            -94.829999999999998,
+                            39.750000000000007
+                        ],
+                        [
+                            -94.879999999999995,
+                            39.640000000000008
+                        ],
+                        [
+                            -95.049999999999997,
+                            39.70000000000001
+                        ],
+                        [
+                            -95.010000000000005,
+                            39.909999900000003
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707180-3200875",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707180-3200875",
+                "areaDesc": "Doniphan, KS; Buchanan, MO; Andrew, MO",
+                "geocode": {
+                    "UGC": [
+                        "KSC043",
+                        "MOC021",
+                        "MOC003"
+                    ],
+                    "SAME": [
+                        "020043",
+                        "029021",
+                        "029003"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/KSC043",
+                    "https://api.weather.gov/zones/county/MOC021",
+                    "https://api.weather.gov/zones/county/MOC003"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706426-3200445",
+                        "identifier": "NWS-IDP-PROD-3706426-3200445",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T20:55:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T11:01:00-05:00",
+                "effective": "2019-07-15T11:01:00-05:00",
+                "onset": "2019-07-15T11:01:00-05:00",
+                "expires": "2019-07-16T11:00:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Kansas City/Pleasant HIll MO",
+                "headline": "Flood Warning issued July 15 at 11:01AM CDT by NWS Kansas City/Pleasant HIll MO",
+                "description": "...The Flood Warning continues for the following rivers in Kansas...\nMissouri...\n\nMissouri River at St Joseph affecting Doniphan...Andrew and\nBuchanan Counties.\n\nMissouri River at Sibley affecting Clay...Jackson and Ray Counties.\n\nMissouri River at Napoleon affecting Jackson...Lafayette and Ray\nCounties.\n\nMissouri River at Waverly affecting Carroll...Lafayette and Saline\nCounties.\n\nMissouri River At Miami affecting Carroll...Chariton and Saline\nCounties.\n\nMissouri River at Glasgow affecting Chariton...Howard and Saline\nCounties.\n\nMissouri River at Boonville affecting Cooper and Howard Counties.\n\nThe Flood Warning continues for\nThe Missouri River at St Joseph.\n* until further notice.\n* At 10:30 AM Monday the stage was 19.5 feet.\n* Flood stage is 17.0 feet.\n* Minor flooding is occurring and Minor flooding is forecast.\n* Forecast...The river will continue rising to near 20.0 feet by\nThursday morning then begin falling.\n* At 19.0 feet...Backwater from the Missouri River floods property\nalong the Nodaway river at Nodaway, Missouri.\n* At 17.0 feet...Lowland flooding upstream and downstream from St.\nJoseph occurs.",
+                "instruction": "Do not drive through flowing water. Nearly half of all flood\nfatalities are vehicle related. As little as 6 inches of water may\ncause you to lose control of your vehicle. Two feet of water will\ncarry most vehicles away.This product along with additional weather\nand stream information is available at www.weather.gov/kc/.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KEAX.FL.W.0048.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "EAXFLSEAX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707179-3200874",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -93.859999999999999,
+                            39.25
+                        ],
+                        [
+                            -93.310000000000002,
+                            39.329999999999998
+                        ],
+                        [
+                            -93.269999999999996,
+                            39.280000000000001
+                        ],
+                        [
+                            -93.299999999999997,
+                            39.219999999999999
+                        ],
+                        [
+                            -93.840000000000003,
+                            39.18
+                        ],
+                        [
+                            -93.859999999999999,
+                            39.25
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707179-3200874",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707179-3200874",
+                "areaDesc": "Carroll, MO; Saline, MO; Lafayette, MO",
+                "geocode": {
+                    "UGC": [
+                        "MOC033",
+                        "MOC195",
+                        "MOC107"
+                    ],
+                    "SAME": [
+                        "029033",
+                        "029195",
+                        "029107"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC033",
+                    "https://api.weather.gov/zones/county/MOC195",
+                    "https://api.weather.gov/zones/county/MOC107"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3705136-3199661",
+                        "identifier": "NWS-IDP-PROD-3705136-3199661",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T09:38:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T11:01:00-05:00",
+                "effective": "2019-07-15T11:01:00-05:00",
+                "onset": "2019-07-15T11:01:00-05:00",
+                "expires": "2019-07-16T11:00:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Kansas City/Pleasant HIll MO",
+                "headline": "Flood Warning issued July 15 at 11:01AM CDT by NWS Kansas City/Pleasant HIll MO",
+                "description": "...The Flood Warning continues for the following rivers in Kansas...\nMissouri...\n\nMissouri River at St Joseph affecting Doniphan...Andrew and\nBuchanan Counties.\n\nMissouri River at Sibley affecting Clay...Jackson and Ray Counties.\n\nMissouri River at Napoleon affecting Jackson...Lafayette and Ray\nCounties.\n\nMissouri River at Waverly affecting Carroll...Lafayette and Saline\nCounties.\n\nMissouri River At Miami affecting Carroll...Chariton and Saline\nCounties.\n\nMissouri River at Glasgow affecting Chariton...Howard and Saline\nCounties.\n\nMissouri River at Boonville affecting Cooper and Howard Counties.\n\nThe Flood Warning continues for\nThe Missouri River at Waverly.\n* until further notice.\n* At 10:30 AM Monday the stage was 24.5 feet.\n* Flood stage is 20.0 feet.\n* Minor flooding is occurring and Minor flooding is forecast.\n* Forecast...The river will continue rising to near 24.9 feet by\nFriday morning.\n* At 23.5 feet...Rural areas along the river which are not protected\nby levees flood.",
+                "instruction": "Do not drive through flowing water. Nearly half of all flood\nfatalities are vehicle related. As little as 6 inches of water may\ncause you to lose control of your vehicle. Two feet of water will\ncarry most vehicles away.This product along with additional weather\nand stream information is available at www.weather.gov/kc/.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KEAX.FL.W.0054.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "EAXFLSEAX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707176-3200871",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -93.140000000000001,
+                            39.350000000000001
+                        ],
+                        [
+                            -93.049999999999997,
+                            39.390000000000001
+                        ],
+                        [
+                            -92.789999999999992,
+                            39.240000000000002
+                        ],
+                        [
+                            -92.86999999999999,
+                            39.060000000000002
+                        ],
+                        [
+                            -92.959999899999985,
+                            39.07
+                        ],
+                        [
+                            -93.140000000000001,
+                            39.350000000000001
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707176-3200871",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707176-3200871",
+                "areaDesc": "Howard, MO; Saline, MO; Chariton, MO",
+                "geocode": {
+                    "UGC": [
+                        "MOC089",
+                        "MOC195",
+                        "MOC041"
+                    ],
+                    "SAME": [
+                        "029089",
+                        "029195",
+                        "029041"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC089",
+                    "https://api.weather.gov/zones/county/MOC195",
+                    "https://api.weather.gov/zones/county/MOC041"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3705140-3199665",
+                        "identifier": "NWS-IDP-PROD-3705140-3199665",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T09:38:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T11:01:00-05:00",
+                "effective": "2019-07-15T11:01:00-05:00",
+                "onset": "2019-07-15T11:01:00-05:00",
+                "expires": "2019-07-16T11:00:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Kansas City/Pleasant HIll MO",
+                "headline": "Flood Warning issued July 15 at 11:01AM CDT by NWS Kansas City/Pleasant HIll MO",
+                "description": "...The Flood Warning continues for the following rivers in Kansas...\nMissouri...\n\nMissouri River at St Joseph affecting Doniphan...Andrew and\nBuchanan Counties.\n\nMissouri River at Sibley affecting Clay...Jackson and Ray Counties.\n\nMissouri River at Napoleon affecting Jackson...Lafayette and Ray\nCounties.\n\nMissouri River at Waverly affecting Carroll...Lafayette and Saline\nCounties.\n\nMissouri River At Miami affecting Carroll...Chariton and Saline\nCounties.\n\nMissouri River at Glasgow affecting Chariton...Howard and Saline\nCounties.\n\nMissouri River at Boonville affecting Cooper and Howard Counties.\n\nThe Flood Warning continues for\nThe Missouri River at Glasgow.\n* until further notice.\n* At 10:30 AM Monday the stage was 26.3 feet.\n* Flood stage is 25.0 feet.\n* Minor flooding is occurring and Minor flooding is forecast.\n* Forecast...The river will continue rising to near 26.5 feet by\nearly Saturday morning.\n* At 25.0 feet...Farmland along the river floods.",
+                "instruction": "Do not drive through flowing water. Nearly half of all flood\nfatalities are vehicle related. As little as 6 inches of water may\ncause you to lose control of your vehicle. Two feet of water will\ncarry most vehicles away.This product along with additional weather\nand stream information is available at www.weather.gov/kc/.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KEAX.FL.W.0155.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "EAXFLSEAX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707181-3200876",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -94.150000000000006,
+                            39.159999900000003
+                        ],
+                        [
+                            -94.170000000000002,
+                            39.220000000000006
+                        ],
+                        [
+                            -93.859999999999999,
+                            39.250000000000007
+                        ],
+                        [
+                            -93.840000000000003,
+                            39.180000000000007
+                        ],
+                        [
+                            -94.049999999999997,
+                            39.110000000000007
+                        ],
+                        [
+                            -94.150000000000006,
+                            39.159999900000003
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707181-3200876",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707181-3200876",
+                "areaDesc": "Jackson, MO; Ray, MO; Lafayette, MO",
+                "geocode": {
+                    "UGC": [
+                        "MOC095",
+                        "MOC177",
+                        "MOC107"
+                    ],
+                    "SAME": [
+                        "029095",
+                        "029177",
+                        "029107"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC095",
+                    "https://api.weather.gov/zones/county/MOC177",
+                    "https://api.weather.gov/zones/county/MOC107"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3705139-3199664",
+                        "identifier": "NWS-IDP-PROD-3705139-3199664",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T09:38:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T11:01:00-05:00",
+                "effective": "2019-07-15T11:01:00-05:00",
+                "onset": "2019-07-15T11:01:00-05:00",
+                "expires": "2019-07-16T11:00:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Kansas City/Pleasant HIll MO",
+                "headline": "Flood Warning issued July 15 at 11:01AM CDT by NWS Kansas City/Pleasant HIll MO",
+                "description": "...The Flood Warning continues for the following rivers in Kansas...\nMissouri...\n\nMissouri River at St Joseph affecting Doniphan...Andrew and\nBuchanan Counties.\n\nMissouri River at Sibley affecting Clay...Jackson and Ray Counties.\n\nMissouri River at Napoleon affecting Jackson...Lafayette and Ray\nCounties.\n\nMissouri River at Waverly affecting Carroll...Lafayette and Saline\nCounties.\n\nMissouri River At Miami affecting Carroll...Chariton and Saline\nCounties.\n\nMissouri River at Glasgow affecting Chariton...Howard and Saline\nCounties.\n\nMissouri River at Boonville affecting Cooper and Howard Counties.\n\nThe Flood Warning continues for\nThe Missouri River at Napoleon.\n* until further notice.\n* At 10:00 AM Monday the stage was 21.3 feet.\n* Flood stage is 17.0 feet.\n* Minor flooding is occurring and Minor flooding is forecast.\n* Forecast...The river will continue rising to near 21.8 feet by\nearly Friday afternoon then begin falling.\n* At 17.0 feet...Low-lying areas unprotected by levees begin to\nflood.",
+                "instruction": "Do not drive through flowing water. Nearly half of all flood\nfatalities are vehicle related. As little as 6 inches of water may\ncause you to lose control of your vehicle. Two feet of water will\ncarry most vehicles away.This product along with additional weather\nand stream information is available at www.weather.gov/kc/.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KEAX.FL.W.0053.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "EAXFLSEAX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707177-3200872",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -93.310000000000002,
+                            39.329999999999998
+                        ],
+                        [
+                            -93.189999999999998,
+                            39.43
+                        ],
+                        [
+                            -93.069999899999999,
+                            39.380000000000003
+                        ],
+                        [
+                            -93.269999999999996,
+                            39.280000000000001
+                        ],
+                        [
+                            -93.310000000000002,
+                            39.329999999999998
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707177-3200872",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707177-3200872",
+                "areaDesc": "Carroll, MO; Saline, MO; Chariton, MO",
+                "geocode": {
+                    "UGC": [
+                        "MOC033",
+                        "MOC195",
+                        "MOC041"
+                    ],
+                    "SAME": [
+                        "029033",
+                        "029195",
+                        "029041"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC033",
+                    "https://api.weather.gov/zones/county/MOC195",
+                    "https://api.weather.gov/zones/county/MOC041"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3705134-3199659",
+                        "identifier": "NWS-IDP-PROD-3705134-3199659",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T09:38:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T11:01:00-05:00",
+                "effective": "2019-07-15T11:01:00-05:00",
+                "onset": "2019-07-15T11:01:00-05:00",
+                "expires": "2019-07-16T11:00:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Kansas City/Pleasant HIll MO",
+                "headline": "Flood Warning issued July 15 at 11:01AM CDT by NWS Kansas City/Pleasant HIll MO",
+                "description": "...The Flood Warning continues for the following rivers in Kansas...\nMissouri...\n\nMissouri River at St Joseph affecting Doniphan...Andrew and\nBuchanan Counties.\n\nMissouri River at Sibley affecting Clay...Jackson and Ray Counties.\n\nMissouri River at Napoleon affecting Jackson...Lafayette and Ray\nCounties.\n\nMissouri River at Waverly affecting Carroll...Lafayette and Saline\nCounties.\n\nMissouri River At Miami affecting Carroll...Chariton and Saline\nCounties.\n\nMissouri River at Glasgow affecting Chariton...Howard and Saline\nCounties.\n\nMissouri River at Boonville affecting Cooper and Howard Counties.\n\nThe Flood Warning continues for\nThe Missouri River At Miami.\n* until further notice.\n* At  8:08 AM Monday the stage was 22.9 feet.\n* Flood stage is 18.0 feet.\n* Minor flooding is occurring and Minor flooding is forecast.\n* Forecast...The river will continue rising to near 23.3 feet by\nSaturday morning.\n* At 18.0 feet...Low-lying rural areas outside of levees begin to\nflood.",
+                "instruction": "Do not drive through flowing water. Nearly half of all flood\nfatalities are vehicle related. As little as 6 inches of water may\ncause you to lose control of your vehicle. Two feet of water will\ncarry most vehicles away.This product along with additional weather\nand stream information is available at www.weather.gov/kc/.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KEAX.FL.W.0055.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "EAXFLSEAX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707178-3200873",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -92.969999999999999,
+                            39.079999999999998
+                        ],
+                        [
+                            -92.549999999999997,
+                            39.019999999999996
+                        ],
+                        [
+                            -92.590000000000003,
+                            38.939999999999998
+                        ],
+                        [
+                            -92.859999999999999,
+                            38.960000000000001
+                        ],
+                        [
+                            -92.980000000000004,
+                            39.030000000000001
+                        ],
+                        [
+                            -92.969999999999999,
+                            39.079999999999998
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707178-3200873",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707178-3200873",
+                "areaDesc": "Howard, MO; Cooper, MO",
+                "geocode": {
+                    "UGC": [
+                        "MOC089",
+                        "MOC053"
+                    ],
+                    "SAME": [
+                        "029089",
+                        "029053"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC089",
+                    "https://api.weather.gov/zones/county/MOC053"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3705137-3199662",
+                        "identifier": "NWS-IDP-PROD-3705137-3199662",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T09:38:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T11:01:00-05:00",
+                "effective": "2019-07-15T11:01:00-05:00",
+                "onset": "2019-07-15T11:01:00-05:00",
+                "expires": "2019-07-16T11:00:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Kansas City/Pleasant HIll MO",
+                "headline": "Flood Warning issued July 15 at 11:01AM CDT by NWS Kansas City/Pleasant HIll MO",
+                "description": "...The Flood Warning continues for the following rivers in Kansas...\nMissouri...\n\nMissouri River at St Joseph affecting Doniphan...Andrew and\nBuchanan Counties.\n\nMissouri River at Sibley affecting Clay...Jackson and Ray Counties.\n\nMissouri River at Napoleon affecting Jackson...Lafayette and Ray\nCounties.\n\nMissouri River at Waverly affecting Carroll...Lafayette and Saline\nCounties.\n\nMissouri River At Miami affecting Carroll...Chariton and Saline\nCounties.\n\nMissouri River at Glasgow affecting Chariton...Howard and Saline\nCounties.\n\nMissouri River at Boonville affecting Cooper and Howard Counties.\n\nThe Flood Warning continues for\nThe Missouri River at Boonville.\n* until further notice.\n* At 10:30 AM Monday the stage was 22.5 feet.\n* Flood stage is 21.0 feet.\n* Minor flooding is occurring and Minor flooding is forecast.\n* Forecast...The river will continue rising to near 22.6 feet by\nearly Saturday afternoon.\n* At 21.0 feet...Low-lying rural areas along the river flood.",
+                "instruction": "Do not drive through flowing water. Nearly half of all flood\nfatalities are vehicle related. As little as 6 inches of water may\ncause you to lose control of your vehicle. Two feet of water will\ncarry most vehicles away.This product along with additional weather\nand stream information is available at www.weather.gov/kc/.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KEAX.FL.W.0156.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "EAXFLSEAX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707163-3200855",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -90.170000000000002,
+                            38.810000000000002
+                        ],
+                        [
+                            -90.040000000000006,
+                            38.830000000000005
+                        ],
+                        [
+                            -90.300000000000011,
+                            38.260000000000005
+                        ],
+                        [
+                            -90.430000000000007,
+                            38.260000000000005
+                        ],
+                        [
+                            -90.240000000000009,
+                            38.729999900000003
+                        ],
+                        [
+                            -90.170000000000002,
+                            38.810000000000002
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707163-3200855",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707163-3200855",
+                "areaDesc": "St. Clair, IL; St. Louis City, MO; St. Louis, MO",
+                "geocode": {
+                    "UGC": [
+                        "ILC163",
+                        "MOC510",
+                        "MOC189"
+                    ],
+                    "SAME": [
+                        "017163",
+                        "029510",
+                        "029189"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/ILC163",
+                    "https://api.weather.gov/zones/county/MOC510",
+                    "https://api.weather.gov/zones/county/MOC189"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706490-3200483",
+                        "identifier": "NWS-IDP-PROD-3706490-3200483",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T21:18:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T10:55:00-05:00",
+                "effective": "2019-07-15T10:55:00-05:00",
+                "onset": "2019-07-15T10:54:00-05:00",
+                "expires": "2019-07-16T10:54:00-05:00",
+                "ends": "2019-07-20T07:00:00-05:00",
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Flood Warning issued July 15 at 10:54AM CDT until July 20 at 7:00AM CDT by NWS St Louis MO",
+                "description": "...The flood warning continues for the Mississippi River along the\nIllinois...Missouri border...\n\n\nat Hannibal\nat Louisiana\nat Clarksville\nat Winfield\nat Grafton\nat Mel Price Lock and Dam\nat St. Louis\nat Chester\n\nRiver forecasts are based on observed precipitation and forecast\nprecipitation for the next 24 hours.\n\nThe Flood Warning continues for\nthe Mississippi River at St. Louis\n* until Saturday morning.\n* At 10:30 AM Monday the stage was 31.5 feet.\n* Flood stage is 30.0 feet.\n* Minor flooding is forecast.\n* The river is forecast to continue falling to below flood stage late\nFriday morning.",
+                "instruction": "Rainfall heavier than forecast could cause river levels to rise even\nhigher than predicted.  The National Weather Service will monitor\nthis developing situation and issue follow up statements as\nconditions or forecasts change.\n\nSafety message:  Never drive cars, trucks, or sport utility vehicles\nthrough flooded areas.  The water may be too deep to allow for safe\npassage.\n\nThis product, along with additional weather and stream information,\nis available at http://water.weather.gov/ahps2/index.php?wfo=lsx.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.EXT.KLSX.FL.W.0078.000000T0000Z-190720T1200Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "LSXFLSLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-07-20T07:00:00-05:00"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707165-3200857",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -91.109999999999999,
+                            39.450000000000003
+                        ],
+                        [
+                            -90.969999999999999,
+                            39.520000000000003
+                        ],
+                        [
+                            -90.890000000000001,
+                            39.450000000000003
+                        ],
+                        [
+                            -90.969999999999999,
+                            39.390000000000001
+                        ],
+                        [
+                            -91.109999999999999,
+                            39.450000000000003
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707165-3200857",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707165-3200857",
+                "areaDesc": "Pike, MO; Pike, IL",
+                "geocode": {
+                    "UGC": [
+                        "MOC163",
+                        "ILC149"
+                    ],
+                    "SAME": [
+                        "029163",
+                        "017149"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC163",
+                    "https://api.weather.gov/zones/county/ILC149"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706487-3200480",
+                        "identifier": "NWS-IDP-PROD-3706487-3200480",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T21:18:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T10:55:00-05:00",
+                "effective": "2019-07-15T10:55:00-05:00",
+                "onset": "2019-07-15T10:54:00-05:00",
+                "expires": "2019-07-16T10:54:00-05:00",
+                "ends": "2019-07-20T07:00:00-05:00",
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Flood Warning issued July 15 at 10:54AM CDT until July 20 at 7:00AM CDT by NWS St Louis MO",
+                "description": "...The flood warning continues for the Mississippi River along the\nIllinois...Missouri border...\n\n\nat Hannibal\nat Louisiana\nat Clarksville\nat Winfield\nat Grafton\nat Mel Price Lock and Dam\nat St. Louis\nat Chester\n\nRiver forecasts are based on observed precipitation and forecast\nprecipitation for the next 24 hours.\n\nThe Flood Warning continues for\nthe Mississippi River at Louisiana\n* until Saturday morning.\n* At 10:30 AM Monday the stage was 16.5 feet.\n* Flood stage is 15.0 feet.\n* Minor flooding is forecast.\n* The river is forecast to fall below flood stage late Friday morning.",
+                "instruction": "Rainfall heavier than forecast could cause river levels to rise even\nhigher than predicted.  The National Weather Service will monitor\nthis developing situation and issue follow up statements as\nconditions or forecasts change.\n\nSafety message:  Never drive cars, trucks, or sport utility vehicles\nthrough flooded areas.  The water may be too deep to allow for safe\npassage.\n\nThis product, along with additional weather and stream information,\nis available at http://water.weather.gov/ahps2/index.php?wfo=lsx.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.EXT.KLSX.FL.W.0060.000000T0000Z-190720T1200Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "LSXFLSLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-07-20T07:00:00-05:00"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707167-3200859",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -90.969999999999999,
+                            39.390000000000001
+                        ],
+                        [
+                            -90.890000000000001,
+                            39.450000000000003
+                        ],
+                        [
+                            -90.769999999999996,
+                            39.380000000000003
+                        ],
+                        [
+                            -90.7099999,
+                            39.229999900000003
+                        ],
+                        [
+                            -90.810000000000002,
+                            39.220000000000006
+                        ],
+                        [
+                            -90.969999999999999,
+                            39.390000000000001
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707167-3200859",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707167-3200859",
+                "areaDesc": "Calhoun, IL; Pike, MO",
+                "geocode": {
+                    "UGC": [
+                        "ILC013",
+                        "MOC163"
+                    ],
+                    "SAME": [
+                        "017013",
+                        "029163"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/ILC013",
+                    "https://api.weather.gov/zones/county/MOC163"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706485-3200478",
+                        "identifier": "NWS-IDP-PROD-3706485-3200478",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T21:18:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T10:55:00-05:00",
+                "effective": "2019-07-15T10:55:00-05:00",
+                "onset": "2019-07-15T10:54:00-05:00",
+                "expires": "2019-07-16T10:54:00-05:00",
+                "ends": "2019-07-20T19:00:00-05:00",
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Flood Warning issued July 15 at 10:54AM CDT until July 20 at 7:00PM CDT by NWS St Louis MO",
+                "description": "...The flood warning continues for the Mississippi River along the\nIllinois...Missouri border...\n\n\nat Hannibal\nat Louisiana\nat Clarksville\nat Winfield\nat Grafton\nat Mel Price Lock and Dam\nat St. Louis\nat Chester\n\nRiver forecasts are based on observed precipitation and forecast\nprecipitation for the next 24 hours.\n\nThe Flood Warning continues for\nthe Mississippi River at Clarksville\n* until Saturday evening.\n* At 10:30 AM Monday the stage was 26.8 feet.\n* Flood stage is 25.0 feet.\n* Minor flooding is forecast.\n* The river is forecast to fall below flood stage Friday evening.",
+                "instruction": "Rainfall heavier than forecast could cause river levels to rise even\nhigher than predicted.  The National Weather Service will monitor\nthis developing situation and issue follow up statements as\nconditions or forecasts change.\n\nSafety message:  Never drive cars, trucks, or sport utility vehicles\nthrough flooded areas.  The water may be too deep to allow for safe\npassage.\n\nThis product, along with additional weather and stream information,\nis available at http://water.weather.gov/ahps2/index.php?wfo=lsx.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.EXT.KLSX.FL.W.0061.000000T0000Z-190721T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "LSXFLSLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-07-20T19:00:00-05:00"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707164-3200856",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -90.430000000000007,
+                            38.259999999999998
+                        ],
+                        [
+                            -90.300000000000011,
+                            38.259999999999998
+                        ],
+                        [
+                            -89.350000000000009,
+                            37.689999999999998
+                        ],
+                        [
+                            -89.590000000000003,
+                            37.689999999999998
+                        ],
+                        [
+                            -90.030000000000001,
+                            37.869999999999997
+                        ],
+                        [
+                            -90.430000000000007,
+                            38.259999999999998
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707164-3200856",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707164-3200856",
+                "areaDesc": "Randolph, IL; Jackson, IL; Ste. Genevieve, MO; Perry, MO",
+                "geocode": {
+                    "UGC": [
+                        "ILC157",
+                        "ILC077",
+                        "MOC186",
+                        "MOC157"
+                    ],
+                    "SAME": [
+                        "017157",
+                        "017077",
+                        "029186",
+                        "029157"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/ILC157",
+                    "https://api.weather.gov/zones/county/ILC077",
+                    "https://api.weather.gov/zones/county/MOC186",
+                    "https://api.weather.gov/zones/county/MOC157"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706483-3200476",
+                        "identifier": "NWS-IDP-PROD-3706483-3200476",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T21:18:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T10:55:00-05:00",
+                "effective": "2019-07-15T10:55:00-05:00",
+                "onset": "2019-07-15T10:54:00-05:00",
+                "expires": "2019-07-16T10:54:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Flood Warning issued July 15 at 10:54AM CDT by NWS St Louis MO",
+                "description": "...The flood warning continues for the Mississippi River along the\nIllinois...Missouri border...\n\n\nat Hannibal\nat Louisiana\nat Clarksville\nat Winfield\nat Grafton\nat Mel Price Lock and Dam\nat St. Louis\nat Chester\n\nRiver forecasts are based on observed precipitation and forecast\nprecipitation for the next 24 hours.\n\nThe Flood Warning continues for\nthe Mississippi River at Chester\n* until further notice.\n* At 10:30 AM Monday the stage was 33.5 feet.\n* Flood stage is 27.0 feet.\n* Minor flooding is forecast.\n* The river will continue to fall to a stage of 33.2 feet by tomorrow\nmorning.",
+                "instruction": "Rainfall heavier than forecast could cause river levels to rise even\nhigher than predicted.  The National Weather Service will monitor\nthis developing situation and issue follow up statements as\nconditions or forecasts change.\n\nSafety message:  Never drive cars, trucks, or sport utility vehicles\nthrough flooded areas.  The water may be too deep to allow for safe\npassage.\n\nThis product, along with additional weather and stream information,\nis available at http://water.weather.gov/ahps2/index.php?wfo=lsx.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KLSX.FL.W.0058.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "LSXFLSLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707161-3200853",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -90.329999999999998,
+                            38.909999900000003
+                        ],
+                        [
+                            -90.280000000000001,
+                            38.950000000000003
+                        ],
+                        [
+                            -90.030000000000001,
+                            38.830000000000005
+                        ],
+                        [
+                            -90.170000000000002,
+                            38.810000000000002
+                        ],
+                        [
+                            -90.170000000000002,
+                            38.859999999999999
+                        ],
+                        [
+                            -90.329999999999998,
+                            38.909999900000003
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707161-3200853",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707161-3200853",
+                "areaDesc": "Madison, IL; St. Charles, MO",
+                "geocode": {
+                    "UGC": [
+                        "ILC119",
+                        "MOC183"
+                    ],
+                    "SAME": [
+                        "017119",
+                        "029183"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/ILC119",
+                    "https://api.weather.gov/zones/county/MOC183"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706489-3200482",
+                        "identifier": "NWS-IDP-PROD-3706489-3200482",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T21:18:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T10:55:00-05:00",
+                "effective": "2019-07-15T10:55:00-05:00",
+                "onset": "2019-07-15T10:54:00-05:00",
+                "expires": "2019-07-16T10:54:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Flood Warning issued July 15 at 10:54AM CDT by NWS St Louis MO",
+                "description": "...The flood warning continues for the Mississippi River along the\nIllinois...Missouri border...\n\n\nat Hannibal\nat Louisiana\nat Clarksville\nat Winfield\nat Grafton\nat Mel Price Lock and Dam\nat St. Louis\nat Chester\n\nRiver forecasts are based on observed precipitation and forecast\nprecipitation for the next 24 hours.\n\nThe Flood Warning continues for\nthe Mississippi River at Mel Price LD\n* until further notice.\n* At 10:30 AM Monday the stage was 24.7 feet.\n* Flood stage is 21.0 feet.\n* Minor flooding is forecast.\n* The river will continue to fall to a stage of 24.4 feet by tomorrow\nmorning.",
+                "instruction": "Rainfall heavier than forecast could cause river levels to rise even\nhigher than predicted.  The National Weather Service will monitor\nthis developing situation and issue follow up statements as\nconditions or forecasts change.\n\nSafety message:  Never drive cars, trucks, or sport utility vehicles\nthrough flooded areas.  The water may be too deep to allow for safe\npassage.\n\nThis product, along with additional weather and stream information,\nis available at http://water.weather.gov/ahps2/index.php?wfo=lsx.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KLSX.FL.W.0072.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "LSXFLSLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707168-3200860",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -90.810000000000002,
+                            39.219999999999999
+                        ],
+                        [
+                            -90.7099999,
+                            39.229999899999996
+                        ],
+                        [
+                            -90.569999899999999,
+                            38.879999999999995
+                        ],
+                        [
+                            -90.569999899999999,
+                            38.809999999999995
+                        ],
+                        [
+                            -90.739999999999995,
+                            38.869999999999997
+                        ],
+                        [
+                            -90.810000000000002,
+                            39.219999999999999
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707168-3200860",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707168-3200860",
+                "areaDesc": "Lincoln, MO; Calhoun, IL",
+                "geocode": {
+                    "UGC": [
+                        "MOC113",
+                        "ILC013"
+                    ],
+                    "SAME": [
+                        "029113",
+                        "017013"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC113",
+                    "https://api.weather.gov/zones/county/ILC013"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706488-3200481",
+                        "identifier": "NWS-IDP-PROD-3706488-3200481",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T21:18:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T10:55:00-05:00",
+                "effective": "2019-07-15T10:55:00-05:00",
+                "onset": "2019-07-15T10:54:00-05:00",
+                "expires": "2019-07-16T10:54:00-05:00",
+                "ends": "2019-07-21T04:00:00-05:00",
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Flood Warning issued July 15 at 10:54AM CDT until July 21 at 4:00AM CDT by NWS St Louis MO",
+                "description": "...The flood warning continues for the Mississippi River along the\nIllinois...Missouri border...\n\n\nat Hannibal\nat Louisiana\nat Clarksville\nat Winfield\nat Grafton\nat Mel Price Lock and Dam\nat St. Louis\nat Chester\n\nRiver forecasts are based on observed precipitation and forecast\nprecipitation for the next 24 hours.\n\nThe Flood Warning continues for\nthe Mississippi River at Winfield\n* until late Saturday night.\n* At 10:30 AM Monday the stage was 27.8 feet.\n* Flood stage is 26.0 feet.\n* Minor flooding is forecast.\n* The river is forecast to fall below flood stage Saturday morning.",
+                "instruction": "Rainfall heavier than forecast could cause river levels to rise even\nhigher than predicted.  The National Weather Service will monitor\nthis developing situation and issue follow up statements as\nconditions or forecasts change.\n\nSafety message:  Never drive cars, trucks, or sport utility vehicles\nthrough flooded areas.  The water may be too deep to allow for safe\npassage.\n\nThis product, along with additional weather and stream information,\nis available at http://water.weather.gov/ahps2/index.php?wfo=lsx.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.EXT.KLSX.FL.W.0071.000000T0000Z-190721T0900Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "LSXFLSLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-07-21T04:00:00-05:00"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707162-3200854",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -91.480000000000004,
+                            39.829999999999998
+                        ],
+                        [
+                            -91.350000000000009,
+                            39.829999999999998
+                        ],
+                        [
+                            -91.209999900000014,
+                            39.739999999999995
+                        ],
+                        [
+                            -91.350000000000009,
+                            39.669999999999995
+                        ],
+                        [
+                            -91.480000000000004,
+                            39.829999999999998
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707162-3200854",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707162-3200854",
+                "areaDesc": "Marion, MO; Pike, IL",
+                "geocode": {
+                    "UGC": [
+                        "MOC127",
+                        "ILC149"
+                    ],
+                    "SAME": [
+                        "029127",
+                        "017149"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC127",
+                    "https://api.weather.gov/zones/county/ILC149"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706484-3200477",
+                        "identifier": "NWS-IDP-PROD-3706484-3200477",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T21:18:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T10:55:00-05:00",
+                "effective": "2019-07-15T10:55:00-05:00",
+                "onset": "2019-07-15T10:54:00-05:00",
+                "expires": "2019-07-16T10:54:00-05:00",
+                "ends": "2019-07-19T19:00:00-05:00",
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Flood Warning issued July 15 at 10:54AM CDT until July 19 at 7:00PM CDT by NWS St Louis MO",
+                "description": "...The flood warning continues for the Mississippi River along the\nIllinois...Missouri border...\n\n\nat Hannibal\nat Louisiana\nat Clarksville\nat Winfield\nat Grafton\nat Mel Price Lock and Dam\nat St. Louis\nat Chester\n\nRiver forecasts are based on observed precipitation and forecast\nprecipitation for the next 24 hours.\n\nThe Flood Warning continues for\nthe Mississippi River at Hannibal\n* until Friday evening.\n* At 10:15 AM Monday the stage was 17.0 feet.\n* Flood stage is 16.0 feet.\n* Minor flooding is forecast.\n* The river is forecast to fall below flood stage Thursday evening.",
+                "instruction": "Rainfall heavier than forecast could cause river levels to rise even\nhigher than predicted.  The National Weather Service will monitor\nthis developing situation and issue follow up statements as\nconditions or forecasts change.\n\nSafety message:  Never drive cars, trucks, or sport utility vehicles\nthrough flooded areas.  The water may be too deep to allow for safe\npassage.\n\nThis product, along with additional weather and stream information,\nis available at http://water.weather.gov/ahps2/index.php?wfo=lsx.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.EXT.KLSX.FL.W.0069.000000T0000Z-190720T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "LSXFLSLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-07-19T19:00:00-05:00"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707166-3200858",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -90.569999899999999,
+                            38.810000000000002
+                        ],
+                        [
+                            -90.569999899999999,
+                            38.880000000000003
+                        ],
+                        [
+                            -90.4599999,
+                            38.990000000000002
+                        ],
+                        [
+                            -90.280000000000001,
+                            38.950000000000003
+                        ],
+                        [
+                            -90.480000000000004,
+                            38.82
+                        ],
+                        [
+                            -90.569999899999999,
+                            38.810000000000002
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707166-3200858",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707166-3200858",
+                "areaDesc": "Jersey, IL; St. Charles, MO",
+                "geocode": {
+                    "UGC": [
+                        "ILC083",
+                        "MOC183"
+                    ],
+                    "SAME": [
+                        "017083",
+                        "029183"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/ILC083",
+                    "https://api.weather.gov/zones/county/MOC183"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706486-3200479",
+                        "identifier": "NWS-IDP-PROD-3706486-3200479",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T21:18:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T10:55:00-05:00",
+                "effective": "2019-07-15T10:55:00-05:00",
+                "onset": "2019-07-15T10:54:00-05:00",
+                "expires": "2019-07-16T10:54:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Flood Warning issued July 15 at 10:54AM CDT by NWS St Louis MO",
+                "description": "...The flood warning continues for the Mississippi River along the\nIllinois...Missouri border...\n\n\nat Hannibal\nat Louisiana\nat Clarksville\nat Winfield\nat Grafton\nat Mel Price Lock and Dam\nat St. Louis\nat Chester\n\nRiver forecasts are based on observed precipitation and forecast\nprecipitation for the next 24 hours.\n\nThe Flood Warning continues for\nthe Mississippi River at Grafton\n* until further notice.\n* At 10:30 AM Monday the stage was 22.2 feet.\n* Flood stage is 18.0 feet.\n* Minor flooding is forecast.\n* The river will continue to fall to a stage of 22.1 feet by tomorrow\nmorning.",
+                "instruction": "Rainfall heavier than forecast could cause river levels to rise even\nhigher than predicted.  The National Weather Service will monitor\nthis developing situation and issue follow up statements as\nconditions or forecasts change.\n\nSafety message:  Never drive cars, trucks, or sport utility vehicles\nthrough flooded areas.  The water may be too deep to allow for safe\npassage.\n\nThis product, along with additional weather and stream information,\nis available at http://water.weather.gov/ahps2/index.php?wfo=lsx.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KLSX.FL.W.0056.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "LSXFLSLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707099-3200819",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -94.150000000000006,
+                            38.07
+                        ],
+                        [
+                            -94.060000000000002,
+                            38.060000000000002
+                        ],
+                        [
+                            -94.060000000000002,
+                            37.990000000000002
+                        ],
+                        [
+                            -94.159999999999997,
+                            38.030000000000001
+                        ],
+                        [
+                            -94.150000000000006,
+                            38.07
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707099-3200819",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707099-3200819",
+                "areaDesc": "Bates, MO; Vernon, MO",
+                "geocode": {
+                    "UGC": [
+                        "MOC013",
+                        "MOC217"
+                    ],
+                    "SAME": [
+                        "029013",
+                        "029217"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC013",
+                    "https://api.weather.gov/zones/county/MOC217"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706400-3200426",
+                        "identifier": "NWS-IDP-PROD-3706400-3200426",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T20:39:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T09:53:00-05:00",
+                "effective": "2019-07-15T09:53:00-05:00",
+                "onset": "2019-07-15T09:53:00-05:00",
+                "expires": "2019-07-16T00:52:00-05:00",
+                "ends": "2019-07-21T01:00:00-05:00",
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Springfield MO",
+                "headline": "Flood Warning issued July 15 at 9:53AM CDT until July 21 at 1:00AM CDT by NWS Springfield MO",
+                "description": "...The Flood Warning continues for the following rivers in\nMissouri...\n\nOsage River near Schell City affecting Bates and Vernon Counties\n...The Flood Warning continues for the following rivers in\nMissouri...\n\nOsage River AT Taberville affecting St. Clair County\n\n.River levels remain above flood stage due to above normal rainfall that fell between late spring and early summer.  Levels are slowly falling but will remain above flood stage.\n\n* Forecast...The river has crested and will continue to fall to below\nflood stage by early Saturday morning.\n* Impact...At 32.0 feet...Flood waters impact all of the low lying\nareas in the Schell Osage Conservation Area as well as several\ncounty roads west of Schell City.",
+                "instruction": "Do not drive through flowing water. Nearly half of all flood\nfatalities are vehicle related. As little as 6 inches of water may\ncause you to lose control of your vehicle. Two feet of water will\ncarry most vehicles away.\n\nStay tuned to NOAA Weather Radio for updates or local media for\nupdates.\n\nAdditional river information can be found on our Advanced Hydrologic\nPrediction Service page at http://water.weather.gov/ahps2/\nindex.php?wfo=sgf",
+                "response": "Avoid",
+                "parameters": {
+                    "NWSheadline": [
+                        "For the Osage River near Schell City"
+                    ],
+                    "VTEC": [
+                        "/O.EXT.KSGF.FL.W.0047.000000T0000Z-190721T0600Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "SGFFLSSGF"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-07-21T01:00:00-05:00"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707100-3200820",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -94.060000000000002,
+                            38.049999999999997
+                        ],
+                        [
+                            -93.790000000000006,
+                            38.019999999999996
+                        ],
+                        [
+                            -93.790000000000006,
+                            37.959999999999994
+                        ],
+                        [
+                            -94.060000000000002,
+                            37.989999999999995
+                        ],
+                        [
+                            -94.060000000000002,
+                            38.049999999999997
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707100-3200820",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707100-3200820",
+                "areaDesc": "St. Clair, MO",
+                "geocode": {
+                    "UGC": [
+                        "MOC185"
+                    ],
+                    "SAME": [
+                        "029185"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC185"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706399-3200425",
+                        "identifier": "NWS-IDP-PROD-3706399-3200425",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T20:39:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T09:53:00-05:00",
+                "effective": "2019-07-15T09:53:00-05:00",
+                "onset": "2019-07-15T09:53:00-05:00",
+                "expires": "2019-07-16T00:52:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Springfield MO",
+                "headline": "Flood Warning issued July 15 at 9:53AM CDT by NWS Springfield MO",
+                "description": "...The Flood Warning continues for the following rivers in\nMissouri...\n\nOsage River near Schell City affecting Bates and Vernon Counties\n...The Flood Warning continues for the following rivers in\nMissouri...\n\nOsage River AT Taberville affecting St. Clair County\n\n.River levels remain above flood stage due to above normal rainfall that fell between late spring and early summer.  Levels are slowly falling but will remain above flood stage.",
+                "instruction": "Do not drive through flowing water. Nearly half of all flood\nfatalities are vehicle related. As little as 6 inches of water may\ncause you to lose control of your vehicle. Two feet of water will\ncarry most vehicles away.\n\nStay tuned to NOAA Weather Radio for updates or local media for\nupdates.\n\nAdditional river information can be found on our Advanced Hydrologic\nPrediction Service page at http://water.weather.gov/ahps2/\nindex.php?wfo=sgf",
+                "response": "Avoid",
+                "parameters": {
+                    "NWSheadline": [
+                        "For the Osage River AT Taberville"
+                    ],
+                    "VTEC": [
+                        "/O.CON.KSGF.FL.W.0065.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "SGFFLSSGF"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707070-3200800",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -91.849999999999994,
+                            38.710000000000001
+                        ],
+                        [
+                            -91.640000000000001,
+                            38.729999900000003
+                        ],
+                        [
+                            -91.640000000000001,
+                            38.68
+                        ],
+                        [
+                            -91.920000000000002,
+                            38.549999999999997
+                        ],
+                        [
+                            -91.980000000000004,
+                            38.640000000000001
+                        ],
+                        [
+                            -91.849999999999994,
+                            38.710000000000001
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707070-3200800",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707070-3200800",
+                "areaDesc": "Callaway, MO; Osage, MO",
+                "geocode": {
+                    "UGC": [
+                        "MOC027",
+                        "MOC151"
+                    ],
+                    "SAME": [
+                        "029027",
+                        "029151"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC027",
+                    "https://api.weather.gov/zones/county/MOC151"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3705161-3199672",
+                        "identifier": "NWS-IDP-PROD-3705161-3199672",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T09:45:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T09:25:00-05:00",
+                "effective": "2019-07-15T09:25:00-05:00",
+                "onset": "2019-07-15T09:25:00-05:00",
+                "expires": "2019-07-16T09:25:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Flood Warning issued July 15 at 9:25AM CDT by NWS St Louis MO",
+                "description": "...The flood warning continues for the Missouri River..\n\nat Chamois\nat Gasconade\nat Hermann\nat Washington\nat St. Charles\n\nRiver forecasts are based on observed precipitation and forecast\nprecipitation for the next 24 hours.\n\nThe Flood Warning continues for\nthe Missouri River near Chamois\n* until further notice.\n* At  9:00 AM Monday the stage was estimated at 19.4 feet.\n* Flood stage is 17.0 feet.\n* The river is forecast to continue falling to a stage of 19.1 feet\nby tomorrow morning.",
+                "instruction": "Rainfall heavier than forecast could cause river levels to rise even\nhigher than predicted.  The National Weather Service will monitor\nthis developing situation and issue follow up statements as\nconditions or forecasts change.\n\nSafety message:  Never drive cars, trucks, or sport utility vehicles\nthrough flooded areas.  The water may be too deep to allow for safe\npassage.\n\nThis product, along with additional weather and stream information,\nis available at http://water.weather.gov/ahps2/index.php?wfo=lsx.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KLSX.FL.W.0102.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "LSXFLSLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707067-3200797",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -91.5,
+                            38.719999999999999
+                        ],
+                        [
+                            -91.5,
+                            38.689999999999998
+                        ],
+                        [
+                            -91.560000000000002,
+                            38.659999899999995
+                        ],
+                        [
+                            -91.640000000000001,
+                            38.679999999999993
+                        ],
+                        [
+                            -91.640000000000001,
+                            38.729999899999996
+                        ],
+                        [
+                            -91.5,
+                            38.719999999999999
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707067-3200797",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707067-3200797",
+                "areaDesc": "Montgomery, MO; Gasconade, MO",
+                "geocode": {
+                    "UGC": [
+                        "MOC139",
+                        "MOC073"
+                    ],
+                    "SAME": [
+                        "029139",
+                        "029073"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC139",
+                    "https://api.weather.gov/zones/county/MOC073"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3705162-3199673",
+                        "identifier": "NWS-IDP-PROD-3705162-3199673",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T09:45:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T09:25:00-05:00",
+                "effective": "2019-07-15T09:25:00-05:00",
+                "onset": "2019-07-15T09:25:00-05:00",
+                "expires": "2019-07-16T09:25:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Flood Warning issued July 15 at 9:25AM CDT by NWS St Louis MO",
+                "description": "...The flood warning continues for the Missouri River..\n\nat Chamois\nat Gasconade\nat Hermann\nat Washington\nat St. Charles\n\nRiver forecasts are based on observed precipitation and forecast\nprecipitation for the next 24 hours.\n\nThe Flood Warning continues for\nthe Missouri River at Gasconade\n* until further notice.\n* At  9:00 AM Monday the stage was estimated at 25.7 feet.\n* Flood stage is 22.0 feet.\n* The river is forecast to continue falling to a stage of 25.3 feet\nby tomorrow morning.",
+                "instruction": "Rainfall heavier than forecast could cause river levels to rise even\nhigher than predicted.  The National Weather Service will monitor\nthis developing situation and issue follow up statements as\nconditions or forecasts change.\n\nSafety message:  Never drive cars, trucks, or sport utility vehicles\nthrough flooded areas.  The water may be too deep to allow for safe\npassage.\n\nThis product, along with additional weather and stream information,\nis available at http://water.weather.gov/ahps2/index.php?wfo=lsx.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KLSX.FL.W.0103.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "LSXFLSLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707066-3200796",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -90.780000000000001,
+                            38.649999999999999
+                        ],
+                        [
+                            -90.719999999999999,
+                            38.589999999999996
+                        ],
+                        [
+                            -90.890000000000001,
+                            38.509999999999998
+                        ],
+                        [
+                            -91.230000000000004,
+                            38.609999999999999
+                        ],
+                        [
+                            -91.189999999999998,
+                            38.659999900000003
+                        ],
+                        [
+                            -90.780000000000001,
+                            38.649999999999999
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707066-3200796",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707066-3200796",
+                "areaDesc": "Franklin, MO; Warren, MO",
+                "geocode": {
+                    "UGC": [
+                        "MOC071",
+                        "MOC219"
+                    ],
+                    "SAME": [
+                        "029071",
+                        "029219"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC071",
+                    "https://api.weather.gov/zones/county/MOC219"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3705163-3199674",
+                        "identifier": "NWS-IDP-PROD-3705163-3199674",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T09:45:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T09:25:00-05:00",
+                "effective": "2019-07-15T09:25:00-05:00",
+                "onset": "2019-07-15T09:25:00-05:00",
+                "expires": "2019-07-16T09:25:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Flood Warning issued July 15 at 9:25AM CDT by NWS St Louis MO",
+                "description": "...The flood warning continues for the Missouri River..\n\nat Chamois\nat Gasconade\nat Hermann\nat Washington\nat St. Charles\n\nRiver forecasts are based on observed precipitation and forecast\nprecipitation for the next 24 hours.\n\nThe Flood Warning continues for\nthe Missouri River at Washington\n* until further notice.\n* At  8:45 AM Monday the stage was 20.6 feet.\n* Flood stage is 20.0 feet.\n* Minor flooding is forecast.\n* The river is forecast to continue falling to a stage of 20.4 feet\nby tomorrow morning.",
+                "instruction": "Rainfall heavier than forecast could cause river levels to rise even\nhigher than predicted.  The National Weather Service will monitor\nthis developing situation and issue follow up statements as\nconditions or forecasts change.\n\nSafety message:  Never drive cars, trucks, or sport utility vehicles\nthrough flooded areas.  The water may be too deep to allow for safe\npassage.\n\nThis product, along with additional weather and stream information,\nis available at http://water.weather.gov/ahps2/index.php?wfo=lsx.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KLSX.FL.W.0139.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "LSXFLSLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707069-3200799",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -90.329999999999998,
+                            38.909999900000003
+                        ],
+                        [
+                            -90.179999999999993,
+                            38.859999999999999
+                        ],
+                        [
+                            -90.169999999999987,
+                            38.810000000000002
+                        ],
+                        [
+                            -90.719999999999985,
+                            38.590000000000003
+                        ],
+                        [
+                            -90.779999999999987,
+                            38.650000000000006
+                        ],
+                        [
+                            -90.329999999999998,
+                            38.909999900000003
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707069-3200799",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707069-3200799",
+                "areaDesc": "St. Charles, MO; St. Louis, MO",
+                "geocode": {
+                    "UGC": [
+                        "MOC183",
+                        "MOC189"
+                    ],
+                    "SAME": [
+                        "029183",
+                        "029189"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC183",
+                    "https://api.weather.gov/zones/county/MOC189"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3705160-3199671",
+                        "identifier": "NWS-IDP-PROD-3705160-3199671",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T09:45:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T09:25:00-05:00",
+                "effective": "2019-07-15T09:25:00-05:00",
+                "onset": "2019-07-15T09:25:00-05:00",
+                "expires": "2019-07-16T09:25:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Flood Warning issued July 15 at 9:25AM CDT by NWS St Louis MO",
+                "description": "...The flood warning continues for the Missouri River..\n\nat Chamois\nat Gasconade\nat Hermann\nat Washington\nat St. Charles\n\nRiver forecasts are based on observed precipitation and forecast\nprecipitation for the next 24 hours.\n\nThe Flood Warning continues for\nthe Missouri River at St. Charles\n* until further notice.\n* At  9:00 AM Monday the stage was 26.9 feet.\n* Flood stage is 25.0 feet.\n* Minor flooding is forecast.\n* The river is forecast to continue falling to a stage of 26.8 feet\nby tomorrow morning.",
+                "instruction": "Rainfall heavier than forecast could cause river levels to rise even\nhigher than predicted.  The National Weather Service will monitor\nthis developing situation and issue follow up statements as\nconditions or forecasts change.\n\nSafety message:  Never drive cars, trucks, or sport utility vehicles\nthrough flooded areas.  The water may be too deep to allow for safe\npassage.\n\nThis product, along with additional weather and stream information,\nis available at http://water.weather.gov/ahps2/index.php?wfo=lsx.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KLSX.FL.W.0106.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "LSXFLSLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707068-3200798",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -91.359999999999999,
+                            38.75
+                        ],
+                        [
+                            -91.189999999999998,
+                            38.659999900000003
+                        ],
+                        [
+                            -91.230000000000004,
+                            38.609999999999999
+                        ],
+                        [
+                            -91.5,
+                            38.689999999999998
+                        ],
+                        [
+                            -91.5,
+                            38.719999999999999
+                        ],
+                        [
+                            -91.359999999999999,
+                            38.75
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707068-3200798",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707068-3200798",
+                "areaDesc": "Montgomery, MO; Gasconade, MO",
+                "geocode": {
+                    "UGC": [
+                        "MOC139",
+                        "MOC073"
+                    ],
+                    "SAME": [
+                        "029139",
+                        "029073"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC139",
+                    "https://api.weather.gov/zones/county/MOC073"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706463-3200465",
+                        "identifier": "NWS-IDP-PROD-3706463-3200465",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T21:08:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T09:25:00-05:00",
+                "effective": "2019-07-15T09:25:00-05:00",
+                "onset": "2019-07-15T09:25:00-05:00",
+                "expires": "2019-07-16T09:25:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Flood Warning issued July 15 at 9:25AM CDT by NWS St Louis MO",
+                "description": "...The flood warning continues for the Missouri River..\n\nat Chamois\nat Gasconade\nat Hermann\nat Washington\nat St. Charles\n\nRiver forecasts are based on observed precipitation and forecast\nprecipitation for the next 24 hours.\n\nThe Flood Warning continues for\nthe Missouri River at Hermann\n* until further notice.\n* At  8:30 AM Monday the stage was 23.6 feet.\n* Flood stage is 21.0 feet.\n* Minor flooding is forecast.\n* The river is forecast to continue falling to a stage of 23.6 feet\nby tomorrow morning.",
+                "instruction": "Rainfall heavier than forecast could cause river levels to rise even\nhigher than predicted.  The National Weather Service will monitor\nthis developing situation and issue follow up statements as\nconditions or forecasts change.\n\nSafety message:  Never drive cars, trucks, or sport utility vehicles\nthrough flooded areas.  The water may be too deep to allow for safe\npassage.\n\nThis product, along with additional weather and stream information,\nis available at http://water.weather.gov/ahps2/index.php?wfo=lsx.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KLSX.FL.W.0104.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "LSXFLSLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707061-3200793",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -95.629999999999995,
+                            40.259999999999998
+                        ],
+                        [
+                            -95.439999999999998,
+                            40.259999999999998
+                        ],
+                        [
+                            -95.009999999999991,
+                            39.909999899999995
+                        ],
+                        [
+                            -95.029999999999987,
+                            39.819999999999993
+                        ],
+                        [
+                            -95.359999999999985,
+                            39.969999999999992
+                        ],
+                        [
+                            -95.629999999999995,
+                            40.259999999999998
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707061-3200793",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707061-3200793",
+                "areaDesc": "Richardson, NE; Holt, MO",
+                "geocode": {
+                    "UGC": [
+                        "NEC147",
+                        "MOC087"
+                    ],
+                    "SAME": [
+                        "031147",
+                        "029087"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/NEC147",
+                    "https://api.weather.gov/zones/county/MOC087"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706407-3200431",
+                        "identifier": "NWS-IDP-PROD-3706407-3200431",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T20:44:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T09:19:00-05:00",
+                "effective": "2019-07-15T09:19:00-05:00",
+                "onset": "2019-07-15T09:19:00-05:00",
+                "expires": "2019-07-16T00:19:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Omaha/Valley NE",
+                "headline": "Flood Warning issued July 15 at 9:19AM CDT by NWS Omaha/Valley NE",
+                "description": "...The Flood Warning continues for...\n\nMissouri River at Plattsmouth affecting Mills and Cass Counties.\n\nMissouri River At Nebraska City affecting Fremont and Otoe\nCounties.\n\nMissouri River At Brownville affecting Atchison and Nemaha\nCounties.\n\nMissouri River At Rulo affecting Holt and Richardson Counties.\n\nThe Flood Warning continues for\nThe Missouri River At Rulo.\n* At  9:00 AM Monday the stage was 20.7 feet...or 3.7 feet above\nflood stage.\n* Flood stage is 17.0 feet.\n* Minor flooding is occurring and Moderate flooding is forecast.\n* Forecast...The river will continue rising to near 21.0 feet by\nWednesday evening then begin falling.",
+                "instruction": "Do not drive cars through areas where water covers the road.  The\nwater depth may be too great to allow your vehicle to pass safely.\nTurn around...don't drown!\n\nAdditional information is available at:\nhttp://www.water.weather.gov/ahps2/index.php?wfo=oax",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KOAX.FL.W.0005.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "OAXFLSOAX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707059-3200791",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -95.799999999999997,
+                            40.479999900000003
+                        ],
+                        [
+                            -95.539999999999992,
+                            40.479999900000003
+                        ],
+                        [
+                            -95.439999999999998,
+                            40.260000000000005
+                        ],
+                        [
+                            -95.629999999999995,
+                            40.260000000000005
+                        ],
+                        [
+                            -95.739999999999995,
+                            40.440000000000005
+                        ],
+                        [
+                            -95.799999999999997,
+                            40.479999900000003
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707059-3200791",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707059-3200791",
+                "areaDesc": "Nemaha, NE; Atchison, MO",
+                "geocode": {
+                    "UGC": [
+                        "NEC127",
+                        "MOC005"
+                    ],
+                    "SAME": [
+                        "031127",
+                        "029005"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/NEC127",
+                    "https://api.weather.gov/zones/county/MOC005"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706409-3200433",
+                        "identifier": "NWS-IDP-PROD-3706409-3200433",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T20:44:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T09:19:00-05:00",
+                "effective": "2019-07-15T09:19:00-05:00",
+                "onset": "2019-07-15T09:19:00-05:00",
+                "expires": "2019-07-16T00:19:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Omaha/Valley NE",
+                "headline": "Flood Warning issued July 15 at 9:19AM CDT by NWS Omaha/Valley NE",
+                "description": "...The Flood Warning continues for...\n\nMissouri River at Plattsmouth affecting Mills and Cass Counties.\n\nMissouri River At Nebraska City affecting Fremont and Otoe\nCounties.\n\nMissouri River At Brownville affecting Atchison and Nemaha\nCounties.\n\nMissouri River At Rulo affecting Holt and Richardson Counties.\n\nThe Flood Warning continues for\nThe Missouri River At Brownville.\n* At  8:15 AM Monday the stage was 36.1 feet...or 2.1 feet above\nflood stage.\n* Flood stage is 34.0 feet.\n* Minor flooding is occurring and Minor flooding is forecast.\n* Forecast...The river will continue rising to near 36.3 feet by\nearly Wednesday morning then begin falling.",
+                "instruction": "Do not drive cars through areas where water covers the road.  The\nwater depth may be too great to allow your vehicle to pass safely.\nTurn around...don't drown!\n\nAdditional information is available at:\nhttp://www.water.weather.gov/ahps2/index.php?wfo=oax",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KOAX.FL.W.0004.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "OAXFLSOAX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        },
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707013-3200776",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -90.430000000000007,
+                            38.479999900000003
+                        ],
+                        [
+                            -90.390000000000001,
+                            38.479999900000003
+                        ],
+                        [
+                            -90.319999899999999,
+                            38.460000000000001
+                        ],
+                        [
+                            -90.340000000000003,
+                            38.409999900000003
+                        ],
+                        [
+                            -90.430000000000007,
+                            38.450000000000003
+                        ],
+                        [
+                            -90.430000000000007,
+                            38.479999900000003
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3707013-3200776",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3707013-3200776",
+                "areaDesc": "Jefferson, MO; St. Louis, MO",
+                "geocode": {
+                    "UGC": [
+                        "MOC099",
+                        "MOC189"
+                    ],
+                    "SAME": [
+                        "029099",
+                        "029189"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/county/MOC099",
+                    "https://api.weather.gov/zones/county/MOC189"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3706503-3200490",
+                        "identifier": "NWS-IDP-PROD-3706503-3200490",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-07-14T21:25:00-05:00"
+                    }
+                ],
+                "sent": "2019-07-15T08:45:00-05:00",
+                "effective": "2019-07-15T08:45:00-05:00",
+                "onset": "2019-07-15T08:45:00-05:00",
+                "expires": "2019-07-16T08:45:00-05:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Observed",
+                "urgency": "Immediate",
+                "event": "Flood Warning",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS St Louis MO",
+                "headline": "Flood Warning issued July 15 at 8:45AM CDT by NWS St Louis MO",
+                "description": "...The flood warning continues for the following river in Missouri..\n\nMeramec River near Arnold\n\nRiver forecasts are based on observed precipitation and forecast\nprecipitation for the next 24 hours.\n\nThe Flood Warning continues for\nthe Meramec River near Arnold\n* until further notice.\n* At  8:30 AM Monday the stage was 28.6 feet.\n* Flood stage is 24.0 feet.\n* Minor flooding is forecast.\n* The river is forecast to continue falling to a stage of 28.3 feet\nby tomorrow morning.",
+                "instruction": "Rainfall heavier than forecast could cause river levels to rise even\nhigher than predicted.  The National Weather Service will monitor\nthis developing situation and issue follow up statements as\nconditions or forecasts change.\n\nSafety message:  Never drive cars, trucks, or sport utility vehicles\nthrough flooded areas.  The water may be too deep to allow for safe\npassage.\n\nThis product, along with additional weather and stream information,\nis available at http://water.weather.gov/ahps2/index.php?wfo=lsx.",
+                "response": "Avoid",
+                "parameters": {
+                    "VTEC": [
+                        "/O.CON.KLSX.FL.W.0065.000000T0000Z-000000T0000Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "LSXFLSLSX"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        }
+    ],
+    "title": "current watches, warnings, and advisories for Missouri",
+    "updated": "2019-07-15T21:25:15+00:00"
+}
