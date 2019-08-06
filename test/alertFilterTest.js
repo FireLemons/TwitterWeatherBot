@@ -146,6 +146,32 @@ describe('Alert Filters', function(){
         })
       })
       
+      describe('keep is false, value is 8', function(){
+        let nowCorrected;
+      
+        before(function(){
+          config.alerts.filters = [
+            {
+              "restriction": "after",
+              "path": "properties.sent",
+              "value": 8,
+              "keep": false
+            }
+          ]
+      
+          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        
+          nowCorrected = new Date(now)
+          nowCorrected.setHours(nowCorrected.getHours() + 8)
+        })
+        
+        it('should be after the current time - 8hours', function(){
+          weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
+            expect(nowCorrected - weatherAlert.properties.sent).to.be.at.least(0)
+          })
+        })
+      })
+      
       describe('keep is false, value is -8', function(){
         let nowCorrected;
       
