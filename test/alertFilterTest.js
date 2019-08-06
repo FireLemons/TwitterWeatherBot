@@ -93,66 +93,82 @@ describe('Alert Filters', function(){
       exampleAlerts4Current.features.forEach(mockAlertTime)
     })
     
-    describe('Filter: after, keep is true, value is 8', function(){
-      let nowCorrected;
+    describe('Filter: after', function(){
+      describe('keep is true, value is 8', function(){
+        let nowCorrected;
       
-      before(function(){
-        config.alerts.filters = [
-          {
-            "restriction": "after",
-            "path": "properties.sent",
-            "value": 8,
-            "keep": true
-          }
-        ]
+        before(function(){
+          config.alerts.filters = [
+            {
+              "restriction": "after",
+              "path": "properties.sent",
+              "value": 8,
+              "keep": true
+            }
+          ]
       
-        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
         
-        nowCorrected = new Date(now)
-        nowCorrected.setHours(nowCorrected.getHours() + 8)
-      })
-      
-      it('should be within 8 hours of the current time', function(){
-        weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
-          expect(Math.abs(now - weatherAlert.properties.sent) / (1000 * 60 * 60)).to.be.at.most(8)
+          nowCorrected = new Date(now)
+          nowCorrected.setHours(nowCorrected.getHours() + 8)
+        })
+        
+        it('should be after the current time + 8hours', function(){
+          weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
+            expect(nowCorrected - weatherAlert.properties.sent).to.be.below(0)
+          })
         })
       })
-        
-      it('should be after the current time + 8hours', function(){
-        weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
-          expect(nowCorrected - weatherAlert.properties.sent).to.be.below(0)
-        })
-      })
-    })
     
-    describe('Filter: after, keep is true, value is -8', function(){
-      let nowCorrected;
+      describe('keep is true, value is -8', function(){
+        let nowCorrected;
       
-      before(function(){
-        config.alerts.filters = [
-          {
-            "restriction": "after",
-            "path": "properties.sent",
-            "value": -8,
-            "keep": true
-          }
-        ]
+        before(function(){
+          config.alerts.filters = [
+            {
+              "restriction": "after",
+              "path": "properties.sent",
+              "value": -8,
+              "keep": true
+            }
+          ]
       
-        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
         
-        nowCorrected = new Date(now)
-        nowCorrected.setHours(nowCorrected.getHours() - 8)
-      })
-      
-      it('should be within 8 hours of the current time', function(){
-        weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
-          expect(Math.abs(nowCorrected - weatherAlert.properties.sent) / (1000 * 60 * 60)).to.be.at.most(8)
+          nowCorrected = new Date(now)
+          nowCorrected.setHours(nowCorrected.getHours() - 8)
+        })
+        
+        it('should be after the current time - 8hours', function(){
+          weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
+            expect(nowCorrected - weatherAlert.properties.sent).to.be.below(0)
+          })
         })
       })
+      
+      describe('keep is false, value is -8', function(){
+        let nowCorrected;
+      
+        before(function(){
+          config.alerts.filters = [
+            {
+              "restriction": "after",
+              "path": "properties.sent",
+              "value": -8,
+              "keep": false
+            }
+          ]
+      
+          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
         
-      it('should be after the current time - 8hours', function(){
-        weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
-          expect(nowCorrected - weatherAlert.properties.sent).to.be.below(0)
+          nowCorrected = new Date(now)
+          nowCorrected.setHours(nowCorrected.getHours() - 8)
+        })
+        
+        it('should be after the current time - 8hours', function(){
+          weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
+            expect(nowCorrected - weatherAlert.properties.sent).to.be.at.least(0)
+          })
         })
       })
     })
