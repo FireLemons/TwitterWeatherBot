@@ -108,10 +108,10 @@ describe('Alert Filters', function(){
       })
       
       it('should be within 8 hours of the current time', function(){
-          weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
-            expect(Math.abs(now - weatherAlert.properties.sent) / (1000 * 60 * 60)).to.be.at.most(8)
-          })
+        weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
+          expect(Math.abs(now - weatherAlert.properties.sent) / (1000 * 60 * 60)).to.be.at.most(8)
         })
+      })
         
       it('should be after the current time + 8', function(){
         let nowCorrected = now
@@ -119,7 +119,7 @@ describe('Alert Filters', function(){
         nowCorrected.setHours(nowCorrected.getHours() + 8)
           
         weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
-          expect(nowCorrected - weatherAlert.properties.sent - (8 * 1000 * 60 * 60)).to.be.below(0)
+          expect(nowCorrected - weatherAlert.properties.sent).to.be.below(0)
         })
       })
     })
