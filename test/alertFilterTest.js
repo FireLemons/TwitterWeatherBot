@@ -330,6 +330,19 @@ describe('Alert Filters', function () {
   })// End time filter tests
 
   describe('Filter: contains', function () {
+    it('should throw a TypeError when path does not lead to an array', function(){
+      config.alerts.filters = [
+        {
+          restriction: 'contains',
+          path: 'properties.event',
+          value: 'MOZ041',
+          keep: true
+        }
+      ]
 
+      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+
+      expect(() => { weatherDataHandler.filterAlerts(exampleAlerts2.features) }).to.throw(TypeError)
+    })
   })// End filter: contains tests
 })
