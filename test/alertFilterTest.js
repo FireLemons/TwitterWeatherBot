@@ -94,6 +94,25 @@ describe('Alert Filters', function(){
     })
     
     describe('Filter: after', function(){
+      describe('Throws an error when path leads to an invalid date string', function(){
+        before(function(){
+          config.alerts.filters = [
+            {
+              "restriction": "after",
+              "path": "properties.event",
+              "value": -8,
+              "keep": false
+            }
+          ]
+      
+          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        })
+        
+        it('should throw a TypeError', function(){
+          expect(() => {weatherDataHandler.filterAlerts(exampleAlerts1Current.features)}).to.throw(TypeError)
+        })
+      })
+        
       describe('keep is true, value is 8', function(){
         let nowCorrected;
       
@@ -225,6 +244,25 @@ describe('Alert Filters', function(){
     })// End filter: after tests
     
     describe('Filter: before', function(){
+      describe('Throws an error when path leads to an invalid date string', function(){
+        before(function(){
+          config.alerts.filters = [
+            {
+              "restriction": "before",
+              "path": "properties.event",
+              "value": 24,
+              "keep": false
+            }
+          ]
+      
+          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        })
+        
+        it('should throw a TypeError', function(){
+          expect(() => {weatherDataHandler.filterAlerts(exampleAlerts3Current.features)}).to.throw(TypeError)
+        })
+      })
+      
       describe('keep is true, value is 24', function(){
         let nowCorrected;
       
@@ -350,7 +388,7 @@ describe('Alert Filters', function(){
         })
         
         it('should filter all the alerts', function(){
-          expect(weatherDataHandler.filterAlerts(exampleAlerts1Current.features)).to.be.empty
+          expect(weatherDataHandler.filterAlerts(exampleAlerts3Current.features)).to.be.empty
         })
       })
     })// End filter: before tests
