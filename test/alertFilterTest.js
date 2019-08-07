@@ -342,7 +342,23 @@ describe('Alert Filters', function () {
 
       weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
 
-      expect(() => { weatherDataHandler.filterAlerts(exampleAlerts2.features) }).to.throw(TypeError)
+      expect(() => { weatherDataHandler.filterAlerts(exampleAlerts4.features) }).to.throw(TypeError)
+    })
+    
+    it('should keep the only alert where properties.geocode.UGC contains "MOZ041" when keep is true and value is "MOZ041"', function(){
+      config.alerts.filters = [
+        {
+          restriction: 'contains',
+          path: 'properties.geocode.UGC',
+          value: 'MOZ041',
+          keep: true
+        }
+      ]
+
+      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      
+      expect(weatherDataHandler.filterAlerts(exampleAlerts4.features)).to.have.lengthOf(1)
+      expect(weatherDataHandler.filterAlerts(exampleAlerts4.features)[0].properties.geocode.UGC).to.include('MOZ041')
     })
   })// End filter: contains tests
 })
