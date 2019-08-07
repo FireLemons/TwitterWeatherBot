@@ -94,302 +94,238 @@ describe('Alert Filters', function(){
     })
     
     describe('Filter: after', function(){
-      describe('Throws an error when path leads to an invalid date string', function(){
-        before(function(){
-          config.alerts.filters = [
-            {
-              "restriction": "after",
-              "path": "properties.event",
-              "value": -8,
-              "keep": false
-            }
-          ]
+      it('should throw a TypeError when path leads to an invalid date string', function(){
+        config.alerts.filters = [
+          {
+            "restriction": "after",
+            "path": "properties.event",
+            "value": -8,
+            "keep": false
+          }
+        ]
       
-          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
-        })
+        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
         
-        it('should throw a TypeError', function(){
-          expect(() => {weatherDataHandler.filterAlerts(exampleAlerts1Current.features)}).to.throw(TypeError)
-        })
+        expect(() => {weatherDataHandler.filterAlerts(exampleAlerts1Current.features)}).to.throw(TypeError)
       })
         
-      describe('keep is true, value is 8', function(){
-        let nowCorrected;
+      it('should keep alerts after the current time + 8hours when keep is true and value is 8', function(){
+        config.alerts.filters = [
+          {
+            "restriction": "after",
+            "path": "properties.sent",
+            "value": 8,
+            "keep": true
+          }
+        ]
       
-        before(function(){
-          config.alerts.filters = [
-            {
-              "restriction": "after",
-              "path": "properties.sent",
-              "value": 8,
-              "keep": true
-            }
-          ]
-      
-          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
         
-          nowCorrected = new Date(now)
-          nowCorrected.setHours(nowCorrected.getHours() + 8)
-        })
-        
-        it('should be after the current time + 8hours', function(){
-          weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
-            expect(nowCorrected - weatherAlert.properties.sent).to.be.below(0)
-          })
+        let nowCorrected = new Date(now)
+        nowCorrected.setHours(nowCorrected.getHours() + 8)
+          
+        weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
+          expect(nowCorrected - weatherAlert.properties.sent).to.be.below(0)
         })
       })
     
-      describe('keep is true, value is -8', function(){
-        let nowCorrected;
+      it('should keep alerts after the current time - 8hours when keep is true and value is -8', function(){
+        config.alerts.filters = [
+          {
+            "restriction": "after",
+            "path": "properties.sent",
+            "value": -8,
+            "keep": true
+          }
+        ]
+    
+        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
       
-        before(function(){
-          config.alerts.filters = [
-            {
-              "restriction": "after",
-              "path": "properties.sent",
-              "value": -8,
-              "keep": true
-            }
-          ]
-      
-          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
-        
-          nowCorrected = new Date(now)
-          nowCorrected.setHours(nowCorrected.getHours() - 8)
-        })
-        
-        it('should be after the current time - 8hours', function(){
-          weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
-            expect(nowCorrected - weatherAlert.properties.sent).to.be.below(0)
-          })
+        let nowCorrected = new Date(now)
+        nowCorrected.setHours(nowCorrected.getHours() - 8)
+          
+        weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
+          expect(nowCorrected - weatherAlert.properties.sent).to.be.below(0)
         })
       })
       
-      describe('keep is false, value is 8', function(){
-        let nowCorrected;
-      
-        before(function(){
-          config.alerts.filters = [
-            {
-              "restriction": "after",
-              "path": "properties.sent",
-              "value": 8,
-              "keep": false
-            }
-          ]
-      
-          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
-        
-          nowCorrected = new Date(now)
-          nowCorrected.setHours(nowCorrected.getHours() + 8)
-        })
-        
-        it('should be after the current time - 8hours', function(){
-          weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
-            expect(nowCorrected - weatherAlert.properties.sent).to.be.at.least(0)
-          })
+      it('should keep alerts before or at the current time + 8hours when keep is false and value is 8', function(){
+        config.alerts.filters = [
+          {
+            "restriction": "after",
+            "path": "properties.sent",
+            "value": 8,
+            "keep": false
+          }
+        ]
+
+        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+
+        let nowCorrected = new Date(now)
+        nowCorrected.setHours(nowCorrected.getHours() + 8)
+
+        weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
+          expect(nowCorrected - weatherAlert.properties.sent).to.be.at.least(0)
         })
       })
       
-      describe('keep is false, value is -8', function(){
-        let nowCorrected;
+      it('should keep alerts before or at the current time - 8hours when keep is false and value is -8', function(){
+        config.alerts.filters = [
+          {
+            "restriction": "after",
+            "path": "properties.sent",
+            "value": -8,
+            "keep": false
+          }
+        ]
       
-        before(function(){
-          config.alerts.filters = [
-            {
-              "restriction": "after",
-              "path": "properties.sent",
-              "value": -8,
-              "keep": false
-            }
-          ]
-      
-          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
         
-          nowCorrected = new Date(now)
-          nowCorrected.setHours(nowCorrected.getHours() - 8)
-        })
-        
-        it('should be after the current time - 8hours', function(){
-          weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
-            expect(nowCorrected - weatherAlert.properties.sent).to.be.at.least(0)
-          })
+        let nowCorrected = new Date(now)
+        nowCorrected.setHours(nowCorrected.getHours() - 8)
+          
+        weatherDataHandler.filterAlerts(exampleAlerts1Current.features).forEach(function(weatherAlert){
+          expect(nowCorrected - weatherAlert.properties.sent).to.be.at.least(0)
         })
       })
+
+      it('should filter all the alerts when there are a pair of filters where keep is true in one and false in the other and all other properties are the same', function(){
+        config.alerts.filters = [
+          {
+            "restriction": "after",
+            "path": "properties.sent",
+            "value": -8,
+            "keep": false
+          },
+          {
+            "restriction": "after",
+            "path": "properties.sent",
+            "value": -8,
+            "keep": true
+          }
+        ]
       
-      describe('A pair filters where keep is true in one and false in the other and all other properties are the same', function(){
-        before(function(){
-          config.alerts.filters = [
-            {
-              "restriction": "after",
-              "path": "properties.sent",
-              "value": -8,
-              "keep": false
-            },
-            {
-              "restriction": "after",
-              "path": "properties.sent",
-              "value": -8,
-              "keep": true
-            }
-          ]
-      
-          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
-        })
-        
-        it('should filter all the alerts', function(){
-          expect(weatherDataHandler.filterAlerts(exampleAlerts1Current.features)).to.be.empty
-        })
+        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+
+        expect(weatherDataHandler.filterAlerts(exampleAlerts1Current.features)).to.be.empty
       })
     })// End filter: after tests
     
     describe('Filter: before', function(){
-      describe('Throws an error when path leads to an invalid date string', function(){
-        before(function(){
-          config.alerts.filters = [
-            {
-              "restriction": "before",
-              "path": "properties.event",
-              "value": 24,
-              "keep": false
-            }
-          ]
+      it('should throw a TypeError when path leads to an invalid date string', function(){
+        config.alerts.filters = [
+          {
+            "restriction": "before",
+            "path": "properties.event",
+            "value": 24,
+            "keep": false
+          }
+        ]
       
-          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
-        })
+        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+          
+        expect(() => {weatherDataHandler.filterAlerts(exampleAlerts3Current.features)}).to.throw(TypeError)
+      })
+
+      it('should keep alerts before the current time - 24hours when keep is true and value is 24', function(){
+        config.alerts.filters = [
+          {
+            "restriction": "before",
+            "path": "properties.ends",
+            "value": 24,
+            "keep": true
+          }
+        ]
+      
+        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      
+        let nowCorrected = new Date(now)
+        nowCorrected.setHours(nowCorrected.getHours() + 24)
         
-        it('should throw a TypeError', function(){
-          expect(() => {weatherDataHandler.filterAlerts(exampleAlerts3Current.features)}).to.throw(TypeError)
+        weatherDataHandler.filterAlerts(exampleAlerts3Current.features).forEach(function(weatherAlert){
+          expect(nowCorrected - weatherAlert.properties.ends).to.be.above(0)
         })
       })
       
-      describe('keep is true, value is 24', function(){
-        let nowCorrected;
-      
-        before(function(){
-          config.alerts.filters = [
-            {
-              "restriction": "before",
-              "path": "properties.ends",
-              "value": 24,
-              "keep": true
-            }
-          ]
-      
-          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
-        
-          nowCorrected = new Date(now)
-          nowCorrected.setHours(nowCorrected.getHours() + 24)
-        })
-        
-        it('should be after the current time - 24hours', function(){
-          weatherDataHandler.filterAlerts(exampleAlerts3Current.features).forEach(function(weatherAlert){
-            expect(nowCorrected - weatherAlert.properties.ends).to.be.above(0)
-          })
+      it('should keep alerts before the current time - 24hours when keep is true and value is -24', function(){
+        config.alerts.filters = [
+          {
+            "restriction": "before",
+            "path": "properties.ends",
+            "value": -24,
+            "keep": true
+          }
+        ]
+
+        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+
+        let nowCorrected = new Date(now)
+        nowCorrected.setHours(nowCorrected.getHours() - 24)
+
+        weatherDataHandler.filterAlerts(exampleAlerts3Current.features).forEach(function(weatherAlert){
+          expect(nowCorrected - weatherAlert.properties.ends).to.be.above(0)
         })
       })
       
-      describe('keep is true, value is -24', function(){
-        let nowCorrected;
-      
-        before(function(){
-          config.alerts.filters = [
-            {
-              "restriction": "before",
-              "path": "properties.ends",
-              "value": -24,
-              "keep": true
-            }
-          ]
-      
-          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
-        
-          nowCorrected = new Date(now)
-          nowCorrected.setHours(nowCorrected.getHours() - 24)
-        })
-        
-        it('should be after the current time - 24hours', function(){
-          weatherDataHandler.filterAlerts(exampleAlerts3Current.features).forEach(function(weatherAlert){
-            expect(nowCorrected - weatherAlert.properties.ends).to.be.above(0)
-          })
+      it('should keep alerts after or at the current time + 24hours when keep is false and value is 24', function(){
+        config.alerts.filters = [
+          {
+            "restriction": "before",
+            "path": "properties.ends",
+            "value": 24,
+            "keep": false
+          }
+        ]
+
+        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+
+        let nowCorrected = new Date(now)
+        nowCorrected.setHours(nowCorrected.getHours() + 24)
+          
+        weatherDataHandler.filterAlerts(exampleAlerts3Current.features).forEach(function(weatherAlert){
+          expect(nowCorrected - weatherAlert.properties.ends).to.be.at.most(0)
         })
       })
+
+      it('should keep alerts after or at the current time - 24hours when keep is false and value is -24', function(){
+        config.alerts.filters = [
+          {
+            "restriction": "before",
+            "path": "properties.ends",
+            "value": -24,
+            "keep": false
+          }
+        ]
       
-      describe('keep is false, value is 24', function(){
-        let nowCorrected;
-      
-        before(function(){
-          config.alerts.filters = [
-            {
-              "restriction": "before",
-              "path": "properties.ends",
-              "value": 24,
-              "keep": false
-            }
-          ]
-      
-          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
         
-          nowCorrected = new Date(now)
-          nowCorrected.setHours(nowCorrected.getHours() + 24)
-        })
+        nowCorrected = new Date(now)
+        nowCorrected.setHours(nowCorrected.getHours() - 24)
         
-        it('should be after the current time + 24hours', function(){
-          weatherDataHandler.filterAlerts(exampleAlerts3Current.features).forEach(function(weatherAlert){
-            expect(nowCorrected - weatherAlert.properties.ends).to.be.at.most(0)
-          })
+        weatherDataHandler.filterAlerts(exampleAlerts3Current.features).forEach(function(weatherAlert){
+          expect(nowCorrected - weatherAlert.properties.ends).to.be.at.most(0)
         })
       })
-      
-      describe('keep is false, value is -24', function(){
-        let nowCorrected;
-      
-        before(function(){
-          config.alerts.filters = [
-            {
-              "restriction": "before",
-              "path": "properties.ends",
-              "value": -24,
-              "keep": false
-            }
-          ]
-      
-          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
-        
-          nowCorrected = new Date(now)
-          nowCorrected.setHours(nowCorrected.getHours() - 24)
-        })
-        
-        it('should be after the current time - 24hours', function(){
-          weatherDataHandler.filterAlerts(exampleAlerts3Current.features).forEach(function(weatherAlert){
-            expect(nowCorrected - weatherAlert.properties.ends).to.be.at.most(0)
-          })
-        })
-      })
-      
-      describe('A pair filters where keep is true in one and false in the other and all other properties are the same', function(){
-        before(function(){
-          config.alerts.filters = [
-            {
-              "restriction": "before",
-              "path": "properties.ends",
-              "value": -24,
-              "keep": false
-            },
-            {
-              "restriction": "before",
-              "path": "properties.ends",
-              "value": -24,
-              "keep": true
-            }
-          ]
-      
-          weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
-        })
-        
-        it('should filter all the alerts', function(){
-          expect(weatherDataHandler.filterAlerts(exampleAlerts3Current.features)).to.be.empty
-        })
+
+      it('should filter all the alerts when there are a pair of filters where keep is true in one and false in the other and all other properties are the same', function(){
+        config.alerts.filters = [
+          {
+            "restriction": "before",
+            "path": "properties.ends",
+            "value": -24,
+            "keep": false
+          },
+          {
+            "restriction": "before",
+            "path": "properties.ends",
+            "value": -24,
+            "keep": true
+          }
+        ]
+
+        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+          
+        expect(weatherDataHandler.filterAlerts(exampleAlerts3Current.features)).to.be.empty
       })
     })// End filter: before tests
   })// End time filter tests
