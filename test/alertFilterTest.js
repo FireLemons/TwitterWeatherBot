@@ -360,5 +360,121 @@ describe('Alert Filters', function () {
       expect(weatherDataHandler.filterAlerts(exampleAlerts4.features)).to.have.lengthOf(1)
       expect(weatherDataHandler.filterAlerts(exampleAlerts4.features)[0].properties.geocode.UGC).to.include('MOZ041')
     })
+    
+    it('should keep alerts where properties.geocode.UGC does not contain "MOZ041" when keep is false and value is "MOZ041"', function(){
+      config.alerts.filters = [
+        {
+          restriction: 'contains',
+          path: 'properties.geocode.UGC',
+          value: 'MOZ041',
+          keep: false
+        }
+      ]
+
+      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      
+      weatherDataHandler.filterAlerts(exampleAlerts4.features).forEach((weatherAlert) => {
+        expect(weatherAlert.properties.geocode.UGC).to.not.include('MOZ041')
+      })
+    })
+    
+    it('should filter all the alerts when there are a pair of filters where keep is true in one and false in the other and all other properties are the same', function(){
+      config.alerts.filters = [
+        {
+          restriction: 'contains',
+          path: 'properties.geocode.UGC',
+          value: 'MOZ041',
+          keep: false
+        },
+        {
+          restriction: 'contains',
+          path: 'properties.geocode.UGC',
+          value: 'MOZ041',
+          keep: true
+        }
+      ]
+
+      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      
+      expect(weatherDataHandler.filterAlerts(exampleAlerts4.features)).to.be.empty
+    })
   })// End filter: contains tests
+  
+  describe('Filter: has', function () {
+    it('should keep alerts where the alert contains properties.replacedBy when path is "properties.replacedBy" and keep is true', function(){
+      config.alerts.filters = [
+        {
+          "restriction": "has",
+          "path": "properties.replacedBy",
+          "keep": true
+        }
+      ]
+      
+      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      
+      weatherDataHandler.filterAlerts(exampleAlerts2.features).forEach((weatherAlert) => {
+        expect(weatherAlert.properties).to.have.property('replacedBy')
+      })
+    })
+    
+    it('should keep alerts where the alert does not contain properties.replacedBy when path is "properties.replacedBy" and keep is false', function(){
+      config.alerts.filters = [
+        {
+          "restriction": "has",
+          "path": "properties.replacedBy",
+          "keep": false
+        }
+      ]
+      
+      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      
+      weatherDataHandler.filterAlerts(exampleAlerts2.features).forEach((weatherAlert) => {
+        expect(weatherAlert.properties).to.not.have.all.keys('replacedBy')
+      })
+    })
+    
+    it('should be prioritized before other filters', function(){
+      config.alerts.filters = [
+        {
+          "restriction": "matches",
+          "path": "properties.parameters.NWSheadline.0",
+          "value": ".*",
+          "keep": true
+        },
+        {
+          "restriction": "has",
+          "path": "properties.parameters.NWSheadline.0",
+          "keep": true
+        },
+        {
+          "restriction": "contains",
+          "path": "properties.parameters.BLOCKCHANNEL",
+          "value": "CMAS",
+          "keep": true
+        },
+        {
+          "restriction": "has",
+          "path": "properties.parameters.BLOCKCHANNEL",
+          "keep": true
+        }
+      ]
+      
+      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      
+      let filteredAlerts = [];
+      
+      expect(() => {
+        filteredAlerts = weatherDataHandler.filterAlerts(exampleAlerts2.features)
+      }).to.not.throw(ReferenceError)
+      
+      expect(filteredAlerts).to.not.be.empty    
+      
+      filteredAlerts.forEach((weatherAlert) => {
+        expect(weatherAlert).to.have.nested.property('properties.parameters.NWSheadline')
+        expect(weatherAlert.properties.parameters.NWSheadline[0]).to.be.a('string')
+        expect(weatherAlert).to.have.nested.property('properties.parameters.BLOCKCHANNEL')
+        expect(weatherAlert.properties.parameters.BLOCKCHANNEL).to.include('CMAS')
+      })
+    })
+  })
 })
