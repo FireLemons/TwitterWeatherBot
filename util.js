@@ -86,19 +86,32 @@ module.exports = {
       return object
     }
 
-    const keys = path.split('.')
-    const leaf = object[keys[0]]
-
-    if (keys.length === 1) {
-      const leaf = object[keys[0]]
-
-      if (leaf === undefined) {
-        throw new ReferenceError('Invalid path')
-      } else {
-        return leaf
-      }
+    let match
+    let nextKey,
+        nextPath
+    
+    if(match = path.match(/^\.([_\$a-zA-Z][_\$a-zA-Z0-9]*)/)){
+      nextKey = match[1]
+      nextPath = path.substr(nextKey.length + 1)
+    } else if(match = path.match(/^\[['"]((?:[_\$a-zA-Z][_\$a-zA-Z0-9]*|[0-9]+))['"]\]/)){
+      nextKey = match[1]
+      nextPath = path.substr(nextKey.length + 4)
+    } else if(match = path.match(/^\[([0-9]+)\]/)){
+      nextKey = match[1]
+      nextPath = path.substr(nextKey.length + 2)
     } else {
-      return this.getValue(leaf, path.substr(path.indexOf('.') + 1))
+      throw new SyntaxError(`Could not parse object accessor from:${path}`)
+    }
+
+    console.log(nextKey)
+    const node = object[nextKey]
+
+    if (node === undefined) {
+      throw new ReferenceError('Invalid path')
+    } else if(nextPath === ''){
+      return node
+    } else {
+      return this.getValue(node, nextPath)
     }
   },
 
