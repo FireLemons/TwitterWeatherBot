@@ -437,13 +437,13 @@ describe('Alert Filters', function () {
       config.alerts.filters = [
         {
           "restriction": "matches",
-          "path": "properties.parameters.NWSheadline.0",
+          "path": "properties.parameters.NWSheadline[0]",
           "value": ".*",
           "keep": true
         },
         {
           "restriction": "has",
-          "path": "properties.parameters.NWSheadline.0",
+          "path": "properties.parameters.NWSheadline[0]",
           "keep": true
         },
         {
