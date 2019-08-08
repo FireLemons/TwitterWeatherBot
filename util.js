@@ -86,33 +86,43 @@ module.exports = {
       return object
     }
 
-    let match
-    let nextKey,
-        nextPath
+    let match,
+        key,
+        node = object
+        
+    if(match = path.match(/^([_\$a-zA-Z][_\$a-zA-Z0-9]*)/)){// check for key without dot
+      key = match[1]
+      path = path.substr(key.length)
+      
+      node = node[key]
+      
+      if (node === undefined) {
+        throw new ReferenceError('Invalid path')
+      }
+    }
     
-    if(match = path.match(/^\.([_\$a-zA-Z][_\$a-zA-Z0-9]*)/)){
-      nextKey = match[1]
-      nextPath = path.substr(nextKey.length + 1)
-    } else if(match = path.match(/^\[['"]((?:[_\$a-zA-Z][_\$a-zA-Z0-9]*|[0-9]+))['"]\]/)){
-      nextKey = match[1]
-      nextPath = path.substr(nextKey.length + 4)
-    } else if(match = path.match(/^\[([0-9]+)\]/)){
-      nextKey = match[1]
-      nextPath = path.substr(nextKey.length + 2)
-    } else {
-      throw new SyntaxError(`Could not parse object accessor from:${path}`)
+    while(path){
+      if(match = path.match(/^\.([_\$a-zA-Z][_\$a-zA-Z0-9]*)/)){// dot accessor
+        key = match[1]
+        path = path.substr(key.length + 1)
+      } else if(match = path.match(/^\[['"]((?:[_\$a-zA-Z][_\$a-zA-Z0-9]*|[0-9]+))['"]\]/)){// bracket accessor with key
+        key = match[1]
+        path = path.substr(key.length + 4)
+      } else if(match = path.match(/^\[([0-9]+)\]/)){// array index accessor
+        key = match[1]
+        path = path.substr(key.length + 2)
+      } else {
+        throw new SyntaxError(`Could not parse object accessor from:${path}`)
+      }
+      
+      node = node[key]
+      
+      if (node === undefined) {
+        throw new ReferenceError('Invalid path')
+      }
     }
-
-    console.log(nextKey)
-    const node = object[nextKey]
-
-    if (node === undefined) {
-      throw new ReferenceError('Invalid path')
-    } else if(nextPath === ''){
-      return node
-    } else {
-      return this.getValue(node, nextPath)
-    }
+    
+    return node
   },
 
   // Generates an object that executes onChange when the values in the object change
