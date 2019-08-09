@@ -481,7 +481,11 @@ describe('Alert Filters', function () {
 
       weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
 
-      weatherDataHandler.filterAlerts(exampleAlerts2.features).forEach((weatherAlert) => {
+      let filteredAlerts = weatherDataHandler.filterAlerts(exampleAlerts1.features)
+      
+      expect(filteredAlerts).to.have.lengthOf(6)
+      
+      filteredAlerts.forEach((weatherAlert) => {
         expect(weatherAlert.properties).to.have.property('replacedBy')
       })
     })
@@ -497,7 +501,11 @@ describe('Alert Filters', function () {
 
       weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
 
-      weatherDataHandler.filterAlerts(exampleAlerts2.features).forEach((weatherAlert) => {
+      let filteredAlerts = weatherDataHandler.filterAlerts(exampleAlerts1.features)
+      
+      expect(filteredAlerts).to.have.lengthOf(3)
+      
+      filteredAlerts.forEach((weatherAlert) => {
         expect(weatherAlert.properties).to.not.have.all.keys('replacedBy')
       })
     })
