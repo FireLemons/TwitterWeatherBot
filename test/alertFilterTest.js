@@ -400,6 +400,71 @@ describe('Alert Filters', function () {
     })
   })// End filter: contains tests
   
+  describe('Filter: equals', function () {
+    it('should keep alerts where the event is "Winter Weather Advisory" when keep is true and value is "Winter Weather Advisory"', function(){
+      config.alerts.filters = [
+        {
+          restriction: 'equals',
+          path: 'properties.event',
+          value: 'Winter Weather Advisory',
+          keep: true
+        }
+      ]
+
+      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      
+      let filteredAlerts = weatherDataHandler.filterAlerts(exampleAlerts1.features)
+      
+      expect(filteredAlerts).to.have.lengthOf(3)
+      
+      filteredAlerts.forEach((weatherAlert) => {
+        expect(weatherAlert.properties.event).to.equal('Winter Weather Advisory')
+      })
+    })
+    
+    it('should keep alerts where the event is not "Winter Weather Advisory" when keep is false and value is "Winter Weather Advisory"', function(){
+      config.alerts.filters = [
+        {
+          restriction: 'equals',
+          path: 'properties.event',
+          value: 'Winter Weather Advisory',
+          keep: false
+        }
+      ]
+
+      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      
+      let filteredAlerts = weatherDataHandler.filterAlerts(exampleAlerts1.features)
+      
+      expect(filteredAlerts).to.have.lengthOf(6)
+      
+      filteredAlerts.forEach((weatherAlert) => {
+        expect(weatherAlert.properties.event).to.not.equal('Winter Weather Advisory')
+      })
+    })
+    
+    it('should filter all the alerts when there are a pair of filters where keep is true in one and false in the other and all other properties are the same', function(){
+      config.alerts.filters = [
+        {
+          restriction: 'equals',
+          path: 'properties.event',
+          value: 'Winter Weather Advisory',
+          keep: false
+        },
+        {
+          restriction: 'equals',
+          path: 'properties.event',
+          value: 'Winter Weather Advisory',
+          keep: true
+        }
+      ]
+
+      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      
+      expect(weatherDataHandler.filterAlerts(exampleAlerts1.features)).to.be.empty
+    })
+  })// End filter: equals tests
+  
   describe('Filter: has', function () {
     it('should keep alerts where the alert contains properties.replacedBy when path is "properties.replacedBy" and keep is true', function(){
       config.alerts.filters = [
