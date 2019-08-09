@@ -476,5 +476,24 @@ describe('Alert Filters', function () {
         expect(weatherAlert.properties.parameters.BLOCKCHANNEL).to.include('CMAS')
       })
     })
-  })
+    
+    it('should filter all the alerts when there are a pair of filters where keep is true in one and false in the other and all other properties are the same', function(){
+      config.alerts.filters = [
+        {
+          restriction: 'has',
+          path: 'properties.parameters.NWSheadline',
+          keep: false
+        },
+        {
+          restriction: 'has',
+          path: 'properties.parameters.NWSheadline',
+          keep: true
+        }
+      ]
+
+      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      
+      expect(weatherDataHandler.filterAlerts(exampleAlerts2.features)).to.be.empty
+    })
+  })// End filter: has tests
 })
