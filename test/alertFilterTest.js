@@ -373,7 +373,11 @@ describe('Alert Filters', function () {
 
       weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
       
-      weatherDataHandler.filterAlerts(exampleAlerts4.features).forEach((weatherAlert) => {
+      let filteredAlerts = weatherDataHandler.filterAlerts(exampleAlerts4.features)
+      
+      expect(filteredAlerts).to.have.lengthOf(34)
+      
+      filteredAlerts.forEach((weatherAlert) => {
         expect(weatherAlert.properties.geocode.UGC).to.not.include('MOZ041')
       })
     })
