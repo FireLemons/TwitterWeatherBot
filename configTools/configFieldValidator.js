@@ -17,6 +17,13 @@ module.exports = {
   validateAlertsAppWebsite (website) {
     return /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/.test(website)
   },
+  
+  // Checks whether config.alerts.app.keep is a boolean
+  //  @param  {any} keep The given keep parameter
+  //  @return {boolean} True keep is a boolean false otherwise
+  validateAlertsFiltersKeep (keep) {
+    return keep === false || keep === true;
+  },
 
   // Checks whether config.alerts.filters.path is a valid chain of dot accessors
   //  @param  {string} path The given path

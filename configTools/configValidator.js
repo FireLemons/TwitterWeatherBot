@@ -294,6 +294,14 @@ if (!(config instanceof Object) || config instanceof Array) {
           if (!validPath) {
             printFilterPathHint()
           }
+          
+          // Check keep
+          const keep = filter.keep
+          let validKeep = configFieldValidator.validateAlertsFiltersKeep(keep)
+          
+          if(validKeep){
+            console.log(`ERROR:   config.alerts.filters[${i}].keep must be a boolean`)
+          }
 
           // Check values
           const value = filter.value
@@ -313,35 +321,37 @@ if (!(config instanceof Object) || config instanceof Array) {
             if (validPath) {
               switch (restriction) {
                 case 'after':
-                  if (validValue) {
+                  if (validValue && validKeep) {
                     console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts with dates at alert.${path} that are before the time when alerts are fetched + ${filter.value} hour(s).`)
                   }
                   break
                 case 'before':
-                  if (validValue) {
+                  if (validValue && validKeep) {
                     console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts with dates at alert.${path} that are after the time when alerts are fetched + ${filter.value} hour(s).`)
                   }
 
                   break
                 case 'contains':
-                  if (validValue) {
+                  if (validValue && validKeep) {
                     console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts with arrays at alert.${path} not containing the value ${filter.value}.`)
                   }
 
                   break
                 case 'equals':
-                  if (validValue) {
+                  if (validValue && validKeep) {
                     console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts with values at alert.${path} equal(strict equality) to ${filter.value}.`)
                   }
 
                   break
                 case 'has':
-                  console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts where alert.${filter.path} ${value ? 'does not contain' : 'contains'} a value.`)
+                  if(validKeep){
+                    console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts where alert.${filter.path} ${value ? 'does not contain' : 'contains'} a value.`)
+                  }
                   break
                 case 'matches':
-                  if (validValue) {
+                  if (validValue && validKeep) {
                     console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts with strings at alert.${path} not matching the regex ${filter.value}.`)
-                  } else {
+                  } else if(!validValue){
                     console.log(`ERROR:   Invalid filter config.alerts.filters[${i}] "matches". Filter value is invalid regex.`)
                   }
 
@@ -350,7 +360,7 @@ if (!(config instanceof Object) || config instanceof Array) {
             }
           }
 
-          checkKeys(filter, `config.alerts.filters[${i}]`, ['restriction', 'path', 'value'])
+          checkKeys(filter, `config.alerts.filters[${i}]`, ['keep', 'restriction', 'path', 'value'])
         }
       })
     }
@@ -392,7 +402,7 @@ if (!(config instanceof Object) || config instanceof Array) {
     if(validParams && validAppInfo){
       console.log('INFO: Fetching alerts from alert URL...')
       
-      let alertPromise = promise.getJSONPromise(alertUrl, {
+      let alertPromise = promise.getJSONPromiseGet(alertUrl, {
         "headers": {
           "User-Agent": `${config.alerts.app.name}/v${config.alerts.app.version} (${config.alerts.app.website}; ${config.alerts.app.contact})`
         }
@@ -542,7 +552,7 @@ if (!(config instanceof Object) || config instanceof Array) {
       console.log(`INFO: Forecast data URL is ${forecastDataUrl}`)
       console.log('INFO: Fetching forecast data from URL...')
       
-      let forecastPromise = promise.getJSONPromise(forecastDataUrl)
+      let forecastPromise = promise.getJSONPromisePost(forecastDataUrl)
       
       forecastPromise.then((data) => {
         fs.writeFile('./forecastData.json', JSON.stringify(data), (error) => {
