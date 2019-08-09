@@ -345,7 +345,7 @@ describe('Alert Filters', function () {
       expect(() => { weatherDataHandler.filterAlerts(exampleAlerts4.features) }).to.throw(TypeError)
     })
 
-    it('should keep the only alert where properties.geocode.UGC contains "MOZ041" when keep is true and value is "MOZ041"', function () {
+    it('should keep alerts where properties.geocode.UGC contains "MOZ041" when keep is true and value is "MOZ041"', function () {
       config.alerts.filters = [
         {
           restriction: 'contains',
@@ -357,8 +357,10 @@ describe('Alert Filters', function () {
 
       weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
 
-      expect(weatherDataHandler.filterAlerts(exampleAlerts4.features)).to.have.lengthOf(1)
-      expect(weatherDataHandler.filterAlerts(exampleAlerts4.features)[0].properties.geocode.UGC).to.include('MOZ041')
+      let filteredAlerts = weatherDataHandler.filterAlerts(exampleAlerts4.features)
+
+      expect(filteredAlerts).to.have.lengthOf(1)
+      expect(filteredAlerts[0].properties.geocode.UGC).to.include('MOZ041')
     })
 
     it('should keep alerts where properties.geocode.UGC does not contain "MOZ041" when keep is false and value is "MOZ041"', function () {
@@ -573,4 +575,84 @@ describe('Alert Filters', function () {
       expect(weatherDataHandler.filterAlerts(exampleAlerts2.features)).to.be.empty
     })
   })// End filter: has tests
+  
+  describe('Filter: matches', function () {
+    it('should throw a TypeError when path does not lead to a string', function () {
+      config.alerts.filters = [
+        {
+          restriction: 'matches',
+          path: 'properties.affectedZones',
+          value: '.*',
+          keep: true
+        }
+      ]
+
+      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+
+      expect(() => { weatherDataHandler.filterAlerts(exampleAlerts4.features) }).to.throw(TypeError)
+    })
+    
+    it('should keep alerts where the event is a watch when keep is true and value is " Watch$"', function () {
+      config.alerts.filters = [
+        {
+          restriction: 'matches',
+          path: 'properties.event',
+          value: ' Watch$',
+          keep: true
+        }
+      ]
+
+      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+
+      let filteredAlerts = weatherDataHandler.filterAlerts(exampleAlerts4.features)
+
+      expect(filteredAlerts).to.have.lengthOf(7)
+      
+      filteredAlerts.forEach((weatherAlert) => {
+        expect(weatherAlert.properties.event).to.match(/ Watch$/)
+      })
+    })
+    
+    it('should keep alerts where the event is not a watch when keep is false and value is " Watch$"', function () {
+      config.alerts.filters = [
+        {
+          restriction: 'matches',
+          path: 'properties.event',
+          value: ' Watch$',
+          keep: false
+        }
+      ]
+
+      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+
+      let filteredAlerts = weatherDataHandler.filterAlerts(exampleAlerts4.features)
+
+      expect(filteredAlerts).to.have.lengthOf(28)
+      
+      filteredAlerts.forEach((weatherAlert) => {
+        expect(weatherAlert.properties.event).to.not.match(/ Watch$/)
+      })
+    })
+    
+    it('should filter all the alerts when there are a pair of filters where keep is true in one and false in the other and all other properties are the same', function () {
+      config.alerts.filters = [
+        {
+          restriction: 'matches',
+          path: 'properties.event',
+          value: ' Watch$',
+          keep: false
+        },
+        {
+          restriction: 'matches',
+          path: 'properties.event',
+          value: ' Watch$',
+          keep: true
+        }
+      ]
+
+      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+
+      expect(weatherDataHandler.filterAlerts(exampleAlerts4.features)).to.be.empty
+    })
+  })// End filter: matches
 })
