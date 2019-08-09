@@ -84,7 +84,7 @@ module.exports = class ExtraGenerator {
       this.logger.info('Generating tutorial')
       extra.type = 'tutorial'
       extra.statement = this.getTutorial()
-    } else if (messageRoll < 0.35) {
+    } else if (messageRoll < 0.65) {
       const eventRoll = Math.random()
 
       if (eventRoll < 0.6) {
@@ -100,7 +100,7 @@ module.exports = class ExtraGenerator {
         extra.type = 'season'
         extra.statement = celestial.getSeasonProgress()
       }
-    } else if (messageRoll < 0.5) {
+    } else if (messageRoll < 0.75) {
       this.logger.info('Generating trivia')
       extra.type = 'beaufort'
       extra.statement = this.getBeaufort(parsedWeatherData.list[0].wind.speed.toPrecision(2))
