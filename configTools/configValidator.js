@@ -165,267 +165,274 @@ function checkObject (obj, path) {
 if (!(config instanceof Object) || config instanceof Array) {
   throw new TypeError('Config file must contain a JSON object')
 } else {
-  // Check alerts
-  const alerts = config.alerts
+  // Check weather
+  const weather = config.weather
 
-  if (!alerts || alerts.disabled) {
-    console.log('INFO: Alerts disabled.')
-  } else if (!(alerts instanceof Object) || alerts instanceof Array) {
-    console.log('ERROR: config.alerts must be an object')
-  } else {
-    console.log('INFO: Alerts are enabled.')
+  if (checkObject(weather, 'config.weather')) {
+    // Check alerts
+    const alerts = weather.alerts
 
-    // Check info to be sent in user-agent header to NWS api
-    const appInfo = alerts.app
-    let validAppInfo = true
-
-    if (!checkObject(appInfo, 'config.alerts.app')) {
-      console.log('The app object contains required information to send to the national weather service api for alert data')
-      console.log('The "app" object is in the form:\n"app": {\n  "contact": "EMAIL ADDRESS",\n  "name": "APP NAME",\n  "version": "VERSION NO",\n  "website": "APP WEBSITE OR CONTACT WEBSITE"\n}\n')
+    if (!alerts || alerts.disabled) {
+      console.log('INFO: Alerts disabled.')
+    } else if (!(alerts instanceof Object) || alerts instanceof Array) {
+      console.log('ERROR: config.weather.alerts must be an object')
     } else {
-      // Check contact
-      const contact = appInfo.contact
-      let validContact = checkString(contact, 'config.alerts.app.contact')
+      console.log('INFO: Alerts are enabled.')
 
-      if (validContact && !configFieldValidator.validateAlertsAppContact(appInfo.contact)) {
-        console.log('WARNING: field "contact" in config.alerts.app is typically an email address')
+      // Check info to be sent in user-agent header to NWS api
+      const appInfo = alerts.app
+      let validAppInfo = true
 
-        validContact = false
-      }
-
-      if (!validContact) {
-        console.log('The national weather service api requires contact information in order get alert data')
-        console.log('A typical "contact" looks like: "contact": "contact.email@example.com"')
-      }
-
-      // Check app name
-      const appName = appInfo.name
-      let validAppName = checkString(appName, 'config.alerts.app.name')
-
-      if (validAppName && !configFieldValidator.validateNotEmptyString(appName)) {
-        console.log('WARNING: field "name" in config.alerts.app is the empty string or contains exclusively whitespace')
-
-        validAppName = false
-      }
-
-      if (!validAppName) {
-        console.log('The national weather service api requires an app name in order to get alert data')
-        console.log('A typical "name" looks like: "name": "ApplicationName"')
-      }
-
-      // Check app version
-      const version = appInfo.version
-      let validVersion = true
-
-      if (version === undefined) {
-        console.log('ERROR: missing field "version" in config.alerts.app')
-
-        validVersion = false
-      } else if (typeof version !== 'string' && isNaN(version)) {
-        console.log('ERROR: field "version" in config.alerts.app must be a string or a number.')
-
-        validVersion = false
-      } else if (typeof version === 'string' && !configFieldValidator.validateNotEmptyString(version)) {
-        console.log('WARNING: config.alerts.app.version is the empty string or contains exclusively whitespace')
-
-        validVersion = false
-      }
-
-      if (!validVersion) {
-        console.log('The national weather service api requires an app version in order to get alert data')
-        console.log('A typical "version" looks like: "version": "vX.Y"')
-      }
-
-      // Check app website
-      const website = appInfo.website
-      const validWebsite = checkString(website, 'config.alerts.app.website')
-
-      if (validWebsite && !configFieldValidator.validateAlertsAppWebsite(website)) {
-        console.log('WARNING: config.alerts.app.website is in an unrecognized format')
-      }
-
-      if (!validWebsite) {
-        console.log('The national weather service api requires an app related website in order to get alert data')
-        console.log('A typical "website" looks like: "website": "https://your.app.url/"')
-      }
-      
-      validAppInfo = validContact && validAppName && validVersion && validWebsite
-      checkKeys(appInfo, 'config.alerts.app', ['contact', 'name', 'version', 'website'])
-    }
-
-    // Check alert filters
-    if (alerts.filters === undefined) { // No filters
-      console.log('INFO: No alert filters.')
-    } else if (!(alerts.filters instanceof Array)) { // Filters wrong type
-      console.log('ERROR: config.alerts.filters must be an array.')
-    } else if (!alerts.filters.length) { // No filters also
-      console.log('INFO: No alert filters.')
-    } else { // There are filters
-      console.log('INFO: Alert Filters:')
-
-      alerts.filters.forEach((filter, i) => {
-        if (!(filter instanceof Object) || filter instanceof Array) {
-          console.log('ERROR:   Each filter of config.alerts.filters must be an object')
-        } else {
-          // Check filter restriction
-          const restriction = filter.restriction
-          let validRestriction = checkString(restriction, `config.alerts.filters[i].restriction`)
-
-          if (validRestriction && !configFieldValidator.validateAlertsFiltersRestriction(filter.restriction)) {
-            console.log(`ERROR:   config.alerts.filters[${i}].restriction has unknown filter restriction: ${filter.restriction}`)
-
-            validRestriction = false
-          }
-
-          if (!validRestriction) {
-            printFilterRestrictionHint()
-          }
-
-          // Check filter path
-          const path = filter.path
-          let validPath = checkString(path, `config.alerts.filters[i].path`)
-
-          if (validPath && !configFieldValidator.validateAlertsFiltersPath(path)) { // Filter path wrong format
-            console.log(`ERROR:   config.alerts.filters[${i}].path is in incorrect format`)
-
-            validPath = false
-          }
-
-          if (!validPath) {
-            printFilterPathHint()
-          }
-          
-          // Check keep
-          const keep = filter.keep
-          let validKeep = configFieldValidator.validateAlertsFiltersKeep(keep)
-          
-          if(validKeep){
-            console.log(`ERROR:   config.alerts.filters[${i}].keep must be a boolean`)
-          }
-
-          // Check values
-          const value = filter.value
-          let validValue = true
-
-          if (validRestriction) {
-            try {
-              validValue = configFieldValidator.validateAlertsFiltersValue(restriction, value)
-            } catch (e) {
-              if (e instanceof ReferenceError) {
-                console.log(`ERROR:   Invalid filter config.alerts.filters[${i}] "${restriction}". Filter value missing.`)
-              } else if (e instanceof TypeError) {
-                console.log(`ERROR:   Invalid filter config.alerts.filters[${i}] "${restriction}". ${e.message}`)
-              }
-            }
-
-            if (validPath) {
-              switch (restriction) {
-                case 'after':
-                  if (validValue && validKeep) {
-                    console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts with dates at alert.${path} that are before the time when alerts are fetched + ${filter.value} hour(s).`)
-                  }
-                  break
-                case 'before':
-                  if (validValue && validKeep) {
-                    console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts with dates at alert.${path} that are after the time when alerts are fetched + ${filter.value} hour(s).`)
-                  }
-
-                  break
-                case 'contains':
-                  if (validValue && validKeep) {
-                    console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts with arrays at alert.${path} not containing the value ${filter.value}.`)
-                  }
-
-                  break
-                case 'equals':
-                  if (validValue && validKeep) {
-                    console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts with values at alert.${path} equal(strict equality) to ${filter.value}.`)
-                  }
-
-                  break
-                case 'has':
-                  if(validKeep){
-                    console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts where alert.${filter.path} ${value ? 'does not contain' : 'contains'} a value.`)
-                  }
-                  break
-                case 'matches':
-                  if (validValue && validKeep) {
-                    console.log(`INFO:   config.alerts.filters[${i}] will remove all alerts with strings at alert.${path} not matching the regex ${filter.value}.`)
-                  } else if(!validValue){
-                    console.log(`ERROR:   Invalid filter config.alerts.filters[${i}] "matches". Filter value is invalid regex.`)
-                  }
-
-                  break
-              }
-            }
-          }
-
-          checkKeys(filter, `config.alerts.filters[${i}]`, ['keep', 'restriction', 'path', 'value'])
-        }
-      })
-    }
-
-    // check get params for api.weather.gov
-    const params = alerts.params
-    let validParams = true,
-        alertUrl;
-
-    if (checkObject(params, 'config.alerts.params')) {
-      let locationParamCount = 0
-
-      locationParamCount += params.area !== undefined
-      locationParamCount += params.point !== undefined
-      locationParamCount += params.region !== undefined
-      locationParamCount += params.region_type !== undefined
-      locationParamCount += params.zone !== undefined
-
-      if (locationParamCount > 1) {
-        console.log('ERROR: 2 or more of these keys are invalid: area, point, region, region_type, zone in config.alerts.params')
-        
-        validParams = false
+      if (!checkObject(appInfo, 'config.weather.alerts.app')) {
+        console.log('The app object contains required information to send to the national weather service api for alert data')
+        console.log('The "app" object is in the form:\n"app": {\n  "contact": "EMAIL ADDRESS",\n  "name": "APP NAME",\n  "version": "VERSION NO",\n  "website": "APP WEBSITE OR CONTACT WEBSITE"\n}\n')
       } else {
-        let alertQueryParams = ''
+        // Check contact
+        const contact = appInfo.contact
+        let validContact = checkString(contact, 'config.weather.alerts.app.contact')
 
-        for (const paramName in params) {
-          if (Object.prototype.hasOwnProperty.call(params, paramName)) {
-            alertQueryParams += '&' + paramName + '=' + params[paramName]
-          }
-        }
-        
-        alertUrl = `https://api.weather.gov/alerts?${alertQueryParams.substr(1)}`
-        console.log(`INFO: Weather alert url is ${alertUrl}`)
-      }
+        if (validContact && !configFieldValidator.validateAlertsAppContact(appInfo.contact)) {
+          console.log('WARNING: field "contact" in config.weather.alerts.app is typically an email address')
 
-      checkKeys(params, 'config.alerts.params', ['active', 'start', 'end', 'status', 'message_type', 'event', 'code', 'region_type', 'point', 'region', 'area', 'zone', 'urgency', 'severity', 'certainty', 'limit', 'cursor'])
-    }
-    
-    if(validParams && validAppInfo){
-      console.log('INFO: Fetching alerts from alert URL...')
-      
-      let alertPromise = promise.getJSONPromiseGet(alertUrl, {
-        "headers": {
-          "User-Agent": `${config.alerts.app.name}/v${config.alerts.app.version} (${config.alerts.app.website}; ${config.alerts.app.contact})`
+          validContact = false
         }
-      })
-      
-      alertPromise.then((alerts) => {
-        fs.writeFile('./alerts.json', JSON.stringify(alerts), (error) => {
-          if(error){
-            console.log('ERROR: Failed to save alerts to file')
-            throw error
+
+        if (!validContact) {
+          console.log('The national weather service api requires contact information in order get alert data')
+          console.log('A typical "contact" looks like: "contact": "contact.email@example.com"')
+        }
+
+        // Check app name
+        const appName = appInfo.name
+        let validAppName = checkString(appName, 'config.weather.alerts.app.name')
+
+        if (validAppName && !configFieldValidator.validateNotEmptyString(appName)) {
+          console.log('WARNING: field "name" in config.weather.alerts.app is the empty string or contains exclusively whitespace')
+
+          validAppName = false
+        }
+
+        if (!validAppName) {
+          console.log('The national weather service api requires an app name in order to get alert data')
+          console.log('A typical "name" looks like: "name": "ApplicationName"')
+        }
+
+        // Check app version
+        const version = appInfo.version
+        let validVersion = true
+
+        if (version === undefined) {
+          console.log('ERROR: missing field "version" in config.weather.alerts.app')
+
+          validVersion = false
+        } else if (typeof version !== 'string' && isNaN(version)) {
+          console.log('ERROR: field "version" in config.weather.alerts.app must be a string or a number.')
+
+          validVersion = false
+        } else if (typeof version === 'string' && !configFieldValidator.validateNotEmptyString(version)) {
+          console.log('WARNING: config.weather.alerts.app.version is the empty string or contains exclusively whitespace')
+
+          validVersion = false
+        }
+
+        if (!validVersion) {
+          console.log('The national weather service api requires an app version in order to get alert data')
+          console.log('A typical "version" looks like: "version": "vX.Y"')
+        }
+
+        // Check app website
+        const website = appInfo.website
+        const validWebsite = checkString(website, 'config.weather.alerts.app.website')
+
+        if (validWebsite && !configFieldValidator.validateAlertsAppWebsite(website)) {
+          console.log('WARNING: config.weather.alerts.app.website is in an unrecognized format')
+        }
+
+        if (!validWebsite) {
+          console.log('The national weather service api requires an app related website in order to get alert data')
+          console.log('A typical "website" looks like: "website": "https://your.app.url/"')
+        }
+
+        validAppInfo = validContact && validAppName && validVersion && validWebsite
+        checkKeys(appInfo, 'config.weather.alerts.app', ['contact', 'name', 'version', 'website'])
+      }// End check alert app info
+
+      // Check alert filters
+      if (alerts.filters === undefined) { // No filters
+        console.log('INFO: No alert filters.')
+      } else if (!(alerts.filters instanceof Array)) { // Filters wrong type
+        console.log('ERROR: config.weather.alerts.filters must be an array.')
+      } else if (!alerts.filters.length) { // No filters also
+        console.log('INFO: No alert filters.')
+      } else { // There are filters
+        console.log('INFO: Alert Filters:')
+
+        alerts.filters.forEach((filter, i) => {
+          if (!(filter instanceof Object) || filter instanceof Array) {
+            console.log('ERROR:   Each filter of config.weather.alerts.filters must be an object')
           } else {
-            console.log(`INFO: Alert data written to ${path.resolve('./alerts.json')}`)
-            console.log('WARNING: Alert filters were not tested in fetching the alert data')
+            // Check filter restriction
+            const restriction = filter.restriction
+            let validRestriction = checkString(restriction, `config.weather.alerts.filters[i].restriction`)
+
+            if (validRestriction && !configFieldValidator.validateAlertsFiltersRestriction(filter.restriction)) {
+              console.log(`ERROR:   config.weather.alerts.filters[${i}].restriction has unknown filter restriction: ${filter.restriction}`)
+
+              validRestriction = false
+            }
+
+            if (!validRestriction) {
+              printFilterRestrictionHint()
+            }
+
+            // Check filter path
+            const path = filter.path
+            let validPath = checkString(path, `config.weather.alerts.filters[i].path`)
+
+            if (validPath && !configFieldValidator.validateAlertsFiltersPath(path)) { // Filter path wrong format
+              console.log(`ERROR:   config.weather.alerts.filters[${i}].path is in incorrect format`)
+
+              validPath = false
+            }
+
+            if (!validPath) {
+              printFilterPathHint()
+            }
+
+            // Check keep
+            const keep = filter.keep
+            const validKeep = configFieldValidator.validateAlertsFiltersKeep(keep)
+
+            if (!validKeep) {
+              console.log(`ERROR:   config.weather.alerts.filters[${i}].keep must be a boolean`)
+            }
+
+            // Check values
+            const value = filter.value
+            let validValue = true
+
+            if (validRestriction) {
+              try {
+                validValue = configFieldValidator.validateAlertsFiltersValue(restriction, value)
+              } catch (e) {
+                if (e instanceof ReferenceError) {
+                  console.log(`ERROR:   Invalid filter config.weather.alerts.filters[${i}] "${restriction}". Filter value missing.`)
+                } else if (e instanceof TypeError) {
+                  console.log(`ERROR:   Invalid filter config.weather.alerts.filters[${i}] "${restriction}". ${e.message}`)
+                }
+              }
+
+              if (validPath) {
+                switch (restriction) {
+                  case 'after':
+                    if (validValue && validKeep) {
+                      console.log(`INFO:   config.weather.alerts.filters[${i}] will remove all alerts with dates at alert.${path} that are before the time when alerts are fetched + ${filter.value} hour(s).`)
+                    }
+                    break
+                  case 'before':
+                    if (validValue && validKeep) {
+                      console.log(`INFO:   config.weather.alerts.filters[${i}] will remove all alerts with dates at alert.${path} that are after the time when alerts are fetched + ${filter.value} hour(s).`)
+                    }
+
+                    break
+                  case 'contains':
+                    if (validValue && validKeep) {
+                      console.log(`INFO:   config.weather.alerts.filters[${i}] will remove all alerts with arrays at alert.${path} not containing the value ${filter.value}.`)
+                    }
+
+                    break
+                  case 'equals':
+                    if (validValue && validKeep) {
+                      console.log(`INFO:   config.weather.alerts.filters[${i}] will remove all alerts with values at alert.${path} equal(strict equality) to ${filter.value}.`)
+                    }
+
+                    break
+                  case 'has':
+                    if (validKeep) {
+                      console.log(`INFO:   config.weather.alerts.filters[${i}] will remove all alerts where alert.${filter.path} ${value ? 'does not contain' : 'contains'} a value.`)
+                    }
+                    break
+                  case 'matches':
+                    if (validValue && validKeep) {
+                      console.log(`INFO:   config.weather.alerts.filters[${i}] will remove all alerts with strings at alert.${path} not matching the regex ${filter.value}.`)
+                    } else if (!validValue) {
+                      console.log(`ERROR:   Invalid filter config.weather.alerts.filters[${i}] "matches". Filter value is invalid regex.`)
+                    }
+
+                    break
+                }
+              }
+            }
+
+            checkKeys(filter, `config.weather.alerts.filters[${i}]`, ['keep', 'restriction', 'path', 'value'])
           }
         })
-      })
-      
-      alertPromise.catch((error) => {
-        console.log('ERROR: Failed to fetch alert data')
-        console.log(error)
-      })
-    }
-  }
+      }
+
+      // check get params for api.weather.gov
+      const params = alerts.params
+      let validParams = true
+      let alertUrl
+
+      if (checkObject(params, 'config.weather.alerts.params')) {
+        let locationParamCount = 0
+
+        locationParamCount += params.area !== undefined
+        locationParamCount += params.point !== undefined
+        locationParamCount += params.region !== undefined
+        locationParamCount += params.region_type !== undefined
+        locationParamCount += params.zone !== undefined
+
+        if (locationParamCount > 1) {
+          console.log('ERROR: 2 or more of these keys are invalid: area, point, region, region_type, zone in config.weather.alerts.params')
+
+          validParams = false
+        } else {
+          let alertQueryParams = ''
+
+          for (const paramName in params) {
+            if (Object.prototype.hasOwnProperty.call(params, paramName)) {
+              alertQueryParams += '&' + paramName + '=' + params[paramName]
+            }
+          }
+
+          alertUrl = `https://api.weather.gov/alerts?${alertQueryParams.substr(1)}`
+          console.log(`INFO: Weather alert url is ${alertUrl}`)
+        }
+
+        checkKeys(params, 'config.weather.alerts.params', ['active', 'start', 'end', 'status', 'message_type', 'event', 'code', 'region_type', 'point', 'region', 'area', 'zone', 'urgency', 'severity', 'certainty', 'limit', 'cursor'])
+      }
+
+      if (validParams && validAppInfo) {
+        console.log('INFO: Fetching alerts from alert URL...')
+
+        const alertAppInfo = config.weather.alerts.app
+
+        const alertPromise = promise.getJSONPromiseGet(alertUrl, {
+          headers: {
+            'User-Agent': `${alertAppInfo.name}/v${alertAppInfo.version} (${alertAppInfo.website}; ${alertAppInfo.contact})`
+          }
+        })
+
+        alertPromise.then((alerts) => {
+          fs.writeFile('./alerts.json', JSON.stringify(alerts), (error) => {
+            if (error) {
+              console.log('ERROR: Failed to save alerts to file')
+              throw error
+            } else {
+              console.log(`INFO: Alert data written to ${path.resolve('./alerts.json')}`)
+              console.log('WARNING: Alert filters were not tested in fetching the alert data')
+            }
+          })
+        })
+
+        alertPromise.catch((error) => {
+          console.log('ERROR: Failed to fetch alert data')
+          console.log(error)
+        })
+      }
+    }// End check alerts
+  }// End check weather
 
   // Check coordinates
   const coordinates = config.coordinates
@@ -504,9 +511,9 @@ if (!(config instanceof Object) || config instanceof Array) {
   }
 
   // Check Open Weather Map
-  const OWM = config.open_weather_map
+  const OWM = config.openWeatherMap
 
-  if (checkObject(OWM, 'config.open_weather_map')) {
+  if (checkObject(OWM, 'config.openWeatherMap')) {
     // Check get params for weather forecast
     const location = OWM.location
 
@@ -547,16 +554,16 @@ if (!(config instanceof Object) || config instanceof Array) {
         }
       }
 
-      let forecastDataUrl = `https://api.openweathermap.org/data/2.5/forecast?${OWMQueryParams.substr(1)}&units=metric&APPID=${OWM.key}`
-      
+      const forecastDataUrl = `https://api.openweathermap.org/data/2.5/forecast?${OWMQueryParams.substr(1)}&units=metric&APPID=${OWM.key}`
+
       console.log(`INFO: Forecast data URL is ${forecastDataUrl}`)
       console.log('INFO: Fetching forecast data from URL...')
-      
-      let forecastPromise = promise.getJSONPromisePost(forecastDataUrl)
-      
+
+      const forecastPromise = promise.getJSONPromisePost(forecastDataUrl)
+
       forecastPromise.then((data) => {
         fs.writeFile('./forecastData.json', JSON.stringify(data), (error) => {
-          if(error){
+          if (error) {
             console.log('ERROR: Failed to save forecast data to file')
             throw error
           } else {
@@ -564,7 +571,7 @@ if (!(config instanceof Object) || config instanceof Array) {
           }
         })
       })
-      
+
       forecastPromise.catch((error) => {
         console.log('ERROR: Failed to fetch weather request data')
         console.log(error)
@@ -581,20 +588,20 @@ if (!(config instanceof Object) || config instanceof Array) {
     // Check consumer key
     const consumerKey = twitter.consumer_key
     let validConsumerKey = checkString(consumerKey, 'config.twitter.consumer_key')
-    
+
     if (validConsumerKey && !configFieldValidator.validateNotEmptyString(consumerKey)) {
       console.log('ERROR: field "consumer_key" in config.twitter is the empty string or contains exclusively whitespace')
-      
+
       validConsumerKey = false
     }
 
     // Check consumer secret
     const consumerSecret = twitter.consumer_secret
     let validConsumerSecret = checkString(consumerSecret, 'config.twitter.consumer_key')
-    
+
     if (validConsumerSecret && !configFieldValidator.validateNotEmptyString(consumerSecret)) {
       console.log('ERROR: field "consumer_secret" in config.twitter is the empty string or contains exclusively whitespace')
-      
+
       validConsumerSecret = false
     }
 
@@ -604,7 +611,7 @@ if (!(config instanceof Object) || config instanceof Array) {
 
     if (validAccessTokenKey && !configFieldValidator.validateNotEmptyString(accessTokenKey)) {
       console.log('ERROR: field "access_token_key" in config.twitter is the empty string or contains exclusively whitespace')
-      
+
       validAccessTokenKey = false
     }
 
@@ -614,28 +621,28 @@ if (!(config instanceof Object) || config instanceof Array) {
 
     if (validAccessTokenSecret && !configFieldValidator.validateNotEmptyString(accessTokenSecret)) {
       console.log('ERROR: field "access_token_secret" in config.twitter is the empty string or contains exclusively whitespace')
-      
+
       validAccessTokenSecret = false
     }
 
-    let twitterClient;
-    
-    if(validConsumerKey && validConsumerSecret && validAccessTokenKey && validAccessTokenSecret){
+    let twitterClient
+
+    if (validConsumerKey && validConsumerSecret && validAccessTokenKey && validAccessTokenSecret) {
       console.log('INFO: Sending test tweet...')
-      
+
       twitterClient = new Twitter({
         consumer_key: config.twitter.consumer_key,
         consumer_secret: config.twitter.consumer_secret,
         access_token_key: config.twitter.access_token_key,
         access_token_secret: config.twitter.access_token_secret
       })
-      
-      let twitterPromise = twitterClient.post('statuses/update', { status: `Test at ${new Date().toString()}` })
-      
+
+      const twitterPromise = twitterClient.post('statuses/update', { status: `Test at ${new Date().toString()}` })
+
       twitterPromise.then((tweet) => {
         console.log('INFO: Tweet received. Check Twitter for a test status update.')
       })
-      
+
       twitterPromise.catch((error) => {
         console.log('ERROR: Failed to send test tweet using config credentials')
         console.log(error)
@@ -645,26 +652,26 @@ if (!(config instanceof Object) || config instanceof Array) {
     // Check local weather station id
     const localStationHandle = twitter.localStationHandle
     let validStationHandle = checkString(localStationHandle, 'config.twitter.localStationHandle')
-    
+
     if (validStationHandle && !configFieldValidator.validateNotEmptyString(localStationHandle)) {
       console.log('ERROR: config.twitter.localStationHandle must be a string')
-      
+
       validStationHandle = false
     }
-    
-    if(validStationHandle && twitterClient){
+
+    if (validStationHandle && twitterClient) {
       console.log(`INFO: Attempting to fetch tweets from ${localStationHandle}...`)
-      
-      let twitterPromise = twitterClient.get('statuses/user_timeline', {
-        "count": 10,
-        "exclude_replies": true,
-        "trim_user": true,
-        "screen_name": localStationHandle
+
+      const twitterPromise = twitterClient.get('statuses/user_timeline', {
+        count: 10,
+        exclude_replies: true,
+        trim_user: true,
+        screen_name: localStationHandle
       })
-      
+
       twitterPromise.then((posts) => {
         fs.writeFile('./localTwitterPosts.json', JSON.stringify(posts), (error) => {
-          if(error){
+          if (error) {
             console.log('ERROR: Failed to save twitter posts of local weather station to file')
             throw error
           } else {
@@ -672,7 +679,7 @@ if (!(config instanceof Object) || config instanceof Array) {
           }
         })
       })
-      
+
       twitterPromise.catch((error) => {
         console.log(`ERROR: Failed to fetch tweets from ${localStationHandle}`)
         console.log('  Are you sure you enetered the correct twitter handle?')
@@ -683,5 +690,5 @@ if (!(config instanceof Object) || config instanceof Array) {
     checkKeys(twitter, 'config.twitter', ['consumer_key', 'consumer_secret', 'access_token_key', 'access_token_secret', 'localStationHandle'])
   }
 
-  checkKeys(config, 'config', ['alerts', 'coordinates', 'log', 'open_weather_map', 'twitter'])
+  checkKeys(config, 'config', ['coordinates', 'log', 'twitter', 'weather'])
 }
