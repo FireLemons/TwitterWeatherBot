@@ -153,7 +153,7 @@ module.exports = {
               const referenceDate = new Date()
               referenceDate.setHours(filter.value + referenceDate.getHours())
 
-              if (referenceDate - dateAtPath < 0 === filter.keep) {
+              if ((referenceDate - dateAtPath < 0) === filter.keep) {
                 filteredAlerts.push(alertElem)
               }
             }
@@ -169,7 +169,7 @@ module.exports = {
               const referenceDate = new Date()
               referenceDate.setHours(filter.value + referenceDate.getHours())
 
-              if (referenceDate - dateAtPath > 0 === filter.keep) {
+              if ((referenceDate - dateAtPath > 0) === filter.keep) {
                 filteredAlerts.push(alertElem)
               }
             }
@@ -182,7 +182,7 @@ module.exports = {
                 throw new TypeError('Could not filter using restriction contains. Value at path not array.')
               }
 
-              if (valueAtPath.indexOf(filter.value) > -1 === filter.keep) {
+              if ((valueAtPath.indexOf(filter.value) > -1) === filter.keep) {
                 filteredAlerts.push(alertElem)
               }
             }
