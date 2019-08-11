@@ -167,7 +167,7 @@ process.on('unhandledRejection', (reason, p) => {
 })
 
 // Init Weather Data Object
-const weatherFetcher = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+const weatherFetcher = new weatherTools.DataFetcher(config.weather, logger)
 
 // Init extra statement generator
 const extraGenerator = new Extra(config.coordinates, logger)
