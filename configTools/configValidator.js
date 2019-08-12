@@ -432,6 +432,79 @@ if (!(config instanceof Object) || config instanceof Array) {
         })
       }
     }// End check alerts
+    
+    // Check Open Weather Map
+    const OWM = weather.openWeatherMap
+
+    if (checkObject(OWM, 'config.weather.openWeatherMap')) {
+      // Check get params for weather forecast
+      const location = OWM.location
+
+      let paramsValid = true
+      let keyValid = true
+
+      if (location === undefined) {
+        console.log('ERROR: missing "location" in config.weather.openWeatherMap')
+        printOpenWeatherMapsLocationHint()
+
+        paramsValid = false
+      } else if (!(location instanceof Object) || location instanceof Array) {
+        console.log('ERROR: config.weather.openWeatherMap.location must be an object')
+        printOpenWeatherMapsLocationHint()
+
+        paramsValid = false
+      } else {
+        checkKeys(location, 'config.weather.openWeatherMap.location', ['q', 'id', 'lat', 'lon', 'zip'])
+      }
+
+      // Check api key
+      const apiKey = OWM.key
+
+      keyValid = checkString(apiKey, 'config.weather.openWeatherMap.key')
+
+      if (keyValid && !configFieldValidator.validateNotEmptyString(apiKey)) {
+        console.log('ERROR: field "key" in config.weather.openWeatherMap is the empty string or contains exclusively whitespace')
+
+        keyValid = false
+      }
+
+      if (paramsValid && keyValid) {
+        let OWMQueryParams = ''
+
+        for (const paramName in location) {
+          if (Object.prototype.hasOwnProperty.call(location, paramName)) {
+            OWMQueryParams += '&' + paramName + '=' + location[paramName]
+          }
+        }
+
+        const forecastDataUrl = `https://api.openweathermap.org/data/2.5/forecast?${OWMQueryParams.substr(1)}&units=metric&APPID=${OWM.key}`
+
+        console.log(`INFO: Forecast data URL is ${forecastDataUrl}`)
+        console.log('INFO: Fetching forecast data from URL...')
+
+        const forecastPromise = promise.getJSONPromisePost(forecastDataUrl)
+
+        forecastPromise.then((data) => {
+          fs.writeFile('./forecastData.json', JSON.stringify(data), (error) => {
+            if (error) {
+              console.log('ERROR: Failed to save forecast data to file')
+              throw error
+            } else {
+              console.log(`INFO: Forecast data written to ${path.resolve('./forecastData.json')}`)
+            }
+          })
+        })
+
+        forecastPromise.catch((error) => {
+          console.log('ERROR: Failed to fetch weather request data')
+          console.log(error)
+        })
+      }
+
+      checkKeys(OWM, 'config.weather.openWeatherMap', ['location', 'key'])
+    }// End check openWeatherMap
+    
+    checkKeys(weather, 'config.weather', ['alerts', 'openWeatherMap'])
   }// End check weather
 
   // Check coordinates
@@ -485,7 +558,7 @@ if (!(config instanceof Object) || config instanceof Array) {
     }
 
     checkKeys(coordinates, 'config.coordinates', ['elevation', 'lat', 'long'])
-  }
+  }// End check coordinates
 
   // Check logging
   const log = config.log
@@ -508,77 +581,6 @@ if (!(config instanceof Object) || config instanceof Array) {
     }
 
     checkKeys(log, 'config.log', ['logDir'])
-  }
-
-  // Check Open Weather Map
-  const OWM = config.openWeatherMap
-
-  if (checkObject(OWM, 'config.openWeatherMap')) {
-    // Check get params for weather forecast
-    const location = OWM.location
-
-    let paramsValid = true
-    let keyValid = true
-
-    if (location === undefined) {
-      console.log('ERROR: missing "location" in config.open_weather_map')
-      printOpenWeatherMapsLocationHint()
-
-      paramsValid = false
-    } else if (!(location instanceof Object) || location instanceof Array) {
-      console.log('ERROR: config.open_weather_map.location must be an object')
-      printOpenWeatherMapsLocationHint()
-
-      paramsValid = false
-    } else {
-      checkKeys(location, 'config.open_weather_map.location', ['q', 'id', 'lat', 'lon', 'zip'])
-    }
-
-    // Check api key
-    const apiKey = OWM.key
-
-    keyValid = checkString(apiKey, 'config.open_weather_map.key')
-
-    if (keyValid && !configFieldValidator.validateNotEmptyString(apiKey)) {
-      console.log('ERROR: field "key" in config.open_weather_map is the empty string or contains exclusively whitespace')
-
-      keyValid = false
-    }
-
-    if (paramsValid && keyValid) {
-      let OWMQueryParams = ''
-
-      for (const paramName in location) {
-        if (Object.prototype.hasOwnProperty.call(location, paramName)) {
-          OWMQueryParams += '&' + paramName + '=' + location[paramName]
-        }
-      }
-
-      const forecastDataUrl = `https://api.openweathermap.org/data/2.5/forecast?${OWMQueryParams.substr(1)}&units=metric&APPID=${OWM.key}`
-
-      console.log(`INFO: Forecast data URL is ${forecastDataUrl}`)
-      console.log('INFO: Fetching forecast data from URL...')
-
-      const forecastPromise = promise.getJSONPromisePost(forecastDataUrl)
-
-      forecastPromise.then((data) => {
-        fs.writeFile('./forecastData.json', JSON.stringify(data), (error) => {
-          if (error) {
-            console.log('ERROR: Failed to save forecast data to file')
-            throw error
-          } else {
-            console.log(`INFO: Forecast data written to ${path.resolve('./forecastData.json')}`)
-          }
-        })
-      })
-
-      forecastPromise.catch((error) => {
-        console.log('ERROR: Failed to fetch weather request data')
-        console.log(error)
-      })
-    }
-
-    checkKeys(OWM, 'config.open_weather_map', ['location', 'key'])
   }
 
   // Check Twitter
