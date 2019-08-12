@@ -2,6 +2,42 @@
 
 /** @fileoverview A collection of utility functions. */
 module.exports = {
+  // Searches a sorted list for an element
+  //  @param  {object} elem The value to search for
+  //  @param  {object[]} list The sorted array to search
+  //  @param  {function} compare The comparison function to be used for searching
+  //    @param  {object} obj1 The first object to be compared
+  //    @param  {object} obj2 The second object to be compared
+  //    @return {number} A negative value if obj1 comes before obj2 0 if obj1 equals obj2 positive otherwise
+  //  @return {number} The index of the element in the list if found null otherwise
+  binarySearchIndex(elem, list, compare){
+    if (!(list instanceof Array)) {
+      throw new TypeError('Param list must be an Array')
+    }
+
+    if (!(compare instanceof Function)) {
+      throw new TypeError('Param compare must be a Function')
+    }
+    
+    let searchIndexStart = 0,
+        searchIndexEnd = list.length - 1
+
+    while(searchIndexStart <= searchIndexEnd){
+      let midpoint = searchIndexStart + Math.floor((searchIndexEnd - searchIndexStart) / 2),
+      comparison = compare(elem, list[midpoint])
+      
+      if(!comparison){
+        return midpoint
+      } else if(comparison < 0){
+        searchIndexEnd = midpoint - 1
+      } else {
+        searchIndexStart = midpoint + 1
+      }
+    }
+    
+    return null
+  },
+  
   // Gets the element from a sorted list closest to the given element.
   //  @param {object} elem The given object to be compared for similarity against
   //  @param {object[]} list The sorted list to be searched for the most similar element
