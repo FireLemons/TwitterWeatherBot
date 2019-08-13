@@ -165,6 +165,197 @@ function checkObject (obj, path) {
 if (!(config instanceof Object) || config instanceof Array) {
   throw new TypeError('Config file must contain a JSON object')
 } else {
+  // Check extra
+  const extra = config.extra
+  if (checkObject(extra, 'config.extra')) {
+  // Check coordinates
+    const coordinates = config.extra.coordinates
+
+    if (checkObject(coordinates, 'config.extra.coordinates')) {
+    // Check elevation
+      const elevation = coordinates.elevation
+      let validElevation = checkNumber(elevation, 'config.extra.coordinates.elevation')
+
+      if (validElevation && !configFieldValidator.validateCoordinatesElevation(elevation)) {
+        console.log('ERROR: Field "elevation" in config.extra.coordinates must be between -413 and 8848')
+
+        validElevation = false
+      }
+
+      if (!validElevation) {
+        printElevationHint()
+      }
+
+      // Check latitude
+      const latitude = coordinates.lat
+      let validLatitude = checkNumber(latitude, 'config.extra.coordinates.lat')
+
+      if (validLatitude && !configFieldValidator.validateCoordinatesLat(latitude)) {
+        console.log('ERROR: Field "lat" in config.extra.coordinates must be between -90 and 90')
+
+        validLatitude = false
+      }
+
+      if (!validLatitude) {
+        printLatitudeHint()
+      }
+
+      // Check longitude
+      const longitude = coordinates.long
+      let validLongitude = checkNumber(longitude, 'config.extra.coordinates.longitude')
+
+      if (validLongitude && !configFieldValidator.validateCoordinatesLong(longitude)) {
+        console.log('ERROR: Field "long" in config.extra.coordinates must be between -180 and 180')
+
+        validLongitude = false
+      }
+
+      if (!validLongitude) {
+        printLongitudeHint()
+      }
+
+      if (validElevation && validLatitude && validLongitude) {
+        console.log(`INFO: Observer position aka coordinates set as ${elevation}m in elevation, ${Math.abs(latitude)}° ${latitude < 0 ? 'S' : 'N'}, ${Math.abs(longitude)}° ${longitude < 0 ? 'W' : 'E'}`)
+      }
+
+      checkKeys(coordinates, 'config.extra.coordinates', ['elevation', 'lat', 'long'])
+    }// End check coordinates
+    
+    checkKeys(extra, 'config.extra', ['coordinates', 'probabilities'])
+  }// End check extra
+  
+  // Check logging
+  const log = config.log
+
+  if (checkObject(log, 'config.log')) {
+    // Check log directory path
+    const logFolder = log.logDir
+    let validPath = checkString(logFolder, 'config.log.logDir')
+
+    if (validPath && !configFieldValidator.validateLogLogDir(log.logDir)) {
+      console.log('ERROR: Field "logDir" in config.log not recognized as a valid file path')
+
+      validPath = false
+    } else {
+      console.log(`INFO: Log directory set as: ${path.resolve('../' + log.logDir)}`)
+    }
+
+    if (!validPath) {
+      printLogDirectoryHint()
+    }
+
+    checkKeys(log, 'config.log', ['logDir'])
+  }
+
+  // Check Twitter
+  const twitter = config.twitter
+
+  if (checkObject(twitter, 'config.twitter')) {
+    // Check consumer key
+    const consumerKey = twitter.consumer_key
+    let validConsumerKey = checkString(consumerKey, 'config.twitter.consumer_key')
+
+    if (validConsumerKey && !configFieldValidator.validateNotEmptyString(consumerKey)) {
+      console.log('ERROR: field "consumer_key" in config.twitter is the empty string or contains exclusively whitespace')
+
+      validConsumerKey = false
+    }
+
+    // Check consumer secret
+    const consumerSecret = twitter.consumer_secret
+    let validConsumerSecret = checkString(consumerSecret, 'config.twitter.consumer_key')
+
+    if (validConsumerSecret && !configFieldValidator.validateNotEmptyString(consumerSecret)) {
+      console.log('ERROR: field "consumer_secret" in config.twitter is the empty string or contains exclusively whitespace')
+
+      validConsumerSecret = false
+    }
+
+    // Check access token key
+    const accessTokenKey = twitter.access_token_key
+    let validAccessTokenKey = checkString(accessTokenKey, 'config.twitter.access_token_key')
+
+    if (validAccessTokenKey && !configFieldValidator.validateNotEmptyString(accessTokenKey)) {
+      console.log('ERROR: field "access_token_key" in config.twitter is the empty string or contains exclusively whitespace')
+
+      validAccessTokenKey = false
+    }
+
+    // Check access token secret
+    const accessTokenSecret = twitter.access_token_secret
+    let validAccessTokenSecret = checkString(accessTokenSecret, 'config.twitter.access_token_secret')
+
+    if (validAccessTokenSecret && !configFieldValidator.validateNotEmptyString(accessTokenSecret)) {
+      console.log('ERROR: field "access_token_secret" in config.twitter is the empty string or contains exclusively whitespace')
+
+      validAccessTokenSecret = false
+    }
+
+    let twitterClient
+
+    if (validConsumerKey && validConsumerSecret && validAccessTokenKey && validAccessTokenSecret) {
+      console.log('INFO: Sending test tweet...')
+
+      twitterClient = new Twitter({
+        consumer_key: config.twitter.consumer_key,
+        consumer_secret: config.twitter.consumer_secret,
+        access_token_key: config.twitter.access_token_key,
+        access_token_secret: config.twitter.access_token_secret
+      })
+
+      const twitterPromise = twitterClient.post('statuses/update', { status: `Test at ${new Date().toString()}` })
+
+      twitterPromise.then((tweet) => {
+        console.log('INFO: Tweet received. Check Twitter for a test status update.')
+      })
+
+      twitterPromise.catch((error) => {
+        console.log('ERROR: Failed to send test tweet using config credentials')
+        console.log(error)
+      })
+    }
+
+    // Check local weather station id
+    const localStationHandle = twitter.localStationHandle
+    let validStationHandle = checkString(localStationHandle, 'config.twitter.localStationHandle')
+
+    if (validStationHandle && !configFieldValidator.validateNotEmptyString(localStationHandle)) {
+      console.log('ERROR: config.twitter.localStationHandle must be a string')
+
+      validStationHandle = false
+    }
+
+    if (validStationHandle && twitterClient) {
+      console.log(`INFO: Attempting to fetch tweets from ${localStationHandle}...`)
+
+      const twitterPromise = twitterClient.get('statuses/user_timeline', {
+        count: 10,
+        exclude_replies: true,
+        trim_user: true,
+        screen_name: localStationHandle
+      })
+
+      twitterPromise.then((posts) => {
+        fs.writeFile('./localTwitterPosts.json', JSON.stringify(posts), (error) => {
+          if (error) {
+            console.log('ERROR: Failed to save twitter posts of local weather station to file')
+            throw error
+          } else {
+            console.log(`INFO: Some twitter posts of ${localStationHandle} written to ${path.resolve('./localTwitterPosts.json')}`)
+          }
+        })
+      })
+
+      twitterPromise.catch((error) => {
+        console.log(`ERROR: Failed to fetch tweets from ${localStationHandle}`)
+        console.log('  Are you sure you enetered the correct twitter handle?')
+        console.log(error)
+      })
+    }
+
+    checkKeys(twitter, 'config.twitter', ['consumer_key', 'consumer_secret', 'access_token_key', 'access_token_secret', 'localStationHandle'])
+  }// End check twitter
+
   // Check weather
   const weather = config.weather
 
@@ -432,7 +623,7 @@ if (!(config instanceof Object) || config instanceof Array) {
         })
       }
     }// End check alerts
-    
+
     // Check Open Weather Map
     const OWM = weather.openWeatherMap
 
@@ -503,194 +694,9 @@ if (!(config instanceof Object) || config instanceof Array) {
 
       checkKeys(OWM, 'config.weather.openWeatherMap', ['location', 'key'])
     }// End check openWeatherMap
-    
+
     checkKeys(weather, 'config.weather', ['alerts', 'openWeatherMap'])
   }// End check weather
 
-  // Check coordinates
-  const coordinates = config.coordinates
-
-  if (checkObject(coordinates, 'config.coordinates')) {
-    // Check elevation
-    const elevation = coordinates.elevation
-    let validElevation = checkNumber(elevation, 'config.coordinates.elevation')
-
-    if (validElevation && !configFieldValidator.validateCoordinatesElevation(elevation)) {
-      console.log('ERROR: Field "elevation" in config.coordinates must be between -413 and 8848')
-
-      validElevation = false
-    }
-
-    if (!validElevation) {
-      printElevationHint()
-    }
-
-    // Check latitude
-    const latitude = coordinates.lat
-    let validLatitude = checkNumber(latitude, 'config.coordinates.lat')
-
-    if (validLatitude && !configFieldValidator.validateCoordinatesLat(latitude)) {
-      console.log('ERROR: Field "lat" in config.coordinates must be between -90 and 90')
-
-      validLatitude = false
-    }
-
-    if (!validLatitude) {
-      printLatitudeHint()
-    }
-
-    // Check longitude
-    const longitude = coordinates.long
-    let validLongitude = checkNumber(longitude, 'config.coordinates.longitude')
-
-    if (validLongitude && !configFieldValidator.validateCoordinatesLong(longitude)) {
-      console.log('ERROR: Field "long" in config.coordinates must be between -180 and 180')
-
-      validLongitude = false
-    }
-
-    if (!validLongitude) {
-      printLongitudeHint()
-    }
-
-    if (validElevation && validLatitude && validLongitude) {
-      console.log(`INFO: Observer position aka coordinates set as ${elevation}m in elevation, ${Math.abs(latitude)}° ${latitude < 0 ? 'S' : 'N'}, ${Math.abs(longitude)}° ${longitude < 0 ? 'W' : 'E'}`)
-    }
-
-    checkKeys(coordinates, 'config.coordinates', ['elevation', 'lat', 'long'])
-  }// End check coordinates
-
-  // Check logging
-  const log = config.log
-
-  if (checkObject(log, 'config.log')) {
-    // Check log directory path
-    const logFolder = log.logDir
-    let validPath = checkString(logFolder, 'config.log.logDir')
-
-    if (validPath && !configFieldValidator.validateLogLogDir(log.logDir)) {
-      console.log('ERROR: Field "logDir" in config.log not recognized as a valid file path')
-
-      validPath = false
-    } else {
-      console.log(`INFO: Log directory set as: ${path.resolve('../' + log.logDir)}`)
-    }
-
-    if (!validPath) {
-      printLogDirectoryHint()
-    }
-
-    checkKeys(log, 'config.log', ['logDir'])
-  }
-
-  // Check Twitter
-  const twitter = config.twitter
-
-  if (checkObject(twitter, 'config.twitter')) {
-    // Check consumer key
-    const consumerKey = twitter.consumer_key
-    let validConsumerKey = checkString(consumerKey, 'config.twitter.consumer_key')
-
-    if (validConsumerKey && !configFieldValidator.validateNotEmptyString(consumerKey)) {
-      console.log('ERROR: field "consumer_key" in config.twitter is the empty string or contains exclusively whitespace')
-
-      validConsumerKey = false
-    }
-
-    // Check consumer secret
-    const consumerSecret = twitter.consumer_secret
-    let validConsumerSecret = checkString(consumerSecret, 'config.twitter.consumer_key')
-
-    if (validConsumerSecret && !configFieldValidator.validateNotEmptyString(consumerSecret)) {
-      console.log('ERROR: field "consumer_secret" in config.twitter is the empty string or contains exclusively whitespace')
-
-      validConsumerSecret = false
-    }
-
-    // Check access token key
-    const accessTokenKey = twitter.access_token_key
-    let validAccessTokenKey = checkString(accessTokenKey, 'config.twitter.access_token_key')
-
-    if (validAccessTokenKey && !configFieldValidator.validateNotEmptyString(accessTokenKey)) {
-      console.log('ERROR: field "access_token_key" in config.twitter is the empty string or contains exclusively whitespace')
-
-      validAccessTokenKey = false
-    }
-
-    // Check access token secret
-    const accessTokenSecret = twitter.access_token_secret
-    let validAccessTokenSecret = checkString(accessTokenSecret, 'config.twitter.access_token_secret')
-
-    if (validAccessTokenSecret && !configFieldValidator.validateNotEmptyString(accessTokenSecret)) {
-      console.log('ERROR: field "access_token_secret" in config.twitter is the empty string or contains exclusively whitespace')
-
-      validAccessTokenSecret = false
-    }
-
-    let twitterClient
-
-    if (validConsumerKey && validConsumerSecret && validAccessTokenKey && validAccessTokenSecret) {
-      console.log('INFO: Sending test tweet...')
-
-      twitterClient = new Twitter({
-        consumer_key: config.twitter.consumer_key,
-        consumer_secret: config.twitter.consumer_secret,
-        access_token_key: config.twitter.access_token_key,
-        access_token_secret: config.twitter.access_token_secret
-      })
-
-      const twitterPromise = twitterClient.post('statuses/update', { status: `Test at ${new Date().toString()}` })
-
-      twitterPromise.then((tweet) => {
-        console.log('INFO: Tweet received. Check Twitter for a test status update.')
-      })
-
-      twitterPromise.catch((error) => {
-        console.log('ERROR: Failed to send test tweet using config credentials')
-        console.log(error)
-      })
-    }
-
-    // Check local weather station id
-    const localStationHandle = twitter.localStationHandle
-    let validStationHandle = checkString(localStationHandle, 'config.twitter.localStationHandle')
-
-    if (validStationHandle && !configFieldValidator.validateNotEmptyString(localStationHandle)) {
-      console.log('ERROR: config.twitter.localStationHandle must be a string')
-
-      validStationHandle = false
-    }
-
-    if (validStationHandle && twitterClient) {
-      console.log(`INFO: Attempting to fetch tweets from ${localStationHandle}...`)
-
-      const twitterPromise = twitterClient.get('statuses/user_timeline', {
-        count: 10,
-        exclude_replies: true,
-        trim_user: true,
-        screen_name: localStationHandle
-      })
-
-      twitterPromise.then((posts) => {
-        fs.writeFile('./localTwitterPosts.json', JSON.stringify(posts), (error) => {
-          if (error) {
-            console.log('ERROR: Failed to save twitter posts of local weather station to file')
-            throw error
-          } else {
-            console.log(`INFO: Some twitter posts of ${localStationHandle} written to ${path.resolve('./localTwitterPosts.json')}`)
-          }
-        })
-      })
-
-      twitterPromise.catch((error) => {
-        console.log(`ERROR: Failed to fetch tweets from ${localStationHandle}`)
-        console.log('  Are you sure you enetered the correct twitter handle?')
-        console.log(error)
-      })
-    }
-
-    checkKeys(twitter, 'config.twitter', ['consumer_key', 'consumer_secret', 'access_token_key', 'access_token_secret', 'localStationHandle'])
-  }
-
-  checkKeys(config, 'config', ['coordinates', 'log', 'twitter', 'weather'])
+  checkKeys(config, 'config', ['extra', 'log', 'twitter', 'weather'])
 }

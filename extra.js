@@ -137,6 +137,7 @@ module.exports = class ExtraGenerator {
         this.logger.info('Generating beaufort')
         extra.statement = this.getBeaufort(parsedWeatherData.list[0].wind.speed.toPrecision(2))
         break
+
       case 'cloudiness':
         this.logger.info('Generating extra stat: cloudiness')
         extra.statement = this.getExtraStat('cloudiness', parsedWeatherData.list.slice(0, 3))
