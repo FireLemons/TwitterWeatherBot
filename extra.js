@@ -5,9 +5,29 @@ const util = require('./util.js')
 
 /** @fileoverview A collection of functions for generating various statements about the weather*/
 module.exports = class ExtraGenerator {
-  constructor (coordinates, logger) {
+  constructor (config, logger) {
     this.logger = logger
-    this.coordinates = coordinates
+    this.coordinates = config.coordinates
+    
+    let probabilities = config.probabilities
+    
+    let accTotal = 0
+    this.probabilities = []
+    
+    for(let messageType in probabilities){
+      let chance = probabilities[messageType]
+      
+      if(chance){
+        this.probabilities.push({
+          "type": messageType,
+          "range": [accTotal, accTotal + chance]
+        })
+      }
+      
+      accTotal += chance
+    }
+    
+    this.totalProbability = accTotal
   }
 
   // Generates a statement about the current wind speed using the beaufort scale
@@ -73,47 +93,74 @@ module.exports = class ExtraGenerator {
       throw new Error('Parameter parsedWeatherData must be an object')
     }
 
-    const messageRoll = Math.random()
-    const extra = {}
-
-    if (messageRoll < 0.01) {
-      this.logger.info('Generating joke')
-      extra.type = 'joke'
-      extra.statement = this.getJoke(parsedWeatherData.list[0])
-    } else if (messageRoll < 0.1) {
-      this.logger.info('Generating tutorial')
-      extra.type = 'tutorial'
-      extra.statement = this.getTutorial()
-    } else if (messageRoll < 0.65) {
-      const eventRoll = Math.random()
-
-      if (eventRoll < 0.6) {
-        this.logger.info('Generating sunrise')
-        extra.type = 'sunrise'
-        extra.statement = celestial.getDayNight(this.coordinates)
-      } else if (eventRoll < 0.8) {
-        this.logger.info('Generating lunar')
-        extra.type = 'lunar'
-        extra.statement = celestial.getLunarPhase()
+    const compareValueToRange = (randomRoll, messageProbability) => {
+      if(randomRoll < messageProbability.range[0]){
+        return -1
+      } else if(randomRoll <= messageProbability.range[1]){
+        return 0
       } else {
-        this.logger.info('Generating season')
-        extra.type = 'season'
-        extra.statement = celestial.getSeasonProgress()
+        return 1
       }
-    } else if (messageRoll < 0.75) {
-      this.logger.info('Generating trivia')
-      extra.type = 'beaufort'
-      extra.statement = this.getBeaufort(parsedWeatherData.list[0].wind.speed.toPrecision(2))
-    } else {
-      const forecastData = parsedWeatherData.list.slice(0, 3)
-      const stat = util.pickRandom(['precipitation', 'precipitation', 'precipitation', 'pressure', 'humidity', 'cloudiness'])
-
-      this.logger.info(`Generating extra stat: ${stat}`)
-
-      extra.statement = this.getExtraStat(stat, forecastData)
-      extra.type = extra.statement.match(/^Expected ([a-zA-Z]+)[: ]/)[1]
     }
 
+    let randomTypeIndex = util.binarySearchIndex(Math.random() * this.totalProbability, this.probabilities, compareValueToRange)
+
+    const extra = {
+      "type": this.probabilities[randomTypeIndex].type
+    }
+
+    switch(extra.type){
+      case 'joke':
+        this.logger.info('Generating joke')
+        extra.statement = this.getJoke(parsedWeatherData.list[0])
+        break;
+        
+      case 'tutorial':
+        this.logger.info('Generating tutorial')
+        extra.statement = this.getTutorial()
+        break;
+        
+      case 'lunar':
+        this.logger.info('Generating lunar')
+        extra.statement = celestial.getLunarPhase()
+        break;
+      case 'sunrise':
+        this.logger.info('Generating sunrise')
+        extra.statement = celestial.getDayNight(this.coordinates)
+        break;
+      case 'season':
+        this.logger.info('Generating season')
+        extra.statement = celestial.getSeasonProgress()
+        break;
+        
+      case 'beaufort':
+        this.logger.info('Generating beaufort')
+        extra.statement = this.getBeaufort(parsedWeatherData.list[0].wind.speed.toPrecision(2))
+        break;
+      case 'cloudiness':
+        this.logger.info('Generating extra stat: cloudiness')
+        extra.statement = this.getExtraStat('cloudiness', parsedWeatherData.list.slice(0, 3))
+        extra.type = 'Cloud'
+        break;
+      case 'humidity':
+        this.logger.info('Generating extra stat: humidity')
+        extra.statement = this.getExtraStat('humidity', parsedWeatherData.list.slice(0, 3))
+        extra.type = 'Humidity'
+        break;
+      case 'precipitation':
+        this.logger.info('Generating extra stat: precipitation')
+        extra.statement = this.getExtraStat('precipitation', parsedWeatherData.list.slice(0, 3))
+        extra.type = extra.statement.match(/^Expected ([a-zA-Z]+)[: ]/)[1]
+        break;
+      case 'pressure':
+        this.logger.info('Generating extra stat: pressure')
+        extra.statement = this.getExtraStat('pressure', parsedWeatherData.list.slice(0, 3))
+        extra.type = 'Pressure'
+        break;
+      default:
+        throw new RangeError(`Unknown extra message type ${extra.type}`)
+    }
+    
     return extra
   }
 

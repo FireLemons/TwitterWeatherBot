@@ -170,7 +170,7 @@ process.on('unhandledRejection', (reason, p) => {
 const weatherFetcher = new weatherTools.DataFetcher(config.weather, logger)
 
 // Init extra statement generator
-const extraGenerator = new Extra(config.coordinates, logger)
+const extraGenerator = new Extra(config.extra, logger)
 
 /*
  * Load stats
