@@ -276,7 +276,7 @@ function tryFetchWeather (isLate) {
   })
 }
 
-if (config.alerts && !config.alerts.disabled) {
+if (config.weather.alerts && !config.weather.alerts.disabled) {
   let retryAlertTimeout = 0
 
   function tryFetchAlerts () {
@@ -302,11 +302,15 @@ if (config.alerts && !config.alerts.disabled) {
           })
       }
     }
-
+    
+    logger.info('Fetching alerts.')
+    
     weatherFetcher.getWeatherAlertsPromise().then((alertData) => {
+      console.log(alertData)
       const alerts = weatherFetcher.filterAlerts(alertData.features)
 
       if (!alerts.length) {
+        logger.info('No relevant alerts found')
         stats.lastAlertUpdate = new Date()
       }
 
