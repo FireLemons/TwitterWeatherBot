@@ -3,30 +3,30 @@
 const celestial = require('./celestial.js')
 const util = require('./util.js')
 
-/** @fileoverview A collection of functions for generating various statements about the weather*/
+/** @fileoverview A collection of functions for generating various statements about the weather */
 module.exports = class ExtraGenerator {
   constructor (config, logger) {
     this.logger = logger
     this.coordinates = config.coordinates
-    
-    let probabilities = config.probabilities
-    
+
+    const probabilities = config.probabilities
+
     let accTotal = 0
     this.probabilities = []
-    
-    for(let messageType in probabilities){
-      let chance = probabilities[messageType]
-      
-      if(chance){
+
+    for (const messageType in probabilities) {
+      const chance = probabilities[messageType]
+
+      if (chance) {
         this.probabilities.push({
-          "type": messageType,
-          "range": [accTotal, accTotal + chance]
+          type: messageType,
+          range: [accTotal, accTotal + chance]
         })
       }
-      
+
       accTotal += chance
     }
-    
+
     this.totalProbability = accTotal
   }
 
@@ -94,73 +94,73 @@ module.exports = class ExtraGenerator {
     }
 
     const compareValueToRange = (randomRoll, messageProbability) => {
-      if(randomRoll < messageProbability.range[0]){
+      if (randomRoll < messageProbability.range[0]) {
         return -1
-      } else if(randomRoll <= messageProbability.range[1]){
+      } else if (randomRoll <= messageProbability.range[1]) {
         return 0
       } else {
         return 1
       }
     }
 
-    let randomTypeIndex = util.binarySearchIndex(Math.random() * this.totalProbability, this.probabilities, compareValueToRange)
+    const randomTypeIndex = util.binarySearchIndex(Math.random() * this.totalProbability, this.probabilities, compareValueToRange)
 
     const extra = {
-      "type": this.probabilities[randomTypeIndex].type
+      type: this.probabilities[randomTypeIndex].type
     }
 
-    switch(extra.type){
+    switch (extra.type) {
       case 'joke':
         this.logger.info('Generating joke')
         extra.statement = this.getJoke(parsedWeatherData.list[0])
-        break;
-        
+        break
+
       case 'tutorial':
         this.logger.info('Generating tutorial')
         extra.statement = this.getTutorial()
-        break;
-        
+        break
+
       case 'lunar':
         this.logger.info('Generating lunar')
         extra.statement = celestial.getLunarPhase()
-        break;
+        break
       case 'sunrise':
         this.logger.info('Generating sunrise')
         extra.statement = celestial.getDayNight(this.coordinates)
-        break;
+        break
       case 'season':
         this.logger.info('Generating season')
         extra.statement = celestial.getSeasonProgress()
-        break;
-        
+        break
+
       case 'beaufort':
         this.logger.info('Generating beaufort')
         extra.statement = this.getBeaufort(parsedWeatherData.list[0].wind.speed.toPrecision(2))
-        break;
+        break
       case 'cloudiness':
         this.logger.info('Generating extra stat: cloudiness')
         extra.statement = this.getExtraStat('cloudiness', parsedWeatherData.list.slice(0, 3))
         extra.type = 'Cloud'
-        break;
+        break
       case 'humidity':
         this.logger.info('Generating extra stat: humidity')
         extra.statement = this.getExtraStat('humidity', parsedWeatherData.list.slice(0, 3))
         extra.type = 'Humidity'
-        break;
+        break
       case 'precipitation':
         this.logger.info('Generating extra stat: precipitation')
         extra.statement = this.getExtraStat('precipitation', parsedWeatherData.list.slice(0, 3))
         extra.type = extra.statement.match(/^Expected ([a-zA-Z]+)[: ]/)[1]
-        break;
+        break
       case 'pressure':
         this.logger.info('Generating extra stat: pressure')
         extra.statement = this.getExtraStat('pressure', parsedWeatherData.list.slice(0, 3))
         extra.type = 'Pressure'
-        break;
+        break
       default:
         throw new RangeError(`Unknown extra message type ${extra.type}`)
     }
-    
+
     return extra
   }
 
