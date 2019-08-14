@@ -1,0 +1,10 @@
+It has rained on x Tuesdays since this bot has been live
+
+http://api.openweathermap.org/data/2.5/uvi?appid=1b349938049f30f533a70d7ec96b81dc&lat=38.95&lon=-92.33
+
+There are five basic value types supported by JSON Schema:
+string.
+number.
+integer.
+boolean.
+null.
