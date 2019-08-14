@@ -306,7 +306,6 @@ if (config.weather.alerts && !config.weather.alerts.disabled) {
     logger.info('Fetching alerts.')
     
     weatherFetcher.getWeatherAlertsPromise().then((alertData) => {
-      console.log(alertData)
       const alerts = weatherFetcher.filterAlerts(alertData.features)
 
       if (!alerts.length) {
