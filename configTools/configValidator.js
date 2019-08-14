@@ -317,6 +317,7 @@ if (!(config instanceof Object) || config instanceof Array) {
 
     // Check local weather station id
     const localStationHandle = twitter.localStationHandle
+    if(localStationHandle !== undefined){
     let validStationHandle = checkString(localStationHandle, 'config.twitter.localStationHandle')
 
     if (validStationHandle && !configFieldValidator.validateNotEmptyString(localStationHandle)) {
@@ -351,6 +352,9 @@ if (!(config instanceof Object) || config instanceof Array) {
         console.log('  Are you sure you enetered the correct twitter handle?')
         console.log(error)
       })
+    }
+    } else {
+      console.log('INFO: Local weather station retweets are unset')
     }
 
     checkKeys(twitter, 'config.twitter', ['consumer_key', 'consumer_secret', 'access_token_key', 'access_token_secret', 'localStationHandle'])

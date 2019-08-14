@@ -361,7 +361,7 @@ schedule.scheduleJob('0 */2 * * *', function () {
   tryFetchWeather()
 })
 
-if (config.twitter.localStationHandle) {
+if (typeof config.twitter.localStationHandle === 'string') {
   schedule.scheduleJob('30 */1 * * *', function () {
     tweetWeather.retweetLocalStationTweets()
   })
