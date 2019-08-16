@@ -1,7 +1,7 @@
 # WORK IN PROGRESS
 # TwitterWeatherBot
 
-A bot that will tweet the weather every 2 hours and works for most cities in the United States. Other optional tweets like alerts and local weather station retweets are available. Check the [configuration](### Configuration) section for more info.
+A bot that will tweet the weather every 2 hours and works for most cities in the United States. Other optional tweets like alerts and local weather station retweets are available. Check the [configuration](#configuration) section for more info.
 
 ## Getting Started
 Api keys from Twitter and OpenWeatherMap are needed.  
