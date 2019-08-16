@@ -257,7 +257,7 @@ if (!(config instanceof Object) || config instanceof Array) {
             console.log(`    ${extra}: ${(probabilities[extra] / sum).toFixed(2)}%`)
           }
         }
-      }
+      }// End check extra message probabilities
       
       checkKeys(probabilities, 'config.extra.probabilities', extraTypes)
     }// End check extra message probabilities
