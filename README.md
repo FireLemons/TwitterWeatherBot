@@ -1,7 +1,7 @@
 # WORK IN PROGRESS
-# ColumbiaMOWeatherTweetBot
+# TwitterWeatherBot
 
-Tweets weather forecasts twice daily for Columbia MO. Location can be changed in `config.json` for use in other cities. As a side note, I can't imagine why anyone would want this because there are more convenient methods to check the weather than Twitter.  
+A bot that will tweet the weather every 2 hours and works for most cities in the United States. Other optional tweets like alerts and local weather station retweets are available. Check the [configuration](### Configuration) section for more info.
 
 ## Getting Started
 Api keys from Twitter and OpenWeatherMap are needed.  
@@ -31,6 +31,9 @@ Running `node index.js` will start up the bot.
 vv Not Yet vv  
 Running `node windowsInstall.js` will install the bot as a service so it automatically starts when booting your windows machine.  
 ^^ Planned Feature ^^  
+  
+### Configuration  
+
   
 ## Contributing
 A description with your pull request is fine.
