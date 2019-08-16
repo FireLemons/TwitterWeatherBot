@@ -123,5 +123,18 @@ module.exports = {
   //  @return {boolean} True if num is an integer false otherwise
   validateInteger(num){
     return num === Math.floor(num)
+  },
+  
+  // Checks whether a value is a number
+  //  @param  {number} probability The value to be checked
+  //  @return {number} 1 if probability is a number, 0 if probability is undefined, -1 otherwise
+  validateProbability(probability){
+    if(probability === undefined){
+      return 0
+    } else if(isNaN(probability)){
+      return -1
+    } else {
+      return 1
+    }
   }
 }

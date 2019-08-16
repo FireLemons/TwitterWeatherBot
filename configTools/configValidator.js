@@ -168,7 +168,7 @@ if (!(config instanceof Object) || config instanceof Array) {
   // Check extra
   const extra = config.extra
   if (checkObject(extra, 'config.extra')) {
-  // Check coordinates
+    // Check coordinates
     const coordinates = config.extra.coordinates
 
     if (checkObject(coordinates, 'config.extra.coordinates')) {
@@ -221,6 +221,47 @@ if (!(config instanceof Object) || config instanceof Array) {
       checkKeys(coordinates, 'config.extra.coordinates', ['elevation', 'lat', 'long'])
     }// End check coordinates
     
+    // Check extra message probabilities
+    let probabilities = extra.probabilities
+    let extraTypes = ["joke", "tutorial", "lunar", "season", "sunrise", "beaufort", "records", "cloudiness", "humidity", "precipitation", "pressure"]
+    
+    if(checkObject(probabilities, 'config.extra.probabilities')){
+      let validProbailities = {}
+      
+      extraTypes.forEach((extra) => {
+        validProbailities[extra] = configFieldValidator.validateProbability(probabilities[extra])
+      })
+      
+      for(let extra in validProbailities){
+        if(!validProbailities[extra]){
+          console.log(`  WARNING: Probability for extra message type ${extra} not specified. By default its probability will be 0%`)
+        } else if(validProbailities[extra] === -1){
+          console.log(`  ERROR: Probability for extra message type ${extra} is not a number.`)
+        }
+      }
+      
+      if(Object.values(validProbailities).reduce((acc, value) => {
+        return acc && (value !== -1)
+      }, true)) {
+        console.log('  Extra message probabilities:')
+        let sum = 0
+        
+        for(let extra in probabilities){
+          sum += probabilities[extra]
+        }
+        
+        for(let extra in validProbailities){
+          if(!validProbailities[extra]){
+            console.log(`    ${extra}: 0%`)
+          } else {
+            console.log(`    ${extra}: ${(probabilities[extra] / sum).toFixed(2)}%`)
+          }
+        }
+      }
+      
+      checkKeys(probabilities, 'config.extra.probabilities', extraTypes)
+    }// End check extra message probabilities
+    
     checkKeys(extra, 'config.extra', ['coordinates', 'probabilities'])
   }// End check extra
   
@@ -245,7 +286,7 @@ if (!(config instanceof Object) || config instanceof Array) {
     }
 
     checkKeys(log, 'config.log', ['logDir'])
-  }
+  }// End check logging
 
   // Check Twitter
   const twitter = config.twitter
