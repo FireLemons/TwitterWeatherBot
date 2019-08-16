@@ -23,7 +23,9 @@ __❗❗❗Make sure `config.json` is not tracked by git. If `git status` shows 
 [Winston](https://www.npmjs.com/package/winston) a logger.  
   
 ### Developer Dependencies  
-[standard js](https://standardjs.com/) A javascript linter.
+[standard js](https://standardjs.com/) A javascript linter.  
+[chai js](https://www.chaijs.com/) A BDD / TDD assertion library.  
+[mocha js](https://mochajs.org/) A feature-rich JavaScript test framework.  
 
 ## Deployment
 Running `node index.js` will start up the bot.  
