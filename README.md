@@ -35,8 +35,23 @@ Running `node windowsInstall.js` will install the bot as a service so it automat
 ^^ Planned Feature ^^  
   
 ### Configuration  
+#### Required Configuration:  
+##### Logging  
+For now the only configuration for logging is to specify a path to where logs will be stored.
+The json below will set the logging diectory to `logs/` relative to `index.js`.  
 
+    "log": {
+      "logDir": "logs"
+    }
   
+##### Open Weather Map  
+##### Twitter  
+
+#### Optional Configuration:  
+##### Alerts  
+##### Extra Messages  
+##### Retweets  
+
 ## Contributing
 A description with your pull request is fine.
 Would be appreciated if it could be deployed as a linux service so it automatically starts on boot. 
