@@ -73,6 +73,14 @@ Example
     }
 
 ##### Twitter  
+All four values of config.twitter shown below will be keys generated from your twitter developer account.
+
+    "twitter": {
+      "consumer_key": "CONSUMER KEY",
+      "consumer_secret": "CONSUMER SECRET",
+      "access_token_key": "ACCESS TOKEN KEY",
+      "access_token_secret": "ACCESS TOKENM SECRET"
+    }
 
 #### Optional Configuration:  
 ##### Alerts  
