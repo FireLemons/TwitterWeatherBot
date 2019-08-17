@@ -45,6 +45,33 @@ The json below will set the logging diectory to `logs/` relative to `index.js`.
     }
   
 ##### Open Weather Map  
+To specify a location for forecasts, config.weather.openWeatherMap.location can contain one of the key value pair combinations below.  
+Accptable key value pairs are:  
+
+City Name  
+`q: "{city name},{country code}"`  
+City ID  
+A list of city ids can be [downloaded here](http://bulk.openweathermap.org/sample/city.list.json.gz).  
+`id: {city id}`  
+Geographic Coordinates  
+`lat: {lat}`  
+`lon: {lon}`  
+Zip Code  
+`zip: "{zip code},{country code}"`
+
+config.weather.openWeatherMap.key will contain the openWeatherMap api key  
+  
+Example
+
+    "weather":{
+      "openWeatherMap": {
+        "location": {
+          "id": 4381982
+        },
+        "key": "YOUR API KEY"
+      }
+    }
+
 ##### Twitter  
 
 #### Optional Configuration:  
