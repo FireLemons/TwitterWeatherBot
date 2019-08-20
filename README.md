@@ -107,6 +107,67 @@ Example:
     }
 
 ###### Alert Filters
+If the request sends back too many alerts, filters can be applied.  
+  
+Filters are in the form:  
+
+    {
+      "restriction":"FILTER TYPE",
+      "path": "PATH TO VALUE",
+      "value": "VALUE FOR FILTERING",
+      "keep": true
+    }
+
+where  
+ - restriction is the type of filter
+ - path is the path in the alert object to the value to be filtered
+ - value will be different depending on the filter type
+ - keep is true if all alerts matching the filter are to be kept and false if all alerts not matching the filter are to be kept
+  
+Available filter types:  
+ - after  
+ Matches alerts with dates after and excluding the time *t* when alerts are tweeted  
+ value is a number of hours to offset *t*  
+ - before  
+ Matches alerts with dates before and excluding the time *t* when alerts are tweeted  
+ value is a number of hours to offset *t*  
+ - contains  
+ Matches alerts with arrays containing VALUE
+ value is an element of an array to be searched for. it must be a primitive value  
+ - has  
+ Matches alerts where PATH in the object exits  
+ value is not needed  
+ The has filter is always used first
+ - equals  
+ Matches alerts with VALUE exactly equal to the value at path  
+ value is a primitive value to be compared with using strict equality  
+ - matches  
+ Matches alerts with strings matching a regular expression  
+ value contains a regular expression string  
+   
+Filters go in an array at config.weather.alerts.filters.  
+  
+Example:  
+Keep all alerts where "Boone;" or "Boone, MO" is used to describe the area and discard all alerts that have been replaced by another alert.  
+
+    "weather": {
+      "alerts": {
+        ...
+        "filters": [
+          {
+            "restriction": "matches",
+            "path": "properties.areaDesc",
+            "value": "Boone;|Boone, MO;",
+            "keep": true
+          },
+          {
+            "restriction": "has",
+            "path": "properties.replacedBy",
+            "keep": false
+          }
+        ]
+      }
+    }
 
 ##### Extra Messages  
 ##### Retweets  
