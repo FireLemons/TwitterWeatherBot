@@ -115,7 +115,7 @@ module.exports = {
     //     "value": "" The VALUE to be used for filtering
     //     "keep": true|false True to discard all alerts not matching the filter false to discard all alerts matching the filter
     //     "restriction": "", One of the below restrictions
-    //        "after"     - PATH leads to a date string. Matches alerts with dates after and including the current time + VALUE(hours)
+    //        "after"     - PATH leads to a date string. Matches alerts with dates after and excluding the current time + VALUE(hours)
     //        "before"    - PATH leads to a date string. Matches alerts with dates before and excluding the current time + VALUE(hours)
     //        "contains"  - PATH leads to an array. Matches alerts with arrays containing VALUE
     //        "has"       - Matches if PATH in an alert object exits. VALUE not needed and not used
