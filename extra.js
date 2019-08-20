@@ -184,7 +184,7 @@ module.exports = class ExtraGenerator {
 
         for (let i = 0; i < 3; i++) {
           const pStat = precipitationStats[i]
-          const rain = pStat.rain.toFixed(2)
+          const rain = (pStat.rain) ? pStat.rain.toFixed(2) : null
           const snow = (pStat.snow) ? pStat.snow.toFixed(2) : null
 
           if (rain || snow) {
