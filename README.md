@@ -7,7 +7,7 @@ Api keys from Twitter and OpenWeatherMap are needed.
 + [Register for a Twitter developer account](https://developer.twitter.com/en/apply)
 
 This service runs on [Node.js](https://nodejs.org/en/download/).  
-After cloning, run `npm install` where `package.json` is which should be the root project directory.  
+After cloning, run `npm install` where `package.json` is which should be the repo's root directory.  
 Configure `config.json` with your location and api keys.  
 
 __❗❗❗Make sure `config.json` is not tracked by git. If `git status` shows `config.json` as `modified`, use `git update-index --assume-unchanged config.json` to untrack it. Having the file tracked may expose your API keys.__
