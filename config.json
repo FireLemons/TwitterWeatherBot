@@ -1,93 +1,70 @@
 {
-    "alerts":{
-        "app":  { Information required by the national weather service when requesting alert data
-            "contact": "EMAIL",
-            "name": "APP NAME",
-            "version": "VERSION #",
-            "website": "WEBSITE URL"
+  "extra":{
+    "coordinates": {
+      "elevation": 231,
+      "long": -92.3341,
+      "lat": 38.9517
+    },
+    "probabilities":{
+      "joke": 1,
+
+      "tutorial": 9,
+
+      "lunar": 15,
+      "season": 5,
+      "sunrise": 15,
+
+      "beaufort": 10,
+      "records": 0,
+
+      "cloudiness": 10,
+      "humidity": 10,
+      "precipitation": 15,
+      "pressure": 10
+    }
+  },
+  "log": {
+    "logDir": "logs"
+  },
+  "twitter": {
+    "consumer_key": "YOUR CONSUMER KEY",
+    "consumer_secret": "YOUR CONSUMER SECRET",
+    "access_token_key": "YOUR ACCESS TOKEN KEY",
+    "access_token_secret": "YOUR ACCESS TOKEN SECRET",
+    
+    "localStationHandle": "NWSStLouis"
+  },
+  "weather": {
+    "alerts": {
+      "app": { 
+        "contact": "EMAIL",
+        "name": "APP NAME",
+        "version": "VERSION #",
+        "website": "WEBSITE URL"
+      },
+      "filters": [
+        {
+          "restriction": "matches",
+          "path": "properties.areaDesc",
+          "value": "some regex",
+          "keep": true
         },
-        "filters": [
-            <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            Optional filters to be applied to the list of alerts recieved from api.weather.gov
-            
-            Filters are a collection of objects in the form:
-            {
-                "restriction": "FILTER NAME",
-                "path": "PATH IN OBJECT TO VALUE TO BE FILTERED",
-                "value": "SEE BELOW"
-            }
-            
-            supported filters are:
-            "after"     - Path leads to a date string. All alerts with dates before the current time + value(hours) will be removed
-            "before"    - Path leads to a date string. All alerts with dates after the current time + value(hours) will be removed
-            "contains"  - Path leads to an array. All alerts with arrays containing value will be kept
-            "has"       - Checks if path exits. Value specifies whether alerts with valid paths will be kept or removed.
-                "value": true to keep matching alerts "value": false to discard alerts
-            "equals"    - Path leads to a primitive value. All alerts with value matching the value at path will be kept
-            "matches"   - Path leads to a string. All alerts matching the regex in value will be kept
-            
-            Example: remove all alerts that have been overridden by a later alert.
-            {
-                "restriction": "has",
-                "path": "properties.replacedBy",
-                "value": 0
-            }
-            >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        ],
-        "params": {
-            <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            GET parameters for api.weather.gov/alerts expressed as key value pairs
-            See https://www.weather.gov/documentation/services-web-api#/default/get_alerts to see all available get parameters
-            
-            For example the for the request https://api.weather.gov/alerts?active=true&area=MO
-            key value pairs would be:
-            "active": true,
-            "area": MO
-            >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        {
+          "restriction": "has",
+          "path": "properties.replacedBy",
+          "keep": false
         }
-    },
-    "coordinates": {//Used to calculate sunrise and sunset
-        "elevation": ELEVATION IN METERS,
-        "long": LATITUDE WEST IN DEGREES(west is negative, east is positive),
-        "lat": NORTH LATITUDE IN DEGREES(north is positive, south is negative) 
-    },
-    "log": {
-        "logDir": "logs"
+      ],
+      "params": {
+        "active": true,
+        "area": "MO"
+      }
     },
     "open_weather_map": {
-        "location": {
-            <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            GET parameters for api.openweathermap.org/2.5/forecast expressed as key value pairs excluding the api key
-            Valid parameters are:
-            ==============================================
-            City & Country Combination
-            
-            "q": "CITY_NAME,ISO_3166_COUNTRY_CODE"
-            ======================OR======================
-            City ID
-            
-            "id": "CITY_ID"
-            ======================OR======================
-            Geographic Coordinates
-            
-            "lat": "LATITIUDE",
-            "lon": "LONGITUDE"
-            ======================OR======================
-            Zip Code
-            
-            "zip": "ZIP_CODE,ISO_3166_COUNTRY_CODE"
-            ==============================================
-            
-            See https://openweathermap.org/forecast5 for 
-            more details.
-            >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        },
-        "key": "YOUR OPEN WEATHER MAP API KEY"
-    },
-    "twitter": {
-        "consumer_key": "YOUR CONSUMER KEY",
-        "consumer_secret": "YOUR CONSUMER SECRET",
-        "access_token_key": "YOUR ACCESS TOKEN KEY",
-        "access_token_secret": "YOUR ACCESS TOKEN SECRET"
+      "location": {
+        "id": 4381982
+      },
+      "key": "YOUR OPEN WEATHER MAP API KEY"
     }
+  }
 }
