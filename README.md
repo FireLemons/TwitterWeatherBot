@@ -82,6 +82,40 @@ All four values of `config.twitter` shown below will be keys generated from your
       "access_token_secret": "ACCESS TOKENM SECRET"
     }
 
+##### Extra Messages  
+Extra messages are appended at the end of every forecast tweet. They give additional weather information and are picked at random.  
+  
+Extra messages require coordiantes to work.  
+`config.extra.coordinates.elevation` is the elevation in meters  
+`config.extra.coordinates.long` is the longitude west(west is negative, east is positive)  
+`config.extra.coordinates.lat` is the north latitude(north is positive, south is negative)  
+
+Example:
+
+    "extra":{
+      "coordinates": {
+        "elevation": 231,
+        "long": -92.3341,
+        "lat": 38.9517
+      }
+      ...
+    }
+  
+The avaialable message types are  
+ - __Jokes__ Fetches a random joke from `data/jokes.json`'s "general" array
+ - __Tutorial Messages__ Mostly tells what weather conditions forecast icons correspond to.
+ - __Moon Phases__ Tells the current phase of the moon
+ - __Season Progress__ Tells the number of days between the latest solstice/equinox and the next solstice/equinox
+ - __Sunrise and Sunset__ At day tells sunset and sunrise times and day length. At night tells last sunset and next sunrise and night length.
+ - __Beaufort__ Descibes the current wind speed using the [Beaufort scale](https://en.wikipedia.org/wiki/Beaufort_scale)
+ - __Daily Records__ Tells the hottest temperature, the coldest temperature, or the most precipitation that has ever occoured on the current day of the year.
+ - __Cloudiness__ Forecasted %cloudiness for the next 9 hours same as the main forecast
+ - __Humidity__ Forecasted %humidity for the next 9 hours same as the main forecast
+ - __precipitation__ Forecasted precipitation in mm for the next 9 hours same as the main forecast. If there is no precipitation cloudiness, humidity, or pressuire is displayed instead.
+ - __Pressure__ Forecasted pressure in hectopascals for the next 9 hours same as the main forecast.  
+ 
+ 
+
 #### Optional Configuration:  
 ##### Alerts  
 Alerts are sent out at midnight, 6:00, noon, and 18:00.  
@@ -92,6 +126,7 @@ Example:
 
     "weather": {
       "alerts": {
+        "disabled": false,
         "app": {
           "contact": "yourEmail@example.com",
           "name": "AppName",
@@ -169,7 +204,6 @@ Keep all alerts where "Boone;" or "Boone, MO" is used to describe the area and d
       }
     }
 
-##### Extra Messages  
 ##### Retweets  
 
 ## Contributing
