@@ -93,24 +93,45 @@ Example:
         "elevation": 231,
         "long": -92.3341,
         "lat": 38.9517
-      }
+      },
       ...
     }
   
 The avaialable message types are  
- - __Jokes__ Fetches a random joke from `data/jokes.json`'s "general" array
- - __Tutorial Messages__ Mostly tells what weather conditions forecast icons correspond to.
- - __Moon Phases__ Tells the current phase of the moon
- - __Season Progress__ Tells the number of days between the latest solstice/equinox and the next solstice/equinox
- - __Sunrise and Sunset__ At day tells sunset and sunrise times and day length. At night tells last sunset and next sunrise and night length.
- - __Beaufort__ Descibes the current wind speed using the [Beaufort scale](https://en.wikipedia.org/wiki/Beaufort_scale)
- - __Daily Records__ Tells the hottest temperature, the coldest temperature, or the most precipitation that has ever occoured on the current day of the year.
- - __Cloudiness__ Forecasted %cloudiness for the next 9 hours same as the main forecast
- - __Humidity__ Forecasted %humidity for the next 9 hours same as the main forecast
+ - __joke__ Fetches a random joke from `data/jokes.json`'s "general" array
+ - __tutorial__ Mostly tells what weather conditions forecast icons correspond to.
+ - __lunar__ Tells the current phase of the moon
+ - __season__ Tells the number of days between the latest solstice/equinox and the next solstice/equinox
+ - __sunrise__ At day tells sunset and sunrise times and day length. At night tells last sunset and next sunrise and night length.
+ - __beaufort__ Descibes the current wind speed using the [Beaufort scale](https://en.wikipedia.org/wiki/Beaufort_scale)
+ - __records__ Tells the hottest temperature, the coldest temperature, or the most precipitation that has ever occoured on the current day of the year.
+ - __cloudiness__ Forecasted %cloudiness for the next 9 hours same as the main forecast
+ - __humidity__ Forecasted %humidity for the next 9 hours same as the main forecast
  - __precipitation__ Forecasted precipitation in mm for the next 9 hours same as the main forecast. If there is no precipitation cloudiness, humidity, or pressuire is displayed instead.
- - __Pressure__ Forecasted pressure in hectopascals for the next 9 hours same as the main forecast.  
+ - __pressure__ Forecasted pressure in hectopascals for the next 9 hours same as the main forecast.  
  
- 
+The probability of each type of message showing up can be set by a weight value. The probability of a particular type of message showing up is weight / sum of all weights.  
+Setting all weights to 0 currently causes an error.  
+  
+Example:  
+The sum of all the weights is 100. Jokes have 1/100 chance of showing up. Moon phase messages have a 15/100 chance of showing up.
+
+    "extra":{
+      ...
+      "probabilities":{
+        "joke": 1,
+        "tutorial": 9,
+        "lunar": 15,
+        "season": 5,
+        "sunrise": 15,
+        "beaufort": 10,
+        "records": 0,
+        "cloudiness": 10,
+        "humidity": 10,
+        "precipitation": 15,
+        "pressure": 10
+      }
+    }
 
 ### Optional Configuration:  
 #### Alerts  
