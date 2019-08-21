@@ -222,6 +222,14 @@ Keep all alerts where "Boone;" or "Boone, MO" is used to describe the area and d
     }
 
 #### Retweets  
+Maybe there's a local weather station's twitter you'd like retweet. Setting `config.twitter.localStationHandle` to the station's twitter handle will retweet all their tweets every hour on the 30 minute mark.  
+  
+Example:  
+
+    "twitter": {
+      ...
+      "localStationHandle": "NWSStLouis"
+    }
 
 # Contributing
 A description with your pull request is fine.
