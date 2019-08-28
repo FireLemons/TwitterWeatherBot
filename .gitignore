@@ -91,3 +91,6 @@ typings/
 
 # DynamoDB Local files 
 .dynamodb/
+
+# A file specific to my global git configuration
+secrets.txt
