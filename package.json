@@ -12,9 +12,9 @@
     "url": "https://github.com/FireLemons/ColumbiaMOWeatherTweetBot/issues"
   },
   "devDependencies": {
-    "standard": "*",
     "chai": "*",
-    "mocha": "*"
+    "mocha": "*",
+    "standard": "^14.1.0"
   },
   "dependencies": {
     "lune": "^0.4.0",
