@@ -72,27 +72,50 @@ function parseInput(input){
   }
 }
 
-
+// Takes parsed user input and determines if it's a valid value for a field
+//  param  {any} input The input parsed by parseInput to be validated
+//  param  {string} type The valid type of the input
+//  param  {function} validate A function to validate the input beyond the type check
+//  param  {string} failValidate An error message to be displayed when validate(input) fails
+//  return {boolean} True if input is valid false otherwise
 function validateField(input, type, validate, failValidate){
-  let valid = true
-  
   if(!(type === '*')){
     switch(type){
       case 'string':
+        if(typeof input !== type){
+          console.log('ERROR: input must be a string')
+          return false
+        }
         break;
       case 'integer':
+        if(isNaN(input) || Math.floor(input) !== input){
+          console.log('ERROR: input must be an integer')
+          return false
+        }
         break;
       case 'number':
+        if(isNaN(input)){
+          console.log('ERROR: input must be a number')
+          return false
+        }
         break;
       case 'boolean':
+        if(input !== true && input !== false){
+          console.log('ERROR: input must be a boolean')
+          return false
+        }
         break;
     }
   }
   
-  return valid;
+  if(!validate(input)){
+    console.log(`ERROR: ${failValidate}`)
+  }
+  
+  return true;
 }
 
-console.log('\nWelcome to the twitterWeatherBot config generator.\n\nType .exit at any time to abort\n\nSimply fill out the fields with either \n  a string(surrounded by quotes) ""\n  an integer -12\n  any number -0.2\n  a boolean true or false\n  or null\n')
+console.log('\nWelcome to the twitterWeatherBot config generator.\n\nType .exit at any time to abort\n\nSimply fill out the fields with either \n  a string(surrounded by quotes) ""\n  an integer -12\n  any number -0.2\n  a boolean true or false\n  or null(not recommended)\n')
 consoleIO.setPrompt('>')
 consoleIO.prompt()
 
