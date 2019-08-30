@@ -282,7 +282,6 @@ if (config.weather.alerts && !config.weather.alerts.disabled) {
   function tryFetchAlerts () {
     const onFailure = (error) => {
       if (retryAlertTimeout <= 262144) {
-        logger.warn(new Error('Failed to load weather alert data.'))
         logger.warn(error)
         logger.info(`Retrying fetching weather alert data in ${retryAlertTimeout}ms. Retry ${(retryAlertTimeout / 131072) + 1} of 3`)
 
@@ -302,9 +301,9 @@ if (config.weather.alerts && !config.weather.alerts.disabled) {
           })
       }
     }
-    
+
     logger.info('Fetching alerts.')
-    
+
     weatherFetcher.getWeatherAlertsPromise().then((alertData) => {
       const alerts = weatherFetcher.filterAlerts(alertData.features)
 
@@ -323,7 +322,35 @@ if (config.weather.alerts && !config.weather.alerts.disabled) {
             })
             .catch((error) => {
               logger.error('Failed to send weather alert tweet')
-              onFailure(error)
+
+              if (error instanceof Array && error[0].code) {
+                let retry = true
+
+                error.forEach((error) => {
+                  const { code } = error
+
+                  switch (code) {
+                    case 64:// API account suspended
+                    case 88:// Rate limit exceeded
+                    case 185:// Status update limit reached
+                    case 187:// Duplicate status
+                    case 226:// Tweet blocked by malicious tweet filter
+                    case 251:// Endpoint deprecated
+                    case 326:// Account locked(Manually login to unlock)
+                      retry = false
+                      logger.error(error)
+                      break
+                    default:
+                      // Do nothing
+                  }
+                })
+
+                if (retry) {
+                  onFailure(error)
+                }
+              } else {
+                onFailure(error)
+              }
             })
         } else if (!alertMessage) {
           logger.error(new Error('Failure in generating alert message'))
