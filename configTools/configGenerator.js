@@ -74,11 +74,10 @@ function parseInput(input){
 
 // Takes parsed user input and determines if it's a valid value for a field
 //  param  {any} input The input parsed by parseInput to be validated
-//  param  {string} type The valid type of the input
-//  param  {function} validate A function to validate the input beyond the type check
-//  param  {string} failValidate An error message to be displayed when validate(input) fails
+//  param  {object} validator A validator object in validators[] above
 //  return {boolean} True if input is valid false otherwise
-function validateField(input, type, validate, failValidate){
+function validateField(input, validator){
+  let {type, validate, failValidate} = validator
   if(!(type === '*')){
     switch(type){
       case 'string':
@@ -115,23 +114,42 @@ function validateField(input, type, validate, failValidate){
   return true;
 }
 
-console.log('\nWelcome to the twitterWeatherBot config generator.\n\nType .exit at any time to abort\n\nSimply fill out the fields with either \n  a string(surrounded by quotes) ""\n  an integer -12\n  any number -0.2\n  a boolean true or false\n  or null(not recommended)\n')
-consoleIO.setPrompt('>')
-consoleIO.prompt()
+let currentField = validators['logDir']
+
+function* generate(){
+  console.log('Enter a path to a directory to store logs')
+  consoleIO.setPrompt('[string] >')
+  consoleIO.prompt()
+  
+  _.set(config, 'log.logDir', yield)
+  
+  console.log(config)
+}
+
+let configGenerator = generate()
+
+console.log('\nWelcome to the twitterWeatherBot config generator.\n\nType .exit at any time to abort\n\nSimply fill out the fields with either \n  a string(surrounded by quotes) ""\n  an integer -12\n  any number -0.2\n  a boolean true or false\n  or null(not recommended)\n\n')
+configGenerator.next()
 
 consoleIO.on('line', function(line) {
   if (line === ".exit"){
-    consoleIO.close();
+    consoleIO.close()
   } else {
     try{
       let parsedInput = parseInput(line)
-      console.log(typeof parsedInput)
+      
+      if(validateField(parsedInput, currentField)){
+        if(configGenerator.next(parsedInput).done){
+          consoleIO.close()
+        }
+      } else {
+        consoleIO.prompt()
+      }
     } catch(e) {
       console.log(e.message)
+      consoleIO.prompt()
     }
   }
-
-  consoleIO.prompt();
 }).on('close',() => {
     process.exit(0);
 });
