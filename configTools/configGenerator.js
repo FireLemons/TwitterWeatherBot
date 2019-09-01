@@ -12,32 +12,33 @@ let config = {}
 
 let validators = {
   "logDir": {
-    "path": "log.logDir",
     "type": "string",
     "validate": configFieldValidator.validateLogLogDir,
     "failValidate": "Log directory is not a valid path"
   },
   
-  "twitterConsumerKey":{
-    "path": "twitter.consumer_key",
+  "OWMKey": {
     "type": "string",
     "validate": configFieldValidator.validateNotEmptyString,
-    "failValidate": "Twitter's consumer key can not be exclusivley whitespace"
+    "failValidate": "OpenWeatherMap key cannot be empty string or exclusively whitespace"
+  },
+  
+  "twitterConsumerKey":{
+    "type": "string",
+    "validate": configFieldValidator.validateNotEmptyString,
+    "failValidate": "Twitter's consumer key can not be exclusively whitespace"
   },
   "twitterConsumerSecret":{
-    "path": "twitter.consumer_secret",
     "type": "string",
     "validate": configFieldValidator.validateNotEmptyString,
     "failValidate": "Twitter's consumer secret can not be exclusivley whitespace"
   },
   "twitterAccessTokenKey":{
-    "path": "twitter.access_token_key",
     "type": "string",
     "validate": configFieldValidator.validateNotEmptyString,
     "failValidate": "Twitter's access token key can not be exclusivley whitespace"
   },
   "twitterAccessTokenSecret":{
-    "path": "twitter.access_token_secret",
     "type": "string",
     "validate": configFieldValidator.validateNotEmptyString,
     "failValidate": "Twitter's access token secret can not be exclusivley whitespace"
@@ -109,6 +110,7 @@ function validateField(input, validator){
   
   if(!validate(input)){
     console.log(`ERROR: ${failValidate}`)
+    return false
   }
   
   return true;
@@ -120,10 +122,25 @@ function* generate(){
   console.log('Enter a path to a directory to store logs')
   consoleIO.setPrompt('[string] >')
   consoleIO.prompt()
-  
   _.set(config, 'log.logDir', yield)
   
+  currentField = validators['OWMKey']
+  console.log('Enter your openWeatherMap api key')
+  consoleIO.setPrompt('[string] >')
+  consoleIO.prompt()
+  _.set(config, 'weather.openWeatherMap.key', yield)
+  
   console.log(config)
+  
+  /*consoleIO.question('Yes or No', function(line){
+    if(line && /^[Yy]/.test(line.charAt(0))){
+      console.log('ya beb')
+    } else {
+      console.log('na beb')
+    }
+    
+    consoleIO.close()
+  })*/
 }
 
 let configGenerator = generate()
@@ -143,10 +160,12 @@ consoleIO.on('line', function(line) {
           consoleIO.close()
         }
       } else {
+        console.log('Try again\n')
         consoleIO.prompt()
       }
     } catch(e) {
       console.log(e.message)
+      console.log('Try again\n')
       consoleIO.prompt()
     }
   }
