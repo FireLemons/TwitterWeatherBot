@@ -118,6 +118,20 @@ module.exports = {
     return str.trim().length > 0
   },
   
+  // Checks whether a string is in the form {city name},{country code}
+  //  param  {string} str The string to be checked
+  //  return {boolean} True if str is in the form {city name},{country code} false otherwise
+  validateOWMCityNameParam(str){
+    return /^.+,[a-zA-Z]{2}$/.test(str)
+  },
+  
+  // Checks whether a string is in the form {zip code},{country code}
+  //  param  {string} str The string to be checked
+  //  return {boolean} True if str is in the form {zip code},{country code} false otherwise
+  validateOWMZipCodeParam(str){
+    return /^[0-9]{5},[a-zA-Z]{2}$/.test(str)
+  },
+  
   // Checks whether a number is an integer
   //  @param  {number} num The number to be checked
   //  @return {boolean} True if num is an integer false otherwise
