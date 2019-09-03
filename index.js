@@ -238,25 +238,26 @@ function tryFetchWeather (isLate) {
 
   weatherFetcher.getForecastPromise().then((forecastData) => {
     let message = weatherTools.generateForecastMessage(forecastData)
-    // extra statement
+
     if (message) {
       // extra statement
       let extra
 
-      if (isLate) {
-        message += util.pickRandom(require('./data/jokes.json').late)
-      } else {
-        extra = extraGenerator.getExtra(forecastData)
-        message += extra.statement
+      if (config.extra && !config.extra.disabled) {
+        if (isLate) {
+          message += util.pickRandom(require('./data/jokes.json').late)
+        } else {
+          extra = extraGenerator.getExtra(forecastData)
+          message += extra.statement
 
-        logger.info(`Generated: ${JSON.stringify(extra)}`)
+          logger.info(`Generated: ${JSON.stringify(extra)}`)
+        }
       }
-
       tweetWeather.sendTweet(message)
         .then((tweet) => {
           stats.lastUpdate = new Date()
 
-          if (!isLate) {
+          if (extra) {
             if (!stats[extra.type]) {
               stats[extra.type] = 0
             }
