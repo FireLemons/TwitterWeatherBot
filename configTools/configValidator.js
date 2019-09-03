@@ -167,7 +167,12 @@ if (!(config instanceof Object) || config instanceof Array) {
 } else {
   // Check extra
   const extra = config.extra
-  if (checkObject(extra, 'config.extra')) {
+
+  if (!extra || extra.disabled) {
+    console.log('INFO: Extras are disabled.')
+  } else if (checkObject(extra, 'config.extra')) {
+    console.log('INFO: Extras are enabled.')
+
     // Check coordinates
     const coordinates = config.extra.coordinates
 
@@ -220,51 +225,51 @@ if (!(config instanceof Object) || config instanceof Array) {
 
       checkKeys(coordinates, 'config.extra.coordinates', ['elevation', 'lat', 'long'])
     }// End check coordinates
-    
+
     // Check extra message probabilities
-    let probabilities = extra.probabilities
-    let extraTypes = ["joke", "tutorial", "lunar", "season", "sunrise", "beaufort", "records", "cloudiness", "humidity", "precipitation", "pressure"]
-    
-    if(checkObject(probabilities, 'config.extra.probabilities')){
-      let validProbailities = {}
-      
+    const probabilities = extra.probabilities
+    const extraTypes = ['joke', 'tutorial', 'lunar', 'season', 'sunrise', 'beaufort', 'records', 'cloudiness', 'humidity', 'precipitation', 'pressure']
+
+    if (checkObject(probabilities, 'config.extra.probabilities')) {
+      const validProbailities = {}
+
       extraTypes.forEach((extra) => {
         validProbailities[extra] = configFieldValidator.validateProbability(probabilities[extra])
       })
-      
-      for(let extra in validProbailities){
-        if(!validProbailities[extra]){
+
+      for (const extra in validProbailities) {
+        if (!validProbailities[extra]) {
           console.log(`  WARNING: Probability for extra message type ${extra} not specified. By default its probability will be 0%`)
-        } else if(validProbailities[extra] === -1){
+        } else if (validProbailities[extra] === -1) {
           console.log(`  ERROR: Probability for extra message type ${extra} is not a number.`)
         }
       }
-      
-      if(Object.values(validProbailities).reduce((acc, value) => {
+
+      if (Object.values(validProbailities).reduce((acc, value) => {
         return acc && (value !== -1)
       }, true)) {
         console.log('  Extra message probabilities:')
         let sum = 0
-        
-        for(let extra in probabilities){
+
+        for (const extra in probabilities) {
           sum += probabilities[extra]
         }
-        
-        for(let extra in validProbailities){
-          if(!validProbailities[extra]){
+
+        for (const extra in validProbailities) {
+          if (!validProbailities[extra]) {
             console.log(`    ${extra}: 0%`)
           } else {
             console.log(`    ${extra}: ${(probabilities[extra] / sum).toFixed(2)}%`)
           }
         }
       }// End check extra message probabilities
-      
+
       checkKeys(probabilities, 'config.extra.probabilities', extraTypes)
     }// End check extra message probabilities
-    
-    checkKeys(extra, 'config.extra', ['coordinates', 'probabilities'])
+
+    checkKeys(extra, 'config.extra', ['disabled', 'coordinates', 'probabilities'])
   }// End check extra
-  
+
   // Check logging
   const log = config.log
 
@@ -358,42 +363,42 @@ if (!(config instanceof Object) || config instanceof Array) {
 
     // Check local weather station id
     const localStationHandle = twitter.localStationHandle
-    if(localStationHandle !== undefined){
-    let validStationHandle = checkString(localStationHandle, 'config.twitter.localStationHandle')
+    if (localStationHandle !== undefined) {
+      let validStationHandle = checkString(localStationHandle, 'config.twitter.localStationHandle')
 
-    if (validStationHandle && !configFieldValidator.validateNotEmptyString(localStationHandle)) {
-      console.log('ERROR: config.twitter.localStationHandle must be a string')
+      if (validStationHandle && !configFieldValidator.validateNotEmptyString(localStationHandle)) {
+        console.log('ERROR: config.twitter.localStationHandle must be a string')
 
-      validStationHandle = false
-    }
+        validStationHandle = false
+      }
 
-    if (validStationHandle && twitterClient) {
-      console.log(`INFO: Attempting to fetch tweets from ${localStationHandle}...`)
+      if (validStationHandle && twitterClient) {
+        console.log(`INFO: Attempting to fetch tweets from ${localStationHandle}...`)
 
-      const twitterPromise = twitterClient.get('statuses/user_timeline', {
-        count: 10,
-        exclude_replies: true,
-        trim_user: true,
-        screen_name: localStationHandle
-      })
-
-      twitterPromise.then((posts) => {
-        fs.writeFile('./localTwitterPosts.json', JSON.stringify(posts), (error) => {
-          if (error) {
-            console.log('ERROR: Failed to save twitter posts of local weather station to file')
-            throw error
-          } else {
-            console.log(`INFO: Some twitter posts of ${localStationHandle} written to ${path.resolve('./localTwitterPosts.json')}`)
-          }
+        const twitterPromise = twitterClient.get('statuses/user_timeline', {
+          count: 10,
+          exclude_replies: true,
+          trim_user: true,
+          screen_name: localStationHandle
         })
-      })
 
-      twitterPromise.catch((error) => {
-        console.log(`ERROR: Failed to fetch tweets from ${localStationHandle}`)
-        console.log('  Are you sure you enetered the correct twitter handle?')
-        console.log(error)
-      })
-    }
+        twitterPromise.then((posts) => {
+          fs.writeFile('./localTwitterPosts.json', JSON.stringify(posts), (error) => {
+            if (error) {
+              console.log('ERROR: Failed to save twitter posts of local weather station to file')
+              throw error
+            } else {
+              console.log(`INFO: Some twitter posts of ${localStationHandle} written to ${path.resolve('./localTwitterPosts.json')}`)
+            }
+          })
+        })
+
+        twitterPromise.catch((error) => {
+          console.log(`ERROR: Failed to fetch tweets from ${localStationHandle}`)
+          console.log('  Are you sure you enetered the correct twitter handle?')
+          console.log(error)
+        })
+      }
     } else {
       console.log('INFO: Local weather station retweets are unset')
     }
@@ -410,9 +415,7 @@ if (!(config instanceof Object) || config instanceof Array) {
 
     if (!alerts || alerts.disabled) {
       console.log('INFO: Alerts disabled.')
-    } else if (!(alerts instanceof Object) || alerts instanceof Array) {
-      console.log('ERROR: config.weather.alerts must be an object')
-    } else {
+    } else if (checkObject(alerts, 'config.weather.alerts')) {
       console.log('INFO: Alerts are enabled.')
 
       // Check info to be sent in user-agent header to NWS api
