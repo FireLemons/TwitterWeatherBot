@@ -1,5 +1,6 @@
 {
   "extra":{
+    "disabled": false,
     "coordinates": {
       "elevation": 231,
       "long": -92.3341,
