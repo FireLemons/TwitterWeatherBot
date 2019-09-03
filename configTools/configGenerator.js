@@ -10,68 +10,80 @@ const consoleIO = readline.createInterface({
 
 const config = {}
 
-const validators = {
+const fields = {
   logDir: {
     type: 'string',
+    prompt: 'Enter a path to a directory to store logs',
     validate: configFieldValidator.validateLogLogDir,
     failValidate: 'Log directory is not a valid path'
   },
 
   OWMKey: {
     type: 'string',
+    prompt: 'Enter your openWeatherMap api key',
     validate: configFieldValidator.validateNotEmptyString,
-    failValidate: 'OpenWeatherMap key cannot be empty string or exclusively whitespace'
+    failValidate: 'OpenWeatherMap key cannot be empty or exclusively whitespace'
   },
   OWMLocationParam: {
     type: 'integer',
+    prompt: 'There are 5 ways to specify location for forecasts.\n  1. City name & country code\n  2. City ID(Recommended)\n  3. Coordinates\n  4. Zip code & country code',
     validate: (num) => { return num === Math.floor(num) && num > 0 && num < 5 },
     failValidate: 'Invalid option. Pick a set of paramters for specifing location. 1,2,3, or 4'
   },
   OWMLocationCityName: {
     type: 'string',
+    prompt: 'Enter a string in the format CITY_NAME,COUNTRY_CODE',
     validate: configFieldValidator.validateOWMCityNameParam,
     failValidate: 'Invalid format. The valid format is CITY_NAME,COUNTRY_CODE. e.g. "New York,US"'
   },
   OWMLocationCityID: {
     type: 'integer',
+    prompt: 'Enter a city id. A city\'s id can be found by searching for the city on openweathermap.org and copying it from the url.\nFor example London\'s url is https://openweathermap.org/city/2643743. Its id is 2643743',
     validate: (num) => { return num >= 0 },
-    failValidate: 'Invalid ID. A list of valid city ids can be downloaded at http://bulk.openweathermap.org/sample/city.list.json.gz'
+    failValidate: 'Invalid ID. City IDs must be positive.'
   },
   OWMLocationLat: {
     type: 'number',
+    prompt: 'Enter the latitude of the area to generate forecasts for',
     validate: configFieldValidator.validateCoordinatesLat,
     failValidate: 'Number is outside the range of acceptable latitudes. Latitudes are between -90 and 90 degrees'
   },
   OWMLocationLong: {
     type: 'number',
+    prompt: 'Enter the longitude of the area to generate forecasts for',
     validate: configFieldValidator.validateCoordinatesLong,
     failValidate: 'Number is outside the range of acceptable longitudes. Latitudes are between -180 and 180 degrees'
   },
   OWMLocationZip: {
     type: 'string',
+    prompt: 'Enter a string in the format ZIP_CODE,COUNTRY_CODE',
     validate: configFieldValidator.validateOWMZipCodeParam,
     failValidate: 'Invalid format. The valid format is ZIP_CODE,COUNTRY_CODE e.g. "12345,US"'
   },
 
   twitterConsumerKey: {
     type: 'string',
+    prompt: 'Enter your twitter consumer key',
     validate: configFieldValidator.validateNotEmptyString,
-    failValidate: "Twitter's consumer key can not be exclusively whitespace"
+    failValidate: "Twitter's consumer key can not be empty or exclusively whitespace"
   },
   twitterConsumerSecret: {
     type: 'string',
+    prompt: 'Enter your twitter consumer secret',
     validate: configFieldValidator.validateNotEmptyString,
-    failValidate: "Twitter's consumer secret can not be exclusivley whitespace"
+    failValidate: "Twitter's consumer secret can not be empty or exclusively whitespace"
   },
   twitterAccessTokenKey: {
     type: 'string',
+    prompt: 'Enter your twitter access token key',
     validate: configFieldValidator.validateNotEmptyString,
-    failValidate: "Twitter's access token key can not be exclusivley whitespace"
+    failValidate: "Twitter's access token key can not be empty or exclusively whitespace"
   },
   twitterAccessTokenSecret: {
     type: 'string',
+    prompt: 'Enter your twitter access token secret',
     validate: configFieldValidator.validateNotEmptyString,
-    failValidate: "Twitter's access token secret can not be exclusivley whitespace"
+    failValidate: "Twitter's access token secret can not be empty or exclusively whitespace"
   }
 }
 
@@ -105,7 +117,7 @@ function parseInput (input) {
 
 // Takes parsed user input and determines if it's a valid value for a field
 //  param  {any} input The input parsed by parseInput to be validated
-//  param  {object} validator A validator object in validators[] above
+//  param  {object} validator A validator object in fields[] above
 //  return {boolean} True if input is valid false otherwise
 function validateField (input, validator) {
   const { type, validate, failValidate } = validator
@@ -146,62 +158,48 @@ function validateField (input, validator) {
   return true
 }
 
-let currentField = validators['logDir']
+let currentField
+
+// Prompts the user to enter a field value for the config
+//  param  {string} field The key to the object related to the field in fields[]
+function promptField(field){
+  currentField = fields[field]
+  console.log(currentField.prompt)
+  consoleIO.setPrompt(`[${currentField.type}] >`)
+  consoleIO.prompt()
+}
 
 function * generate () {
-  console.log('Enter a path to a directory to store logs')
-  consoleIO.setPrompt('[string] >')
-  consoleIO.prompt()
+  promptField('logDir')
   _.set(config, 'log.logDir', yield)
 
-  currentField = validators['OWMKey']
-  console.log('Enter your openWeatherMap api key')
-  consoleIO.setPrompt('[string] >')
-  consoleIO.prompt()
+  promptField('OWMKey')
   _.set(config, 'weather.openWeatherMap.key', yield)
 
-  currentField = validators['OWMLocationParam']
-  console.log('There are 5 ways to specify location for forecasts.')
-  console.log('  1. City name & country code\n  2. City ID\n  3. Coordinates\n  4. Zip code & country code')
-  consoleIO.setPrompt('[integer] >')
-  consoleIO.prompt()
+  promptField('OWMLocationParam')
+  currentField = fields['OWMLocationParam']
 
   switch (yield) {
     case 1:// City name
-      currentField = validators['OWMLocationCityName']
-      console.log('Enter a string in the format CITY_NAME,COUNTRY_CODE')
-      consoleIO.setPrompt('[string] >')
-      consoleIO.prompt()
+      promptField('OWMLocationCityName')
       _.set(config, 'weather.openWeatherMap.location.q', yield)
 
       break
     case 2:// City ID
-      currentField = validators['OWMLocationCityID']
-      console.log('Enter a city id')
-      consoleIO.setPrompt('[integer] >')
-      consoleIO.prompt()
+      promptField('OWMLocationCityID')
       _.set(config, 'weather.openWeatherMap.location.id', yield)
 
       break
     case 3:// Coordinates
-      currentField = validators['OWMLocationLat']
-      console.log('Enter the latitude of the area to generate forecasts for')
-      consoleIO.setPrompt('[number] >')
-      consoleIO.prompt()
+      promptField('OWMLocationLat')
       _.set(config, 'weather.openWeatherMap.location.lat', yield)
 
-      currentField = validators['OWMLocationLong']
-      console.log('Enter the longitude of the area to generate forecasts for')
-      consoleIO.setPrompt('[number] >')
-      consoleIO.prompt()
+      promptField('OWMLocationLong')
       _.set(config, 'weather.openWeatherMap.location.long', yield)
 
       break
     case 4:// Zip code
-      currentField = validators['OWMLocationZip']
-      console.log('Enter a string in the format ZIP_CODE,COUNTRY_CODE')
-      consoleIO.setPrompt('[string] >')
-      consoleIO.prompt()
+      promptField('OWMLocationZip')
       _.set(config, 'weather.openWeatherMap.location.zip', yield)
 
       break
@@ -211,6 +209,18 @@ function * generate () {
       break
   }
 
+  promptField('twitterConsumerKey')
+  _.set(config, 'twitter.consumer_key', yield)
+  
+  promptField('twitterConsumerSecret')
+  _.set(config, 'twitter.consumer_secret', yield)
+  
+  promptField('twitterAccessTokenKey')
+  _.set(config, 'twitter.access_token_key', yield)
+
+  promptField('twitterAccessTokenSecret')
+  _.set(config, 'twitter.access_token_secret', yield)
+  
   console.log(JSON.stringify(config))
 
   /* consoleIO.question('Yes or No', function(line){
