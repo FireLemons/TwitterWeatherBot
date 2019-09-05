@@ -241,7 +241,7 @@ if (!(config instanceof Object) || config instanceof Array) {
         if (!validProbailities[extra]) {
           console.log(`  WARNING: Probability for extra message type ${extra} not specified. By default its probability will be 0%`)
         } else if (validProbailities[extra] === -1) {
-          console.log(`  ERROR: Probability for extra message type ${extra} is not a number.`)
+          console.log(`  ERROR: Probability for extra message type ${extra} is not a positive number.`)
         }
       }
 

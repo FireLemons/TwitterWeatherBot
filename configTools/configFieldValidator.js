@@ -141,11 +141,11 @@ module.exports = {
   
   // Checks whether a value is a number
   //  @param  {number} probability The value to be checked
-  //  @return {number} 1 if probability is a number, 0 if probability is undefined, -1 otherwise
+  //  @return {number} 1 if probability is a positive number, 0 if probability is undefined, -1 otherwise
   validateProbability(probability){
     if(probability === undefined){
       return 0
-    } else if(isNaN(probability)){
+    } else if(isNaN(probability) || probability < 0){
       return -1
     } else {
       return 1
