@@ -191,15 +191,16 @@ The avaialable message types are
  - __lunar__ Tells the current phase of the moon
  - __season__ Tells the number of days between the latest solstice/equinox and the next solstice/equinox
  - __sunrise__ At day tells sunset and sunrise times and day length. At night tells last sunset and next sunrise and night length.
- - __beaufort__ Descibes the current wind speed using the [Beaufort scale](https://en.wikipedia.org/wiki/Beaufort_scale)
+ - __beaufort__ Describes the current wind speed using the [Beaufort scale](https://en.wikipedia.org/wiki/Beaufort_scale)
  - __records__ Tells the hottest temperature, the coldest temperature, or the most precipitation that has ever occoured on the current day of the year.
  - __cloudiness__ Forecasted %cloudiness for the next 9 hours same as the main forecast
  - __humidity__ Forecasted %humidity for the next 9 hours same as the main forecast
  - __precipitation__ Forecasted precipitation in mm for the next 9 hours same as the main forecast. If there is no precipitation cloudiness, humidity, or pressuire is displayed instead.
  - __pressure__ Forecasted pressure in hectopascals for the next 9 hours same as the main forecast.  
- 
-The probability of each type of message showing up can be set by a weight value. The probability of a particular type of message showing up is weight / sum of all weights.  
-Setting all weights to 0 and having etras enabled currently causes an error.  
+  
+The probability of each type of message showing up is set by a weight. The probability of a message type showing up is its weight / sum of all weights.  
+  
+Setting all weights to 0 and having extras enabled causes an error.  
   
 Example:  
 The sum of all the weights is 100. Jokes have 1/100 chance of showing up. Moon phase messages have a 15/100 chance of showing up.
