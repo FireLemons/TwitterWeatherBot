@@ -84,6 +84,73 @@ const fields = {
     prompt: 'Enter your twitter access token secret',
     validate: configFieldValidator.validateNotEmptyString,
     failValidate: "Twitter's access token secret can not be empty or exclusively whitespace"
+  },
+  
+  extraEnable: {
+    type: 'boolean',
+    prompt: 'Enable extra statements?\nExtra statements are appended to regular forecast tweets and include information like humidity and the phase of the moon',
+    validate: () => true,
+    failValidate: ""
+  },
+  extraJokeChance: {
+    type: 'integer',
+    prompt: 'Enter a weight for jokes. Low weight recommended.',
+    validate: (num) => configFieldValidator.validateProbability(num) > 0,
+    failValidate: "The weight must be positive"
+  },
+  extraTutorialChance: {
+    type: 'integer',
+    prompt: 'Enter a weight for tutorials. Tutorial messages show the meaning of icons in the forecast. Low weight recommended.',
+    validate: (num) => configFieldValidator.validateProbability(num) > 0,
+    failValidate: "The weight must be positive"
+  },
+  extraLunarChance: {
+    type: 'integer',
+    prompt: 'Enter a weight for moon phase',
+    validate: (num) => configFieldValidator.validateProbability(num) > 0,
+    failValidate: "The weight must be positive"
+  },
+  extraSeasonChance: {
+    type: 'integer',
+    prompt: 'Enter a weight for season progress. Season progress shows days since the last equinox/solstice and days until the next equinox/solstice.',
+    validate: (num) => configFieldValidator.validateProbability(num) > 0,
+    failValidate: "The weight must be positive"
+  },
+  extraSunriseChance: {
+    type: 'integer',
+    prompt: 'Enter a weight for sunrise/sunset',
+    validate: (num) => configFieldValidator.validateProbability(num) > 0,
+    failValidate: "The weight must be positive"
+  },
+  extraBeaufortChance: {
+    type: 'integer',
+    prompt: 'Enter a weight for beaufort. The Beaufort scale describes the current wind intensity empirically.',
+    validate: (num) => configFieldValidator.validateProbability(num) > 0,
+    failValidate: "The weight must be positive"
+  },
+  extraCloudinessChance: {
+    type: 'integer',
+    prompt: 'Enter a weight for cloudiness',
+    validate: (num) => configFieldValidator.validateProbability(num) > 0,
+    failValidate: "The weight must be positive"
+  },
+  extraHumidityChance: {
+    type: 'integer',
+    prompt: 'Enter a weight for humidity',
+    validate: (num) => configFieldValidator.validateProbability(num) > 0,
+    failValidate: "The weight must be positive"
+  },
+  extraPrecipitationChance: {
+    type: 'integer',
+    prompt: 'Enter a weight for precipitation',
+    validate: (num) => configFieldValidator.validateProbability(num) > 0,
+    failValidate: "The weight must be positive"
+  },
+  extraPressureChance: {
+    type: 'integer',
+    prompt: 'Enter a weight for pressure',
+    validate: (num) => configFieldValidator.validateProbability(num) > 0,
+    failValidate: "The weight must be positive"
   }
 }
 
@@ -220,6 +287,18 @@ function * generate () {
 
   promptField('twitterAccessTokenSecret')
   _.set(config, 'twitter.access_token_secret', yield)
+  
+  promptField('extraEnable')
+  _.set(config, 'extra.disabled', !(yield))
+  
+  if(!config.extra.disabled){
+    console.log('\nAvailable extras are: jokes, tutorials, moon phase, season progress, sunrise/sunset, beaufort, cloudiness, humidity, precipitation, and pressure\n')
+    console.log('The probability of each type of extra showing up is set by a weight. The probability of a type of extra showing up is its weight / sum of all weights.')
+    console.log('Setting all weights to 0 causes an error.\n')
+    
+    promptField('extraJokeChance')
+    _.set(config, 'extra.probabilities.joke', yield)
+  }
   
   console.log(JSON.stringify(config))
 
