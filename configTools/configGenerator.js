@@ -13,7 +13,7 @@ const config = {}
 const fields = {
   logDir: {
     type: 'string',
-    prompt: 'Enter a path to a directory to store logs',
+    prompt: 'Enter a path to a directory to store logs(relative to index.js)',
     validate: configFieldValidator.validateLogLogDir,
     failValidate: 'Log directory is not a valid path'
   },
@@ -85,72 +85,72 @@ const fields = {
     validate: configFieldValidator.validateNotEmptyString,
     failValidate: "Twitter's access token secret can not be empty or exclusively whitespace"
   },
-  
+
   extraEnable: {
     type: 'boolean',
     prompt: 'Enable extra statements?\nExtra statements are appended to regular forecast tweets and include information like humidity and the phase of the moon',
     validate: () => true,
-    failValidate: ""
+    failValidate: ''
   },
   extraJokeChance: {
     type: 'integer',
     prompt: 'Enter a weight for jokes. Low weight recommended.',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
-    failValidate: "The weight must be positive"
+    failValidate: 'The weight must be positive'
   },
   extraTutorialChance: {
     type: 'integer',
     prompt: 'Enter a weight for tutorials. Tutorial messages show the meaning of icons in the forecast. Low weight recommended.',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
-    failValidate: "The weight must be positive"
+    failValidate: 'The weight must be positive'
   },
   extraLunarChance: {
     type: 'integer',
     prompt: 'Enter a weight for moon phase',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
-    failValidate: "The weight must be positive"
+    failValidate: 'The weight must be positive'
   },
   extraSeasonChance: {
     type: 'integer',
     prompt: 'Enter a weight for season progress. Season progress shows days since the last equinox/solstice and days until the next equinox/solstice.',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
-    failValidate: "The weight must be positive"
+    failValidate: 'The weight must be positive'
   },
   extraSunriseChance: {
     type: 'integer',
     prompt: 'Enter a weight for sunrise/sunset',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
-    failValidate: "The weight must be positive"
+    failValidate: 'The weight must be positive'
   },
   extraBeaufortChance: {
     type: 'integer',
     prompt: 'Enter a weight for beaufort. The Beaufort scale describes the current wind intensity empirically.',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
-    failValidate: "The weight must be positive"
+    failValidate: 'The weight must be positive'
   },
   extraCloudinessChance: {
     type: 'integer',
     prompt: 'Enter a weight for cloudiness',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
-    failValidate: "The weight must be positive"
+    failValidate: 'The weight must be positive'
   },
   extraHumidityChance: {
     type: 'integer',
     prompt: 'Enter a weight for humidity',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
-    failValidate: "The weight must be positive"
+    failValidate: 'The weight must be positive'
   },
   extraPrecipitationChance: {
     type: 'integer',
     prompt: 'Enter a weight for precipitation',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
-    failValidate: "The weight must be positive"
+    failValidate: 'The weight must be positive'
   },
   extraPressureChance: {
     type: 'integer',
     prompt: 'Enter a weight for pressure',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
-    failValidate: "The weight must be positive"
+    failValidate: 'The weight must be positive'
   }
 }
 
@@ -229,9 +229,9 @@ let currentField
 
 // Prompts the user to enter a field value for the config
 //  param  {string} field The key to the object related to the field in fields[]
-function promptField(field){
+function promptField (field) {
   currentField = fields[field]
-  console.log(currentField.prompt)
+  console.log(`\n${currentField.prompt}`)
   consoleIO.setPrompt(`[${currentField.type}] >`)
   consoleIO.prompt()
 }
@@ -278,28 +278,55 @@ function * generate () {
 
   promptField('twitterConsumerKey')
   _.set(config, 'twitter.consumer_key', yield)
-  
+
   promptField('twitterConsumerSecret')
   _.set(config, 'twitter.consumer_secret', yield)
-  
+
   promptField('twitterAccessTokenKey')
   _.set(config, 'twitter.access_token_key', yield)
 
   promptField('twitterAccessTokenSecret')
   _.set(config, 'twitter.access_token_secret', yield)
-  
+
   promptField('extraEnable')
   _.set(config, 'extra.disabled', !(yield))
-  
-  if(!config.extra.disabled){
+
+  if (!config.extra.disabled) {
     console.log('\nAvailable extras are: jokes, tutorials, moon phase, season progress, sunrise/sunset, beaufort, cloudiness, humidity, precipitation, and pressure\n')
     console.log('The probability of each type of extra showing up is set by a weight. The probability of a type of extra showing up is its weight / sum of all weights.')
     console.log('Setting all weights to 0 causes an error.\n')
-    
+
     promptField('extraJokeChance')
     _.set(config, 'extra.probabilities.joke', yield)
+
+    promptField('extraTutorialChance')
+    _.set(config, 'extra.probabilities.tutorial', yield)
+
+    promptField('extraLunarChance')
+    _.set(config, 'extra.probabilities.lunar', yield)
+
+    promptField('extraSeasonChance')
+    _.set(config, 'extra.probabilities.season', yield)
+
+    promptField('extraSunriseChance')
+    _.set(config, 'extra.probabilities.sunrise', yield)
+
+    promptField('extraBeaufortChance')
+    _.set(config, 'extra.probabilities.beaufort', yield)
+
+    promptField('extraCloudinessChance')
+    _.set(config, 'extra.probabilities.cloudiness', yield)
+
+    promptField('extraHumidityChance')
+    _.set(config, 'extra.probabilities.humidity', yield)
+
+    promptField('extraPrecipitationChance')
+    _.set(config, 'extra.probabilities.precipitation', yield)
+
+    promptField('extraPressureChance')
+    _.set(config, 'extra.probabilities.pressure', yield)
   }
-  
+
   console.log(JSON.stringify(config))
 
   /* consoleIO.question('Yes or No', function(line){
@@ -318,7 +345,7 @@ const configGenerator = generate()
 console.log('\nWelcome to the twitterWeatherBot config generator.\n')
 console.log('Type .exit at any time to abort\n')
 console.log('Simply fill out the fields with either')
-console.log('  a string(surrounded by quotes) ""\n  an integer -12\n  any number -0.2\n  a boolean true or false\n  or null(not recommended)\n\n')
+console.log('  a string(surrounded by quotes) ""\n  an integer -12\n  any number -0.2\n  a boolean true or false\n  or null(not recommended)\n')
 configGenerator.next()
 
 consoleIO.on('line', function (line) {

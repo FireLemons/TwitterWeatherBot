@@ -17,12 +17,12 @@ module.exports = {
   validateAlertsAppWebsite (website) {
     return /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/.test(website)
   },
-  
+
   // Checks whether config.alerts.app.keep is a boolean
   //  @param  {any} keep The given keep parameter
   //  @return {boolean} True keep is a boolean false otherwise
   validateAlertsFiltersKeep (keep) {
-    return keep === false || keep === true;
+    return keep === false || keep === true
   },
 
   // Checks whether config.alerts.filters.path is a valid chain of dot accessors
@@ -110,42 +110,42 @@ module.exports = {
   validateLogLogDir (logDir) {
     return /^(?:[\w]:[\\/]+|\.|\.\.){0,1}[\w_\-\s.]+(?:[\\/]+[a-z_\-\s0-9.]+)*$/.test(logDir)
   },
-  
+
   // Checks whether a string contains non white space characters
   //  @param  {string} str The string to be checked
   //  @return {boolean} True if str has length and isn't exclusively white space false otherwise
-  validateNotEmptyString(str){
+  validateNotEmptyString (str) {
     return str.trim().length > 0
   },
-  
+
   // Checks whether a string is in the form {city name},{country code}
   //  param  {string} str The string to be checked
   //  return {boolean} True if str is in the form {city name},{country code} false otherwise
-  validateOWMCityNameParam(str){
+  validateOWMCityNameParam (str) {
     return /^.+,[a-zA-Z]{2}$/.test(str)
   },
-  
+
   // Checks whether a string is in the form {zip code},{country code}
   //  param  {string} str The string to be checked
   //  return {boolean} True if str is in the form {zip code},{country code} false otherwise
-  validateOWMZipCodeParam(str){
+  validateOWMZipCodeParam (str) {
     return /^[0-9]{5},[a-zA-Z]{2}$/.test(str)
   },
-  
+
   // Checks whether a number is an integer
   //  @param  {number} num The number to be checked
   //  @return {boolean} True if num is an integer false otherwise
-  validateInteger(num){
+  validateInteger (num) {
     return num === Math.floor(num)
   },
-  
+
   // Checks whether a value is a number
   //  @param  {number} probability The value to be checked
   //  @return {number} 1 if probability is a positive number, 0 if probability is undefined, -1 otherwise
-  validateProbability(probability){
-    if(probability === undefined){
+  validateProbability (probability) {
+    if (probability === undefined) {
       return 0
-    } else if(isNaN(probability) || probability < 0){
+    } else if (isNaN(probability) || probability < 0) {
       return -1
     } else {
       return 1
