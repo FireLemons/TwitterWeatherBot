@@ -108,7 +108,7 @@ module.exports = {
   //  @param  {string} logDir The given directory path
   //  @return {boolean} true if logDir is a valid path false otherwise
   validateLogLogDir (logDir) {
-    return /^(?:[\w]:[\\/]+|\.|\.\.){0,1}[\w_\-\s.]+(?:[\\/]+[a-z_\-\s0-9.]+)*$/.test(logDir)
+    return /^(?:[\w]:[\\/]+|\.|\.\.){0,1}[\w_\-\s.]+(?:[\\/]+[a-z_\-\s0-9.]+)*$/.test(logDir) || /^[.]{1,2}[\\/]$/.test(logDir)
   },
 
   // Checks whether a string contains non white space characters
