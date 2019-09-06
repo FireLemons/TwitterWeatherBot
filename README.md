@@ -240,8 +240,12 @@ Example:
     }
 
 # Contributing
-A description with your pull request is fine.
-Would be appreciated if it could be deployed as a linux service so it automatically starts on boot. 
+A description with your pull request is fine.  
+  
+Some desired features are:  
+International support for weather alerts.  
+A script to gather data for hottest temperature/lowest temperature for a day.  
+Linux process interrupts tests and support.  
 
 # Planned Features  
 The next set of features revolve around configration and can be found [here](https://github.com/FireLemons/TwitterWeatherBot/projects/1) in the repo's project section.
