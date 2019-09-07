@@ -37,19 +37,12 @@ module.exports = {
     //  @param {object} config The "weather" object from config.json
     //  @param {object} logger A winston logger
     constructor (config, logger) {
+      this.logger = logger
+
       // Prepare weather get request URLs from config
-      const alerts = config.alerts
       const OWM = config.openWeatherMap
-      const alertParams = alerts.params
-      let alertQueryParams = ''
       const OWMlocation = OWM.location
       let OWMQueryParams = ''
-
-      for (const paramName in alertParams) {
-        if (Object.prototype.hasOwnProperty.call(alertParams, paramName)) {
-          alertQueryParams += '&' + paramName + '=' + alertParams[paramName]
-        }
-      }
 
       for (const paramName in OWMlocation) {
         if (Object.prototype.hasOwnProperty.call(OWMlocation, paramName)) {
@@ -57,27 +50,39 @@ module.exports = {
         }
       }
 
-      this.alertAppInfo = alerts.app
-
-      if (alerts.filters && !alerts.filters.disabled) {
-        this.alertFilters = alerts.filters
-
-        // Prioritize "has" filters first
-        this.alertFilters.sort((filter1, filter2) => {
-          if (filter1.restriction === filter2.restriction) {
-            return 0
-          } else if (filter1.restriction === 'has') {
-            return -1
-          } else {
-            return 1
-          }
-        })
-      }
-
-      this.alertURL = `https://api.weather.gov/alerts?${alertQueryParams.substr(1)}`
       this.weatherRequestURL = `https://api.openweathermap.org/data/2.5/forecast?${OWMQueryParams.substr(1)}&units=metric&APPID=${OWM.key}`
 
-      this.logger = logger
+      const alerts = config.alerts
+
+      if (alerts && !alerts.disabled) {
+        const alertParams = alerts.params
+        let alertQueryParams = ''
+
+        for (const paramName in alertParams) {
+          if (Object.prototype.hasOwnProperty.call(alertParams, paramName)) {
+            alertQueryParams += '&' + paramName + '=' + alertParams[paramName]
+          }
+        }
+
+        this.alertAppInfo = alerts.app
+
+        if (alerts.filters && !alerts.filters.disabled) {
+          this.alertFilters = alerts.filters
+
+          // Prioritize "has" filters first
+          this.alertFilters.sort((filter1, filter2) => {
+            if (filter1.restriction === filter2.restriction) {
+              return 0
+            } else if (filter1.restriction === 'has') {
+              return -1
+            } else {
+              return 1
+            }
+          })
+        }
+
+        this.alertURL = `https://api.weather.gov/alerts?${alertQueryParams.substr(1)}`
+      }
     }
 
     // Sends the get request for weather alerts.
