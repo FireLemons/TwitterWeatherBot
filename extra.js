@@ -137,7 +137,10 @@ module.exports = class ExtraGenerator {
         this.logger.info('Generating beaufort')
         extra.statement = this.getBeaufort(parsedWeatherData.list[0].wind.speed.toPrecision(2))
         break
-
+      case 'records':
+        this.logger.info('Generating records')
+        extra.statement = this.getRecord(new Date())
+        break
       case 'cloudiness':
         this.logger.info('Generating extra stat: cloudiness')
         extra.statement = this.getExtraStat('cloudiness', parsedWeatherData.list.slice(0, 3))
@@ -247,6 +250,28 @@ module.exports = class ExtraGenerator {
     }
 
     return util.pickRandom(jokePool)
+  }
+
+  // Generates a statement describing the highest temperature, the coldest temperature, or the most precipitation for a day.
+  //  @param  {Date} The date to generate a record message for
+  //  @return {string} The message describing the record for the day
+  getRecord (date) {
+    const records = require('./data/records.json')
+    const monthDay = date.toDateString().substr(4, 6)
+    const record = records[monthDay]
+    const recordType = util.pickRandom(Object.keys(record))
+
+    switch (recordType) {
+      case 'coldest':
+        return `The coldest temperature recorded on ${monthDay} is ${record.coldest}°C`
+      case 'hottest':
+        return `The hottest temperature recorded on ${monthDay} is ${record.hottest}°C`
+      case 'precipitation':
+        return `The most rain/snow recorded on ${monthDay} is ${record.precipitation}mm`
+      default:
+        this.logger.error(new Error(`Unrecognized record type: ${recordType}`))
+        break
+    }
   }
 
   // Generates a random message explaining some of the messages the bot displays.
