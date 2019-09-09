@@ -269,8 +269,7 @@ module.exports = class ExtraGenerator {
       case 'precipitation':
         return `The most rain/snow recorded on ${monthDay} is ${record.precipitation}mm`
       default:
-        this.logger.error(new Error(`Unrecognized record type: ${recordType}`))
-        break
+        throw new Error(`Unrecognized record type: ${recordType}`)
     }
   }
 
