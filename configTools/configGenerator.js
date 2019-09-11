@@ -2,10 +2,18 @@ const _ = require('lodash')
 const configFieldValidator = require('./configFieldValidator.js')
 const fs = require('fs')
 const readline = require('readline')
+const weatherTools = require('../weather.js')
 
 const consoleIO = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
+  
+  completer: function(line){
+    const completions = ['.exit', 'false', 'null', 'true']
+    const matchingCompletions = completions.filter((c) => c.startsWith(line));
+    
+    return [matchingCompletions, line];
+  }
 })
 
 const config = {}
@@ -91,6 +99,24 @@ const fields = {
     prompt: 'Enable extra statements?\nExtra statements are appended to regular forecast tweets and include information like humidity and the phase of the moon',
     validate: () => true,
     failValidate: ''
+  },
+  extraCoordElevation: {
+    type: 'number',
+    prompt: 'Enter the elevation in meters for the area',
+    validate: configFieldValidator.validateCoordinatesElevation,
+    failValidate: 'Elevation is out of range. Valid points of elevation are between -413m and 8848m'
+  },
+  extraCoordLat: {
+    type: 'number',
+    prompt: 'Enter the latitiude of the area',
+    validate: configFieldValidator.validateCoordinatesLat,
+    failValidate: 'Latitude out of range. Valid latitudes are between -90° and 90°.'
+  },
+  extraCoordLong: {
+    type: 'number',
+    prompt: 'Enter the longitude of the area',
+    validate: configFieldValidator.validateCoordinatesLong,
+    failValidate: 'Longitude out of range. Valid latitudes are between -180° and 180°.'
   },
   extraJokeChance: {
     type: 'integer',
@@ -236,6 +262,8 @@ function promptField (field) {
   consoleIO.prompt()
 }
 
+let configGenerator
+
 function * generate () {
   promptField('logDir')
   _.set(config, 'log.logDir', yield)
@@ -325,6 +353,31 @@ function * generate () {
 
     promptField('extraPressureChance')
     _.set(config, 'extra.probabilities.pressure', yield)
+    
+    console.log('Some extras need coordinates to work like sunrise/sunset. Attempting to fetch coordinates from openweathermap...')
+    let w = new weatherTools.DataFetcher(config.weather, {error: () => {}, info: () => {}})
+    
+    w.getForecastPromise().then((forecastData) => {
+      console.log(`Fetched ${forecastData.city.coord} from openWeatherMap. Does this look right?`)
+      consoleIO.setPrompt('boolean>')
+      currentField.type = 'boolean'
+    }).catch((error) => {
+      console.log('Failed to fetch coordinates from openWeatherMap. This may indicate the openWeatherMap api key or forecast location were filled out incorrectly.')
+      console.log(error)
+      
+      console.log('\nYou can still enter the coordinates manually')
+      if (configGenerator.next(true).done) {
+        consoleIO.close()
+      }
+    })
+    
+    if(!(yield)){
+      //manual entry of lat long
+    }
+    
+    promptField('extraCoordElevation')
+    _.set(config, 'extra.coordinates.elevation', yield)
+    
   }
 
   console.log(JSON.stringify(config))
@@ -340,7 +393,7 @@ function * generate () {
   }) */
 }
 
-const configGenerator = generate()
+configGenerator = generate()
 
 console.log('\nWelcome to the twitterWeatherBot config generator.\n')
 console.log('Type .exit at any time to abort\n')
