@@ -7,12 +7,12 @@ const weatherTools = require('../weather.js')
 const consoleIO = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
-  
-  completer: function(line){
+
+  completer: function (line) {
     const completions = ['.exit', 'false', 'null', 'true']
-    const matchingCompletions = completions.filter((c) => c.startsWith(line));
-    
-    return [matchingCompletions, line];
+    const matchingCompletions = completions.filter((c) => c.startsWith(line))
+
+    return [matchingCompletions, line]
   }
 })
 
@@ -262,8 +262,6 @@ function promptField (field) {
   consoleIO.prompt()
 }
 
-let configGenerator
-
 function * generate () {
   promptField('logDir')
   _.set(config, 'log.logDir', yield)
@@ -353,10 +351,10 @@ function * generate () {
 
     promptField('extraPressureChance')
     _.set(config, 'extra.probabilities.pressure', yield)
-    
+
     console.log('Some extras need coordinates to work like sunrise/sunset. Attempting to fetch coordinates from openweathermap...')
-    let w = new weatherTools.DataFetcher(config.weather, {error: () => {}, info: () => {}})
-    
+    const w = new weatherTools.DataFetcher(config.weather, { error: () => {}, info: () => {} })
+
     w.getForecastPromise().then((forecastData) => {
       console.log(`Fetched ${forecastData.city.coord} from openWeatherMap. Does this look right?`)
       consoleIO.setPrompt('boolean>')
@@ -364,20 +362,19 @@ function * generate () {
     }).catch((error) => {
       console.log('Failed to fetch coordinates from openWeatherMap. This may indicate the openWeatherMap api key or forecast location were filled out incorrectly.')
       console.log(error)
-      
+
       console.log('\nYou can still enter the coordinates manually')
       if (configGenerator.next(true).done) {
         consoleIO.close()
       }
     })
-    
-    if(!(yield)){
-      //manual entry of lat long
+
+    if (!(yield)) {
+      // manual entry of lat long
     }
-    
+
     promptField('extraCoordElevation')
     _.set(config, 'extra.coordinates.elevation', yield)
-    
   }
 
   console.log(JSON.stringify(config))
@@ -393,7 +390,7 @@ function * generate () {
   }) */
 }
 
-configGenerator = generate()
+const configGenerator = generate()
 
 console.log('\nWelcome to the twitterWeatherBot config generator.\n')
 console.log('Type .exit at any time to abort\n')
