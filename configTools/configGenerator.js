@@ -355,22 +355,30 @@ function * generate () {
     console.log('Some extras need coordinates to work like sunrise/sunset. Attempting to fetch coordinates from openweathermap...')
     const w = new weatherTools.DataFetcher(config.weather, { error: () => {}, info: () => {} })
 
+    consoleIO.pause()
     w.getForecastPromise().then((forecastData) => {
-      console.log(`Fetched ${forecastData.city.coord} from openWeatherMap. Does this look right?`)
-      consoleIO.setPrompt('boolean>')
+      console.log(`${JSON.stringify(forecastData.city.coord)} are the correct coordinates?`)
       currentField.type = 'boolean'
+      consoleIO.setPrompt('boolean>')
+      consoleIO.prompt()
     }).catch((error) => {
       console.log('Failed to fetch coordinates from openWeatherMap. This may indicate the openWeatherMap api key or forecast location were filled out incorrectly.')
       console.log(error)
 
       console.log('\nYou can still enter the coordinates manually')
-      if (configGenerator.next(true).done) {
+      if (configGenerator.next(false).done) {
         consoleIO.close()
       }
+    }).finally(() => {
+      consoleIO.resume()
     })
 
     if (!(yield)) {
-      // manual entry of lat long
+      promptField('OWMLocationLat')
+      _.set(config, 'weather.openWeatherMap.location.lat', yield)
+
+      promptField('OWMLocationLong')
+      _.set(config, 'weather.openWeatherMap.location.long', yield)
     }
 
     promptField('extraCoordElevation')
