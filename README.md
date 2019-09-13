@@ -1,5 +1,5 @@
 # TwitterWeatherBot
-A bot that will tweet the weather every 2 hours and works for most cities in the United States. Other optional tweets like alerts and local weather station retweets are available. Check the [configuration](#configuration) section for more info.
+If you check twitter often and would like your weather forecasts in the same place this is the bot for you. The bot can be configured to tweet the information you want. Information like alerts and local weather station retweets. Check the [configuration](#configuration) section for more info. And if it can't be configured it can sure be edited in simple to understand modules fully documented in plain english.
 
 # Getting Started
 Api keys from Twitter and OpenWeatherMap are needed.  
@@ -240,12 +240,12 @@ Example:
     }
 
 # Contributing
-A description with your pull request is fine.  
+A description with your pull request is fine. I'll request more information if I need it.  
   
 Some desired features are:  
 International support for weather alerts.  
 A script to gather data for hottest temperature/lowest temperature for a day.  
-Linux process interrupts tests and support.  
+Linux process interrupt support.  
 
 # Planned Features  
 The next set of features revolve around configration and can be found [here](https://github.com/FireLemons/TwitterWeatherBot/projects/1) in the repo's project section.
