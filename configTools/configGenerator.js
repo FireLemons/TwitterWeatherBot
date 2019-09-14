@@ -23,14 +23,14 @@ const fields = {
     type: 'string',
     prompt: 'Enter a path to a directory to store logs(relative to index.js)',
     validate: configFieldValidator.validateLogLogDir,
-    failValidate: 'Log directory is not a valid path'
+    failValidate: 'Not a valid path'
   },
 
   OWMKey: {
     type: 'string',
     prompt: 'Enter your openWeatherMap api key',
     validate: configFieldValidator.validateNotEmptyString,
-    failValidate: 'OpenWeatherMap key cannot be empty or exclusively whitespace'
+    failValidate: 'The api key cannot be empty or exclusively whitespace'
   },
   OWMLocationParam: {
     type: 'integer',
@@ -52,15 +52,15 @@ const fields = {
   },
   OWMLocationLat: {
     type: 'number',
-    prompt: 'Enter the latitude of the area to generate forecasts for',
+    prompt: 'Enter the latitude of the area',
     validate: configFieldValidator.validateCoordinatesLat,
-    failValidate: 'Number is outside the range of acceptable latitudes. Latitudes are between -90 and 90 degrees'
+    failValidate: 'Out of range. Latitudes are between -90 and 90 degrees'
   },
   OWMLocationLong: {
     type: 'number',
-    prompt: 'Enter the longitude of the area to generate forecasts for',
+    prompt: 'Enter the longitude of the area',
     validate: configFieldValidator.validateCoordinatesLong,
-    failValidate: 'Number is outside the range of acceptable longitudes. Latitudes are between -180 and 180 degrees'
+    failValidate: 'Out of range. Longitudes are between -180 and 180 degrees'
   },
   OWMLocationZip: {
     type: 'string',
@@ -73,25 +73,25 @@ const fields = {
     type: 'string',
     prompt: 'Enter your twitter consumer key',
     validate: configFieldValidator.validateNotEmptyString,
-    failValidate: "Twitter's consumer key can not be empty or exclusively whitespace"
+    failValidate: "The consumer key can not be empty or exclusively whitespace"
   },
   twitterConsumerSecret: {
     type: 'string',
     prompt: 'Enter your twitter consumer secret',
     validate: configFieldValidator.validateNotEmptyString,
-    failValidate: "Twitter's consumer secret can not be empty or exclusively whitespace"
+    failValidate: "The consumer secret can not be empty or exclusively whitespace"
   },
   twitterAccessTokenKey: {
     type: 'string',
     prompt: 'Enter your twitter access token key',
     validate: configFieldValidator.validateNotEmptyString,
-    failValidate: "Twitter's access token key can not be empty or exclusively whitespace"
+    failValidate: "The access token key can not be empty or exclusively whitespace"
   },
   twitterAccessTokenSecret: {
     type: 'string',
     prompt: 'Enter your twitter access token secret',
     validate: configFieldValidator.validateNotEmptyString,
-    failValidate: "Twitter's access token secret can not be empty or exclusively whitespace"
+    failValidate: "The access token secret can not be empty or exclusively whitespace"
   },
 
   extraEnable: {
@@ -104,19 +104,7 @@ const fields = {
     type: 'number',
     prompt: 'Enter the elevation in meters for the area',
     validate: configFieldValidator.validateCoordinatesElevation,
-    failValidate: 'Elevation is out of range. Valid points of elevation are between -413m and 8848m'
-  },
-  extraCoordLat: {
-    type: 'number',
-    prompt: 'Enter the latitiude of the area',
-    validate: configFieldValidator.validateCoordinatesLat,
-    failValidate: 'Latitude out of range. Valid latitudes are between -90° and 90°.'
-  },
-  extraCoordLong: {
-    type: 'number',
-    prompt: 'Enter the longitude of the area',
-    validate: configFieldValidator.validateCoordinatesLong,
-    failValidate: 'Longitude out of range. Valid latitudes are between -180° and 180°.'
+    failValidate: 'Out of range. Valid points of elevation are between -413m and 8848m'
   },
   extraJokeChance: {
     type: 'integer',
@@ -355,7 +343,7 @@ function * generate () {
     console.log('Some extras need coordinates to work like sunrise/sunset. Attempting to fetch coordinates from openweathermap...')
     const w = new weatherTools.DataFetcher(config.weather, { error: () => {}, info: () => {} })
 
-    consoleIO.pause()
+    consoleIO.pause()// Disable user input while async request is running
     w.getForecastPromise().then((forecastData) => {
       console.log(`${JSON.stringify(forecastData.city.coord)} are the correct coordinates?`)
       currentField.type = 'boolean'
