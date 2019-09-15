@@ -28,7 +28,7 @@ const fields = {
 
   OWMKey: {
     type: 'string',
-    prompt: 'Enter your openWeatherMap api key',
+    prompt: 'openweathermap api key:',
     validate: configFieldValidator.validateNotEmptyString,
     failValidate: 'The api key cannot be empty or exclusively whitespace'
   },
@@ -40,7 +40,7 @@ const fields = {
   },
   OWMLocationCityName: {
     type: 'string',
-    prompt: 'Enter a string in the format CITY_NAME,COUNTRY_CODE',
+    prompt: 'Enter CITY_NAME,COUNTRY_CODE following that exact format',
     validate: configFieldValidator.validateOWMCityNameParam,
     failValidate: 'Invalid format. The valid format is CITY_NAME,COUNTRY_CODE. e.g. "New York,US"'
   },
@@ -52,44 +52,44 @@ const fields = {
   },
   OWMLocationLat: {
     type: 'number',
-    prompt: 'Enter the latitude of the area',
+    prompt: 'Latitude:',
     validate: configFieldValidator.validateCoordinatesLat,
     failValidate: 'Out of range. Latitudes are between -90 and 90 degrees'
   },
   OWMLocationLong: {
     type: 'number',
-    prompt: 'Enter the longitude of the area',
+    prompt: 'Longitude:',
     validate: configFieldValidator.validateCoordinatesLong,
     failValidate: 'Out of range. Longitudes are between -180 and 180 degrees'
   },
   OWMLocationZip: {
     type: 'string',
-    prompt: 'Enter a string in the format ZIP_CODE,COUNTRY_CODE',
+    prompt: 'Enter ZIP_CODE,COUNTRY_CODE following that exact format',
     validate: configFieldValidator.validateOWMZipCodeParam,
     failValidate: 'Invalid format. The valid format is ZIP_CODE,COUNTRY_CODE e.g. "12345,US"'
   },
 
   twitterConsumerKey: {
     type: 'string',
-    prompt: 'Enter your twitter consumer key',
+    prompt: 'Twitter consumer key:',
     validate: configFieldValidator.validateNotEmptyString,
     failValidate: "The consumer key can not be empty or exclusively whitespace"
   },
   twitterConsumerSecret: {
     type: 'string',
-    prompt: 'Enter your twitter consumer secret',
+    prompt: 'Twitter consumer secret:',
     validate: configFieldValidator.validateNotEmptyString,
     failValidate: "The consumer secret can not be empty or exclusively whitespace"
   },
   twitterAccessTokenKey: {
     type: 'string',
-    prompt: 'Enter your twitter access token key',
+    prompt: 'Twitter access token key:',
     validate: configFieldValidator.validateNotEmptyString,
     failValidate: "The access token key can not be empty or exclusively whitespace"
   },
   twitterAccessTokenSecret: {
     type: 'string',
-    prompt: 'Enter your twitter access token secret',
+    prompt: 'Twitter access token secret:',
     validate: configFieldValidator.validateNotEmptyString,
     failValidate: "The access token secret can not be empty or exclusively whitespace"
   },
@@ -102,69 +102,76 @@ const fields = {
   },
   extraCoordElevation: {
     type: 'number',
-    prompt: 'Enter the elevation in meters for the area',
+    prompt: 'Elevation in meters:',
     validate: configFieldValidator.validateCoordinatesElevation,
     failValidate: 'Out of range. Valid points of elevation are between -413m and 8848m'
   },
   extraJokeChance: {
     type: 'integer',
-    prompt: 'Enter a weight for jokes. Low weight recommended.',
+    prompt: 'Weight for jokes(low weight recommended):',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
     failValidate: 'The weight must be positive'
   },
   extraTutorialChance: {
     type: 'integer',
-    prompt: 'Enter a weight for tutorials. Tutorial messages show the meaning of icons in the forecast. Low weight recommended.',
+    prompt: 'Tutorial messages show what the forecast icons mean.\nWeight for tutorials(low weight recommended):',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
     failValidate: 'The weight must be positive'
   },
   extraLunarChance: {
     type: 'integer',
-    prompt: 'Enter a weight for moon phase',
+    prompt: 'Weight for moon phase:',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
     failValidate: 'The weight must be positive'
   },
   extraSeasonChance: {
     type: 'integer',
-    prompt: 'Enter a weight for season progress. Season progress shows days since the last equinox/solstice and days until the next equinox/solstice.',
+    prompt: 'Season progress shows days since the last equinox/solstice and days until the next equinox/solstice\nWeight for season progress:',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
     failValidate: 'The weight must be positive'
   },
   extraSunriseChance: {
     type: 'integer',
-    prompt: 'Enter a weight for sunrise/sunset',
+    prompt: 'Weight for sunrise/sunset:',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
     failValidate: 'The weight must be positive'
   },
   extraBeaufortChance: {
     type: 'integer',
-    prompt: 'Enter a weight for beaufort. The Beaufort scale describes the current wind intensity empirically.',
+    prompt: 'The Beaufort scale describes the current wind intensity empirically.\nWeight for beaufort:',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
     failValidate: 'The weight must be positive'
   },
   extraCloudinessChance: {
     type: 'integer',
-    prompt: 'Enter a weight for cloudiness',
+    prompt: 'Weight for cloudiness:',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
     failValidate: 'The weight must be positive'
   },
   extraHumidityChance: {
     type: 'integer',
-    prompt: 'Enter a weight for humidity',
+    prompt: 'Weight for humidity:',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
     failValidate: 'The weight must be positive'
   },
   extraPrecipitationChance: {
     type: 'integer',
-    prompt: 'Enter a weight for precipitation',
+    prompt: 'Weight for precipitation:',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
     failValidate: 'The weight must be positive'
   },
   extraPressureChance: {
     type: 'integer',
-    prompt: 'Enter a weight for pressure',
+    prompt: 'Weight for pressure:',
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
     failValidate: 'The weight must be positive'
+  },
+  
+  alertsEnable: {
+    type: 'boolean',
+    prompt: 'Enable weather alerts?\nWeather alerts are supported only for the Unites States at the moment',
+    validate: () => true,
+    failValidate: ''
   }
 }
 
@@ -302,6 +309,7 @@ function * generate () {
   promptField('twitterAccessTokenSecret')
   _.set(config, 'twitter.access_token_secret', yield)
 
+  // Configure extras
   promptField('extraEnable')
   _.set(config, 'extra.disabled', !(yield))
 
@@ -371,19 +379,17 @@ function * generate () {
 
     promptField('extraCoordElevation')
     _.set(config, 'extra.coordinates.elevation', yield)
+  }// End configuring extras
+  
+  //Configure alerts
+  promptField('alertsEnable')
+  _.set(config, 'weather.alerts.disabled', !(yield))
+  
+  if (!config.weather.alerts.disabled) {
+    console.log('')
   }
 
   console.log(JSON.stringify(config))
-
-  /* consoleIO.question('Yes or No', function(line){
-    if(line && /^[Yy]/.test(line.charAt(0))){
-      console.log('ya beb')
-    } else {
-      console.log('na beb')
-    }
-
-    consoleIO.close()
-  }) */
 }
 
 const configGenerator = generate()
