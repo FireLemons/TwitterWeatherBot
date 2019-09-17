@@ -81,7 +81,7 @@ All four values of `config.twitter` shown below will be keys generated from your
 ### Optional Configuration:  
 #### Alerts  
 Alerts are sent out at midnight, 6:00, noon, and 18:00.  
-In order to receive alert data from the national weather service, a header containing a contact email, an app name, an app version number, and either a personal website or an app website must be included with each request. These are specified in `config.weather.alerts.app`  
+In order to receive alert data from the national weather service, a header containing a email to contact you, an app name, an app version, and a website must be included with each request. These are specified in `config.weather.alerts.app`  
 `weather.alerts.params` will contain get parameters to send to api.weather.gov/alerts in the form of key value pairs. More information about valid get paramters and a request tester can be found [here](https://www.weather.gov/documentation/services-web-api#/default/get_alerts) under the "Specification" tab.
   
 Example:
