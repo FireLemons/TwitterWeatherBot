@@ -73,25 +73,25 @@ const fields = {
     type: 'string',
     prompt: 'Twitter consumer key:',
     validate: configFieldValidator.validateNotEmptyString,
-    failValidate: "The consumer key can not be empty or exclusively whitespace"
+    failValidate: 'The consumer key can not be empty or only whitespace'
   },
   twitterConsumerSecret: {
     type: 'string',
     prompt: 'Twitter consumer secret:',
     validate: configFieldValidator.validateNotEmptyString,
-    failValidate: "The consumer secret can not be empty or exclusively whitespace"
+    failValidate: 'The consumer secret can not be empty or only whitespace'
   },
   twitterAccessTokenKey: {
     type: 'string',
     prompt: 'Twitter access token key:',
     validate: configFieldValidator.validateNotEmptyString,
-    failValidate: "The access token key can not be empty or exclusively whitespace"
+    failValidate: 'The access token key can not be empty or only whitespace'
   },
   twitterAccessTokenSecret: {
     type: 'string',
     prompt: 'Twitter access token secret:',
     validate: configFieldValidator.validateNotEmptyString,
-    failValidate: "The access token secret can not be empty or exclusively whitespace"
+    failValidate: 'The access token secret can not be empty or only whitespace'
   },
 
   extraEnable: {
@@ -166,12 +166,36 @@ const fields = {
     validate: (num) => configFieldValidator.validateProbability(num) > 0,
     failValidate: 'The weight must be positive'
   },
-  
+
   alertsEnable: {
     type: 'boolean',
     prompt: 'Enable weather alerts?\nWeather alerts are supported only for the Unites States at the moment',
     validate: () => true,
     failValidate: ''
+  },
+  alertsAppContact: {
+    type: 'string',
+    prompt: 'Email:',
+    validate: configFieldValidator.validateAlertsAppContact,
+    failValidate: 'Invalid email'
+  },
+  alertsAppName: {
+    type: 'string',
+    prompt: 'App Name:',
+    validate: configFieldValidator.validateNotEmptyString,
+    failValidate: 'App name can not be empty or only whitespace'
+  },
+  alertsAppVersion: {
+    type: 'string',
+    prompt: 'App Version:',
+    validate: configFieldValidator.validateNotEmptyString,
+    failValidate: 'App version can not be empty or only whitespace'
+  },
+  alertsAppWebsite: {
+    type: 'string',
+    prompt: 'App Website(any website is fine but try to keep it relevant):',
+    validate: configFieldValidator.validateAlertsAppWebsite,
+    failValidate: 'Invalid url'
   }
 }
 
@@ -380,13 +404,25 @@ function * generate () {
     promptField('extraCoordElevation')
     _.set(config, 'extra.coordinates.elevation', yield)
   }// End configuring extras
-  
-  //Configure alerts
+
+  // Configure alerts
   promptField('alertsEnable')
   _.set(config, 'weather.alerts.disabled', !(yield))
-  
+
   if (!config.weather.alerts.disabled) {
-    console.log('')
+    console.log('To fetch alert data, the National Weather Service requires a header containing: an app name, an app version, a website, and an email address they can contact')
+    
+    promptField('alertsAppName')
+    _.set(config, 'weather.alerts.app.name', yield)
+    
+    promptField('alertsAppVersion')
+    _.set(config, 'weather.alerts.app.version', yield)
+    
+    promptField('alertsAppWebsite')
+    _.set(config, 'weather.alerts.app.website', yield)
+    
+    promptField('alertsAppContact')
+    _.set(config, 'weather.alerts.app.contact', yield)
   }
 
   console.log(JSON.stringify(config))
