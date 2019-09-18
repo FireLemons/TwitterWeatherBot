@@ -104,63 +104,6 @@ module.exports = {
     return (date2 - date1) / (1000 * 60 * 60 * 24)
   },
 
-  // Gets the value referenced by path in object
-  //  @param  {object} object An object
-  //  @param  {string} path A string consisting of object keys delimited by periods
-  //  @return The value at path if it exists
-  //  @throws {ReferenceError} On finding that the path is invalid
-  getValue (object, path) {
-    if (typeof path !== 'string') {
-      throw new TypeError('Param path must be a string')
-    }
-
-    if (!(object instanceof Object)) {
-      throw new TypeError('Param object must be an object')
-    }
-
-    if (!path.length) {
-      return object
-    }
-
-    let match,
-        key,
-        node = object
-        
-    if(match = path.match(/^([_\$a-zA-Z][_\$a-zA-Z0-9]*)/)){// check for key without dot
-      key = match[1]
-      path = path.substr(key.length)
-      
-      node = node[key]
-      
-      if (node === undefined) {
-        throw new ReferenceError('Invalid path')
-      }
-    }
-    
-    while(path){
-      if(match = path.match(/^\.([_\$a-zA-Z][_\$a-zA-Z0-9]*)/)){// dot accessor
-        key = match[1]
-        path = path.substr(key.length + 1)
-      } else if(match = path.match(/^\[['"]((?:[_\$a-zA-Z][_\$a-zA-Z0-9]*|[0-9]+))['"]\]/)){// bracket accessor with key
-        key = match[1]
-        path = path.substr(key.length + 4)
-      } else if(match = path.match(/^\[([0-9]+)\]/)){// array index accessor
-        key = match[1]
-        path = path.substr(key.length + 2)
-      } else {
-        throw new SyntaxError(`Could not parse object accessor from:${path}`)
-      }
-      
-      node = node[key]
-      
-      if (node === undefined) {
-        throw new ReferenceError('Invalid path')
-      }
-    }
-    
-    return node
-  },
-
   // Generates an object that executes onChange when the values in the object change
   // From https://davidwalsh.name/watch-object-changes
   //  @param  {object} obj The object to be watched for changes

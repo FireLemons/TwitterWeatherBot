@@ -1,5 +1,6 @@
 'use strict'
 
+const _ = require('lodash')
 const promise = require('./promise.js')
 const util = require('./util.js')
 
@@ -149,7 +150,7 @@ module.exports = {
         switch (filter.restriction) {
           case 'after':
             filterTest = (alertElem) => {
-              const dateAtPath = new Date(util.getValue(alertElem, filter.path))
+              const dateAtPath = new Date(_.get(alertElem, filter.path))
 
               if (Number.isNaN(dateAtPath.getTime())) {
                 throw new TypeError('Could not filter using restriction after. Value at path invalid date string.')
@@ -165,7 +166,7 @@ module.exports = {
             break
           case 'before':
             filterTest = (alertElem) => {
-              const dateAtPath = new Date(util.getValue(alertElem, filter.path))
+              const dateAtPath = new Date(_.get(alertElem, filter.path))
 
               if (Number.isNaN(dateAtPath.getTime())) {
                 throw new TypeError('Could not filter using restriction before. Value at path invalid date string.')
@@ -181,7 +182,7 @@ module.exports = {
             break
           case 'contains':
             filterTest = (alertElem) => {
-              const valueAtPath = util.getValue(alertElem, filter.path)
+              const valueAtPath = _.get(alertElem, filter.path)
 
               if (!Array.isArray(valueAtPath)) {
                 throw new TypeError('Could not filter using restriction contains. Value at path not array.')
@@ -194,7 +195,7 @@ module.exports = {
             break
           case 'equals':
             filterTest = (alertElem) => {
-              if ((util.getValue(alertElem, filter.path) === filter.value) === filter.keep) {
+              if ((_.get(alertElem, filter.path) === filter.value) === filter.keep) {
                 filteredAlerts.push(alertElem)
               }
             }
@@ -202,7 +203,7 @@ module.exports = {
           case 'has':
             filterTest = filter.keep ? (alertElem) => {
               try {
-                if (util.getValue(alertElem, filter.path) !== undefined) {
+                if (_.get(alertElem, filter.path) !== undefined) {
                   filteredAlerts.push(alertElem)
                 }
               } catch (e) {
@@ -211,7 +212,7 @@ module.exports = {
             }
               : (alertElem) => {
                 try {
-                  util.getValue(alertElem, filter.path)
+                  _.get(alertElem, filter.path)
                 } catch (e) {
                   filteredAlerts.push(alertElem)
                 }
@@ -220,13 +221,13 @@ module.exports = {
           case 'matches':
             filterTest = (alertElem) => {
               const regex = new RegExp(filter.value)
-              const valueAtPath = util.getValue(alertElem, filter.path)
+              const valueAtPath = _.get(alertElem, filter.path)
 
               if (typeof valueAtPath !== 'string') {
                 throw new TypeError('Could not filter using restriction mathces. Value at path not string.')
               }
 
-              if (regex.test(util.getValue(alertElem, filter.path)) === filter.keep) {
+              if (regex.test(_.get(alertElem, filter.path)) === filter.keep) {
                 filteredAlerts.push(alertElem)
               }
             }
