@@ -196,6 +196,26 @@ const fields = {
     prompt: 'App Website(any website is fine but try to keep it relevant):',
     validate: configFieldValidator.validateAlertsAppWebsite,
     failValidate: 'Invalid url'
+  },
+
+  alertsParamKey: {
+    type: 'string',
+    prompt: 'Key(Enter "" to stop entering parameters):',
+    validate: (key) => {// Verify there's at least 1 parameter
+      if(!key){
+        let params = _.get(config, 'weather.alerts.params')
+        return params && Object.keys(params).length
+      }
+      
+      return true;
+    },
+    failValidate: 'Requesting alerts won\'t work without at least 1 parameter'
+  },
+  alertsParamValue: {
+    type: 'any',
+    prompt: 'Value:',
+    validate: () => true,
+    failValidate: ''
   }
 }
 
@@ -233,7 +253,7 @@ function parseInput (input) {
 //  return {boolean} True if input is valid false otherwise
 function validateField (input, validator) {
   const { type, validate, failValidate } = validator
-  if (!(type === '*')) {
+  if (!(type === 'any')) {
     switch (type) {
       case 'string':
         if (typeof input !== 'string') {
@@ -411,18 +431,40 @@ function * generate () {
 
   if (!config.weather.alerts.disabled) {
     console.log('To fetch alert data, the National Weather Service requires a header containing: an app name, an app version, a website, and an email address they can contact')
-    
+
     promptField('alertsAppName')
     _.set(config, 'weather.alerts.app.name', yield)
-    
+
     promptField('alertsAppVersion')
     _.set(config, 'weather.alerts.app.version', yield)
-    
+
     promptField('alertsAppWebsite')
     _.set(config, 'weather.alerts.app.website', yield)
-    
+
     promptField('alertsAppContact')
     _.set(config, 'weather.alerts.app.contact', yield)
+
+    console.log('Enter get request parameters for api.weather.gov/alerts in the form of key value pairs\n')
+    console.log('For example api.weather.gov/alerts?area=MO has key "area" and value "MO"\n')
+    console.log('Not sure what parameters to enter?')
+    console.log('Requests with various parameters can be tested at https://www.weather.gov/documentation/services-web-api#/default/get_alerts under the "Specification" tab')
+
+    let key
+    let value
+
+    do {
+      promptField('alertsParamKey')
+      key = yield
+
+      if (!key) {
+        break
+      }
+
+      promptField('alertsParamValue')
+      value = yield
+
+      _.set(config, `weather.alerts.params.${key}`, value)
+    } while (key.length)
   }
 
   console.log(JSON.stringify(config))
