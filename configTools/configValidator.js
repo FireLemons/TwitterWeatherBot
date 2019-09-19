@@ -366,8 +366,9 @@ if (!(config instanceof Object) || config instanceof Array) {
     if (localStationHandle !== undefined) {
       let validStationHandle = checkString(localStationHandle, 'config.twitter.localStationHandle')
 
-      if (validStationHandle && !configFieldValidator.validateNotEmptyString(localStationHandle)) {
-        console.log('ERROR: config.twitter.localStationHandle must be a string')
+      if (validStationHandle && !configFieldValidator.validateTwitterHandle(localStationHandle)) {
+        console.log('ERROR: config.twitter.localStationHandle is not a valid twitter handle')
+        console.log('  Twitter handles are at most 15 characters long and contain only alphanumeric characters and underscores')
 
         validStationHandle = false
       }

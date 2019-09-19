@@ -131,6 +131,13 @@ module.exports = {
   validateOWMZipCodeParam (str) {
     return /^[0-9]{5},[a-zA-Z]{2}$/.test(str)
   },
+  
+  // Checks whether a string is a valid twitter handle
+  //  param {string} str The string to be checked
+  //  return {boolean}True if str is a valid twitter handle false otherwise
+  validateTwitterHandle (str) {
+    return /^[a-zA-Z0-9_]{1,15}$/.test(str)
+  },
 
   // Checks whether a number is an integer
   //  @param  {number} num The number to be checked

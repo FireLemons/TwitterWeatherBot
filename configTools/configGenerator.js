@@ -28,7 +28,7 @@ const fields = {
 
   OWMKey: {
     type: 'string',
-    prompt: 'openweathermap api key:',
+    prompt: 'Openweathermap Api Key:',
     validate: configFieldValidator.validateNotEmptyString,
     failValidate: 'The api key cannot be empty or exclusively whitespace'
   },
@@ -71,7 +71,7 @@ const fields = {
 
   twitterConsumerKey: {
     type: 'string',
-    prompt: 'Twitter consumer key:',
+    prompt: 'Twitter Consumer Key:',
     validate: configFieldValidator.validateNotEmptyString,
     failValidate: 'The consumer key can not be empty or only whitespace'
   },
@@ -83,15 +83,23 @@ const fields = {
   },
   twitterAccessTokenKey: {
     type: 'string',
-    prompt: 'Twitter access token key:',
+    prompt: 'Twitter Access Token Key:',
     validate: configFieldValidator.validateNotEmptyString,
     failValidate: 'The access token key can not be empty or only whitespace'
   },
   twitterAccessTokenSecret: {
     type: 'string',
-    prompt: 'Twitter access token secret:',
+    prompt: 'Twitter Access Token Secret:',
     validate: configFieldValidator.validateNotEmptyString,
     failValidate: 'The access token secret can not be empty or only whitespace'
+  },
+  twitterLocalStationRT: {
+    type: 'string',
+    prompt: 'Retweet all tweets from a local weather station?\nTwitter Handle(empty string to disable):',
+    validate: (handle) => {
+      return !handle || /^@?[a-zA-Z0-9_]{1,15}$/.test(handle)
+    },
+    failValidate: 'Invalid Handle. Twitter handles are 15 characters at most and contain only alphanumeric characters and underscores.'
   },
 
   extraEnable: {
@@ -352,6 +360,17 @@ function * generate () {
 
   promptField('twitterAccessTokenSecret')
   _.set(config, 'twitter.access_token_secret', yield)
+  
+  promptField('twitterLocalStationRT')
+  let localStationHandle = yield
+  
+  if(localStationHandle.trim()){
+    if(localStationHandle.charAt(0) === '@'){
+      localStationHandle = localStationHandle.substr(1)
+    }
+    
+    _.set(config, 'twitter.localStationHandle', localStationHandle)
+  }
 
   // Configure extras
   promptField('extraEnable')
@@ -467,7 +486,7 @@ function * generate () {
     } while (key.length)
   }
 
-  console.log(JSON.stringify(config))
+  console.log(JSON.stringify(config, null, 2))
 }
 
 const configGenerator = generate()
