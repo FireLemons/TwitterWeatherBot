@@ -141,7 +141,7 @@ module.exports = {
 
     const closestPhase = util.getClosestIndex(now, nearbyPhases, (date1, date2) => date1 - date2)
     let phase
-    const proximity = util.getDaysBetween(now, nearbyPhases[closestPhase])
+    const proximity = util.getDaysBetween(nearbyPhases[closestPhase], now)
 
     switch (closestPhase) {
       case 0:

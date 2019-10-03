@@ -91,7 +91,7 @@ module.exports = {
   // Gets the number of days between 2 dates
   //  @param  {Date} date1 A valid date
   //  @param  {Date} date2 A valid date
-  //  @return {number} The number of days between date1 and date2. A negative number if date2 came before date1.
+  //  @return {number} The number of days between date1 and date2. A negative number if date2 comes before date1.
   getDaysBetween (date1, date2) {
     if (!(date1 instanceof Date)) {
       throw new TypeError('First argument not a date')
