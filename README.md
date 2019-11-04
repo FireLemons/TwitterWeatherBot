@@ -1,5 +1,10 @@
 # TwitterWeatherBot
-If you check twitter often and would like your weather forecasts in the same place this is the bot for you. The bot can be configured to tweet the information you want. Information like alerts and local weather station retweets. Check the [configuration](#configuration) section for more info. And if it can't be configured it can sure be edited in simple to understand modules fully documented in plain english.
+A great way to check the weather and twitter at the same time.  
+TwitterWeatherBot can  
++ Tweet a forecast for the near future every 2 hours  
++ Add a random weather fact to the 2 hour forecast  
++ Tweet alerts from the NWS  
++ Retweet all tweets from your local weather station
 
 # Getting Started
 Api keys from Twitter and OpenWeatherMap are needed.  
@@ -16,7 +21,6 @@ __❗❗❗Make sure `config.json` is not tracked by git. If `git status` shows 
 ## Dependencies  
 [lune](https://www.npmjs.com/package/lune/v/0.4.0) calculates moon phases.  
 [Node Schedule](https://www.npmjs.com/package/node-schedule) like cron.  
-[Node Windows](https://www.npmjs.com/package/node-windows)  
 [Twitter for Node.js](https://www.npmjs.com/package/twitter)  
 [Winston](https://www.npmjs.com/package/winston) a logger.  
   
@@ -33,16 +37,15 @@ __❗❗❗Again make sure `config.json` is not tracked by git. If `git status` 
 ## Configuration  
 ### Required Configuration:  
 #### Logging  
-For now the only configuration for logging is to specify a path to where logs will be stored.
-The json below will set the logging diectory to `logs/` relative to `index.js`.  
+For now the only configuration for logging is to set a path to where logs will be stored.
+The json below will set the log diectory to `logs/` relative to `index.js`.  
 
     "log": {
       "logDir": "logs"
     }
   
 #### Open Weather Map  
-To specify a location for forecasts, `config.weather.openWeatherMap.location` can contain one of the key value pair combinations below.  
-Accptable key value pairs are:  
+To set the forecast area, set `config.weather.openWeatherMap.location` to one of the key value pair combinations below.  
 
 City Name  
 `q: "{city name},{country code}"`  
@@ -55,7 +58,7 @@ Geographic Coordinates
 Zip Code  
 `zip: "{zip code},{country code}"`
 
-`config.weather.openWeatherMap.key` will contain the openWeatherMap api key  
+set `config.weather.openWeatherMap.key` to your openWeatherMap api key  
   
 Example
 
@@ -240,12 +243,9 @@ Example:
     }
 
 # Contributing
-A description with your pull request is fine. I'll request more information if I need it.  
-  
-Some desired features are:  
-International support for weather alerts.  
-A script to gather data for hottest temperature/lowest temperature for a day.  
-Linux process interrupt support.  
+A description with your pull request is fine.  
 
-# Planned Features  
-The next set of features revolve around configration and can be found [here](https://github.com/FireLemons/TwitterWeatherBot/projects/1) in the repo's project section.
+# Planned/Wanted Features   
+The next set of features are focused on configration and can be found [here](https://github.com/FireLemons/TwitterWeatherBot/projects/1) in the repo's project section.
+  
+Other desired features can be found on the [issues page](https://github.com/FireLemons/TwitterWeatherBot/issues)
