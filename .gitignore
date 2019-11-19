@@ -2,7 +2,7 @@
 #Find it here https://github.com/github/gitignore/blob/master/Node.gitignore
 
 # Config
-# DELETING THE LINE BELOW MAY EXPOSE YOUR API KEYS
+# Contains api keys
 config.json*
 
 # Logs
