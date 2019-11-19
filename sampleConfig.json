@@ -58,7 +58,8 @@
       ],
       "params": {
         "active": true,
-        "area": "MO"
+        "area": "MO",
+        "status": "actual"
       }
     },
     "open_weather_map": {
