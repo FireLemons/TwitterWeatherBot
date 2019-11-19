@@ -15,7 +15,7 @@ This service runs on [Node.js](https://nodejs.org/en/download/).
 After cloning, run `npm install` where `package.json` is which should be the repo's root directory.  
 Configure `config.json` with your location and api keys.  
 
-__❗❗❗Make sure `config.json` is not tracked by git. If `git status` shows `config.json` as `modified`, use `git update-index --assume-unchanged config.json` to untrack it. Having the file tracked may expose your API keys.__
+__❗❗❗Make sure `config.json` is not tracked by git. Having the file tracked may expose your API keys.__
 
 # Included Node Packages  
 ## Dependencies  
@@ -31,8 +31,6 @@ __❗❗❗Make sure `config.json` is not tracked by git. If `git status` shows 
 
 # Deployment
 Running `node index.js` from the repo root directory will start up the bot.  
-  
-__❗❗❗Again make sure `config.json` is not tracked by git. If `git status` shows `config.json` as `modified`, use `git update-index --assume-unchanged config.json` to untrack it. Having the file tracked may expose your API keys.__
   
 ## Configuration  
 ### Required Configuration:  
