@@ -62,7 +62,7 @@
         "status": "actual"
       }
     },
-    "open_weather_map": {
+    "openWeatherMap": {
       "location": {
         "id": 4381982
       },
