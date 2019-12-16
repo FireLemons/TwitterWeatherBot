@@ -212,7 +212,9 @@ module.exports = {
             }
               : (alertElem) => {
                 try {
-                  _.get(alertElem, filter.path)
+                  if(_.get(alertElem, filter.path) === undefined){
+                    filteredAlerts.push(alertElem)
+                  }
                 } catch (e) {
                   filteredAlerts.push(alertElem)
                 }
