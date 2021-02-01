@@ -13,8 +13,8 @@ Basic features:
 ## Configuration  
 ### Required Configuration:  
 #### Logging  
-For now the only configuration for logging is to set a path to where logs will be stored.
-The json below will set the log diectory to `logs/` relative to `index.js`.  
+Set the dierctory path where logs will be stored.
+Paths are relative to `index.js`.  
 
     "log": {
       "logDir": "logs"
