@@ -1,36 +1,14 @@
 # TwitterWeatherBot
-A great way to check the weather and twitter at the same time.  
-TwitterWeatherBot can  
+My personal twitter weather bot
+
+Basic features:  
 + Tweet a forecast for the near future every 2 hours  
 + Add a random weather fact to the 2 hour forecast  
 + Tweet alerts from the NWS  
-+ Retweet all tweets from your local weather station
-
-# Getting Started
-Api keys from Twitter and OpenWeatherMap are needed.  
-+ [Register for an OpenWeatherMap developer account](https://home.openweathermap.org/users/sign_up)
-+ [Register for a Twitter developer account](https://developer.twitter.com/en/apply)
-
-This service runs on [Node.js](https://nodejs.org/en/download/).  
-After cloning, run `npm install` where `package.json` is which should be the repo's root directory.  
-Configure `config.json` with your location and api keys.  
-
-__❗❗❗Make sure `config.json` is not tracked by git. Having the file tracked may expose your API keys.__
-
-# Included Node Packages  
-## Dependencies  
-[lune](https://www.npmjs.com/package/lune/v/0.4.0) calculates moon phases.  
-[Node Schedule](https://www.npmjs.com/package/node-schedule) like cron.  
-[Twitter for Node.js](https://www.npmjs.com/package/twitter)  
-[Winston](https://www.npmjs.com/package/winston) a logger.  
-  
-## Developer Dependencies  
-[standard js](https://standardjs.com/) A javascript linter.  
-[chai js](https://www.chaijs.com/) A BDD / TDD assertion library.  
-[mocha js](https://mochajs.org/) A feature-rich JavaScript test framework.  
++ Retweet all tweets from the local weather station
 
 # Deployment
-Running `node index.js` from the repo root directory will start up the bot.  
+`node index.js` to start up the bot.  
   
 ## Configuration  
 ### Required Configuration:  
@@ -239,11 +217,3 @@ Example:
       ...
       "localStationHandle": "NWSStLouis"
     }
-
-# Contributing
-A description with your pull request is fine.  
-
-# Planned/Wanted Features   
-The next set of features are focused on configration and can be found [here](https://github.com/FireLemons/TwitterWeatherBot/projects/1) in the repo's project section.
-  
-Other desired features can be found on the [issues page](https://github.com/FireLemons/TwitterWeatherBot/issues)
