@@ -4,6 +4,7 @@
   "description": "Gets weather data from OpenWeatherMap and posts it to Twitter",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "mocha"
   },
   "author": "shenyang64@gmail.com",
