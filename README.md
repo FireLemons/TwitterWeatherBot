@@ -6,9 +6,6 @@ Basic features:
 + Add a random weather fact to the 2 hour forecast  
 + Tweet alerts from the NWS  
 + Retweet all tweets from the local weather station
-
-# Deployment
-`node index.js` to start up the bot.  
   
 ## Configuration  
 ### Required Configuration:  
