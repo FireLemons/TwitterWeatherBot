@@ -94,3 +94,6 @@ typings/
 
 # A file specific to my global git configuration
 secrets.txt
+
+# Vim swp files
+*.swp
