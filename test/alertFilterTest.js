@@ -24,9 +24,9 @@ const exampleAlerts4 = require('../test/exampleAlerts4.json')
 describe('Alert Filters', function () {
   describe('No filters', function () {
     before(function () {
-      config.alerts.filters = []
+      config.weather.alerts.filters = []
 
-      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
     })
 
     it('should not filter the alerts when there are no filters', function () {
@@ -94,7 +94,7 @@ describe('Alert Filters', function () {
 
     describe('Filter: after', function () {
       it('should throw a TypeError when path leads to an invalid date string', function () {
-        config.alerts.filters = [
+        config.weather.alerts.filters = [
           {
             restriction: 'after',
             path: 'properties.event',
@@ -103,13 +103,13 @@ describe('Alert Filters', function () {
           }
         ]
 
-        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
         expect(() => { weatherDataHandler.filterAlerts(exampleAlerts1Current.features) }).to.throw(TypeError)
       })
 
       it('should keep alerts after the current time + 8hours when keep is true and value is 8', function () {
-        config.alerts.filters = [
+        config.weather.alerts.filters = [
           {
             restriction: 'after',
             path: 'properties.sent',
@@ -118,7 +118,7 @@ describe('Alert Filters', function () {
           }
         ]
 
-        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
         const nowCorrected = new Date(now)
         nowCorrected.setHours(nowCorrected.getHours() + 8)
@@ -129,7 +129,7 @@ describe('Alert Filters', function () {
       })
 
       it('should keep alerts after the current time - 8hours when keep is true and value is -8', function () {
-        config.alerts.filters = [
+        config.weather.alerts.filters = [
           {
             restriction: 'after',
             path: 'properties.sent',
@@ -138,7 +138,7 @@ describe('Alert Filters', function () {
           }
         ]
 
-        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
         const nowCorrected = new Date(now)
         nowCorrected.setHours(nowCorrected.getHours() - 8)
@@ -149,7 +149,7 @@ describe('Alert Filters', function () {
       })
 
       it('should keep alerts before or at the current time + 8hours when keep is false and value is 8', function () {
-        config.alerts.filters = [
+        config.weather.alerts.filters = [
           {
             restriction: 'after',
             path: 'properties.sent',
@@ -158,7 +158,7 @@ describe('Alert Filters', function () {
           }
         ]
 
-        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
         const nowCorrected = new Date(now)
         nowCorrected.setHours(nowCorrected.getHours() + 8)
@@ -169,7 +169,7 @@ describe('Alert Filters', function () {
       })
 
       it('should keep alerts before or at the current time - 8hours when keep is false and value is -8', function () {
-        config.alerts.filters = [
+        config.weather.alerts.filters = [
           {
             restriction: 'after',
             path: 'properties.sent',
@@ -178,7 +178,7 @@ describe('Alert Filters', function () {
           }
         ]
 
-        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
         const nowCorrected = new Date(now)
         nowCorrected.setHours(nowCorrected.getHours() - 8)
@@ -189,7 +189,7 @@ describe('Alert Filters', function () {
       })
 
       it('should filter all the alerts when there are a pair of filters where keep is true in one and false in the other and all other properties are the same', function () {
-        config.alerts.filters = [
+        config.weather.alerts.filters = [
           {
             restriction: 'after',
             path: 'properties.sent',
@@ -204,7 +204,7 @@ describe('Alert Filters', function () {
           }
         ]
 
-        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
         expect(weatherDataHandler.filterAlerts(exampleAlerts1Current.features)).to.be.empty
       })
@@ -212,7 +212,7 @@ describe('Alert Filters', function () {
 
     describe('Filter: before', function () {
       it('should throw a TypeError when path leads to an invalid date string', function () {
-        config.alerts.filters = [
+        config.weather.alerts.filters = [
           {
             restriction: 'before',
             path: 'properties.event',
@@ -221,13 +221,13 @@ describe('Alert Filters', function () {
           }
         ]
 
-        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
         expect(() => { weatherDataHandler.filterAlerts(exampleAlerts3Current.features) }).to.throw(TypeError)
       })
 
       it('should keep alerts before the current time - 24hours when keep is true and value is 24', function () {
-        config.alerts.filters = [
+        config.weather.alerts.filters = [
           {
             restriction: 'before',
             path: 'properties.ends',
@@ -236,7 +236,7 @@ describe('Alert Filters', function () {
           }
         ]
 
-        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
         const nowCorrected = new Date(now)
         nowCorrected.setHours(nowCorrected.getHours() + 24)
@@ -247,7 +247,7 @@ describe('Alert Filters', function () {
       })
 
       it('should keep alerts before the current time - 24hours when keep is true and value is -24', function () {
-        config.alerts.filters = [
+        config.weather.alerts.filters = [
           {
             restriction: 'before',
             path: 'properties.ends',
@@ -256,7 +256,7 @@ describe('Alert Filters', function () {
           }
         ]
 
-        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
         const nowCorrected = new Date(now)
         nowCorrected.setHours(nowCorrected.getHours() - 24)
@@ -267,7 +267,7 @@ describe('Alert Filters', function () {
       })
 
       it('should keep alerts after or at the current time + 24hours when keep is false and value is 24', function () {
-        config.alerts.filters = [
+        config.weather.alerts.filters = [
           {
             restriction: 'before',
             path: 'properties.ends',
@@ -276,7 +276,7 @@ describe('Alert Filters', function () {
           }
         ]
 
-        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
         const nowCorrected = new Date(now)
         nowCorrected.setHours(nowCorrected.getHours() + 24)
@@ -287,7 +287,7 @@ describe('Alert Filters', function () {
       })
 
       it('should keep alerts after or at the current time - 24hours when keep is false and value is -24', function () {
-        config.alerts.filters = [
+        config.weather.alerts.filters = [
           {
             restriction: 'before',
             path: 'properties.ends',
@@ -296,7 +296,7 @@ describe('Alert Filters', function () {
           }
         ]
 
-        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
         const nowCorrected = new Date(now)
         nowCorrected.setHours(nowCorrected.getHours() - 24)
@@ -307,7 +307,7 @@ describe('Alert Filters', function () {
       })
 
       it('should filter all the alerts when there are a pair of filters where keep is true in one and false in the other and all other properties are the same', function () {
-        config.alerts.filters = [
+        config.weather.alerts.filters = [
           {
             restriction: 'before',
             path: 'properties.ends',
@@ -322,7 +322,7 @@ describe('Alert Filters', function () {
           }
         ]
 
-        weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+        weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
         expect(weatherDataHandler.filterAlerts(exampleAlerts3Current.features)).to.be.empty
       })
@@ -331,7 +331,7 @@ describe('Alert Filters', function () {
 
   describe('Filter: contains', function () {
     it('should throw a TypeError when path does not lead to an array', function () {
-      config.alerts.filters = [
+      config.weather.alerts.filters = [
         {
           restriction: 'contains',
           path: 'properties.event',
@@ -340,13 +340,13 @@ describe('Alert Filters', function () {
         }
       ]
 
-      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
       expect(() => { weatherDataHandler.filterAlerts(exampleAlerts4.features) }).to.throw(TypeError)
     })
 
     it('should keep alerts where properties.geocode.UGC contains "MOZ041" when keep is true and value is "MOZ041"', function () {
-      config.alerts.filters = [
+      config.weather.alerts.filters = [
         {
           restriction: 'contains',
           path: 'properties.geocode.UGC',
@@ -355,7 +355,7 @@ describe('Alert Filters', function () {
         }
       ]
 
-      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
       let filteredAlerts = weatherDataHandler.filterAlerts(exampleAlerts4.features)
 
@@ -364,7 +364,7 @@ describe('Alert Filters', function () {
     })
 
     it('should keep alerts where properties.geocode.UGC does not contain "MOZ041" when keep is false and value is "MOZ041"', function () {
-      config.alerts.filters = [
+      config.weather.alerts.filters = [
         {
           restriction: 'contains',
           path: 'properties.geocode.UGC',
@@ -373,7 +373,7 @@ describe('Alert Filters', function () {
         }
       ]
 
-      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
       const filteredAlerts = weatherDataHandler.filterAlerts(exampleAlerts4.features)
 
@@ -385,7 +385,7 @@ describe('Alert Filters', function () {
     })
 
     it('should filter all the alerts when there are a pair of filters where keep is true in one and false in the other and all other properties are the same', function () {
-      config.alerts.filters = [
+      config.weather.alerts.filters = [
         {
           restriction: 'contains',
           path: 'properties.geocode.UGC',
@@ -400,7 +400,7 @@ describe('Alert Filters', function () {
         }
       ]
 
-      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
       expect(weatherDataHandler.filterAlerts(exampleAlerts4.features)).to.be.empty
     })
@@ -408,7 +408,7 @@ describe('Alert Filters', function () {
 
   describe('Filter: equals', function () {
     it('should keep alerts where the event is "Winter Weather Advisory" when keep is true and value is "Winter Weather Advisory"', function () {
-      config.alerts.filters = [
+      config.weather.alerts.filters = [
         {
           restriction: 'equals',
           path: 'properties.event',
@@ -417,7 +417,7 @@ describe('Alert Filters', function () {
         }
       ]
 
-      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
       const filteredAlerts = weatherDataHandler.filterAlerts(exampleAlerts1.features)
 
@@ -429,7 +429,7 @@ describe('Alert Filters', function () {
     })
 
     it('should keep alerts where the event is not "Winter Weather Advisory" when keep is false and value is "Winter Weather Advisory"', function () {
-      config.alerts.filters = [
+      config.weather.alerts.filters = [
         {
           restriction: 'equals',
           path: 'properties.event',
@@ -438,7 +438,7 @@ describe('Alert Filters', function () {
         }
       ]
 
-      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
       const filteredAlerts = weatherDataHandler.filterAlerts(exampleAlerts1.features)
 
@@ -450,7 +450,7 @@ describe('Alert Filters', function () {
     })
 
     it('should filter all the alerts when there are a pair of filters where keep is true in one and false in the other and all other properties are the same', function () {
-      config.alerts.filters = [
+      config.weather.alerts.filters = [
         {
           restriction: 'equals',
           path: 'properties.event',
@@ -465,7 +465,7 @@ describe('Alert Filters', function () {
         }
       ]
 
-      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
       expect(weatherDataHandler.filterAlerts(exampleAlerts1.features)).to.be.empty
     })
@@ -473,7 +473,7 @@ describe('Alert Filters', function () {
 
   describe('Filter: has', function () {
     it('should keep alerts where the alert contains properties.replacedBy when path is "properties.replacedBy" and keep is true', function () {
-      config.alerts.filters = [
+      config.weather.alerts.filters = [
         {
           restriction: 'has',
           path: 'properties.replacedBy',
@@ -481,7 +481,7 @@ describe('Alert Filters', function () {
         }
       ]
 
-      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
       let filteredAlerts = weatherDataHandler.filterAlerts(exampleAlerts1.features)
       
@@ -493,7 +493,7 @@ describe('Alert Filters', function () {
     })
 
     it('should keep alerts where the alert does not contain properties.replacedBy when path is "properties.replacedBy" and keep is false', function () {
-      config.alerts.filters = [
+      config.weather.alerts.filters = [
         {
           restriction: 'has',
           path: 'properties.replacedBy',
@@ -501,7 +501,7 @@ describe('Alert Filters', function () {
         }
       ]
 
-      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
       let filteredAlerts = weatherDataHandler.filterAlerts(exampleAlerts1.features)
       
@@ -513,7 +513,7 @@ describe('Alert Filters', function () {
     })
 
     it('should be prioritized before other filters', function () {
-      config.alerts.filters = [
+      config.weather.alerts.filters = [
         {
           restriction: 'matches',
           path: 'properties.parameters.NWSheadline[0]',
@@ -538,7 +538,7 @@ describe('Alert Filters', function () {
         }
       ]
 
-      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
       let filteredAlerts = []
 
@@ -557,7 +557,7 @@ describe('Alert Filters', function () {
     })
 
     it('should filter all the alerts when there are a pair of filters where keep is true in one and false in the other and all other properties are the same', function () {
-      config.alerts.filters = [
+      config.weather.alerts.filters = [
         {
           restriction: 'has',
           path: 'properties.parameters.NWSheadline',
@@ -570,7 +570,7 @@ describe('Alert Filters', function () {
         }
       ]
 
-      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
       expect(weatherDataHandler.filterAlerts(exampleAlerts2.features)).to.be.empty
     })
@@ -578,7 +578,7 @@ describe('Alert Filters', function () {
   
   describe('Filter: matches', function () {
     it('should throw a TypeError when path does not lead to a string', function () {
-      config.alerts.filters = [
+      config.weather.alerts.filters = [
         {
           restriction: 'matches',
           path: 'properties.affectedZones',
@@ -587,13 +587,13 @@ describe('Alert Filters', function () {
         }
       ]
 
-      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
       expect(() => { weatherDataHandler.filterAlerts(exampleAlerts4.features) }).to.throw(TypeError)
     })
     
     it('should keep alerts where the event is a watch when keep is true and value is " Watch$"', function () {
-      config.alerts.filters = [
+      config.weather.alerts.filters = [
         {
           restriction: 'matches',
           path: 'properties.event',
@@ -602,7 +602,7 @@ describe('Alert Filters', function () {
         }
       ]
 
-      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
       let filteredAlerts = weatherDataHandler.filterAlerts(exampleAlerts4.features)
 
@@ -614,7 +614,7 @@ describe('Alert Filters', function () {
     })
     
     it('should keep alerts where the event is not a watch when keep is false and value is " Watch$"', function () {
-      config.alerts.filters = [
+      config.weather.alerts.filters = [
         {
           restriction: 'matches',
           path: 'properties.event',
@@ -623,7 +623,7 @@ describe('Alert Filters', function () {
         }
       ]
 
-      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
       let filteredAlerts = weatherDataHandler.filterAlerts(exampleAlerts4.features)
 
@@ -635,7 +635,7 @@ describe('Alert Filters', function () {
     })
     
     it('should filter all the alerts when there are a pair of filters where keep is true in one and false in the other and all other properties are the same', function () {
-      config.alerts.filters = [
+      config.weather.alerts.filters = [
         {
           restriction: 'matches',
           path: 'properties.event',
@@ -650,7 +650,7 @@ describe('Alert Filters', function () {
         }
       ]
 
-      weatherDataHandler = new weatherTools.DataFetcher(config.alerts, config.open_weather_map, logger)
+      weatherDataHandler = new weatherTools.DataFetcher(config.weather, logger)
 
       expect(weatherDataHandler.filterAlerts(exampleAlerts4.features)).to.be.empty
     })
