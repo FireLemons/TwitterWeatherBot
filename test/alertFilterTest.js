@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const config = require('../config.json')
+const config = require('./mock_config.json')
 const expect = require('chai').expect
 const weatherTools = require('../weather.js')
 

@@ -1,0 +1,64 @@
+{
+  "extra":{
+    "disabled": false,
+    "coordinates": {
+      "elevation": 231,
+      "long": -92.3341,
+      "lat": 38.9517
+    },
+    "probabilities":{
+      "joke": 1,
+
+      "tutorial": 9,
+
+      "lunar": 15,
+      "season": 5,
+      "sunrise": 15,
+
+      "beaufort": 10,
+      "records": 0,
+
+      "cloudiness": 10,
+      "humidity": 10,
+      "precipitation": 15,
+      "pressure": 10
+    }
+  },
+  "log": {
+    "logDir": "logs"
+  },
+  "weather": {
+    "alerts": {
+      "app": { 
+        "contact": "test@test.com",
+        "name": "WeatherBot",
+        "version": "1.1",
+        "website": "example.com"
+      },
+      "filters": [
+        {
+          "restriction": "matches",
+          "path": "properties.areaDesc",
+          "value": "Boone",
+          "keep": true
+        },
+        {
+          "restriction": "has",
+          "path": "properties.replacedBy",
+          "keep": false
+        }
+      ],
+      "params": {
+        "active": true,
+        "area": "MO",
+        "status": "actual"
+      }
+    },
+    "openWeatherMap": {
+      "location": {
+        "id": 4381982
+      },
+      "key": ""
+    }
+  }
+}
