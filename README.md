@@ -206,7 +206,7 @@ Extras can be disabled with:
     }
 
 #### Retweets  
-Maybe there's a local weather station's twitter you'd like retweet. Setting `config.twitter.localStationHandle` to the station's twitter handle will retweet all their tweets every hour on the 30 minute mark.  
+`config.twitter.localStationHandle` cna be set to a local weather station's twitter handle to retweet all their tweets every hour on the 30 minute mark.  
   
 Example:  
 
