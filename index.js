@@ -202,7 +202,7 @@ if (!fs.existsSync('./data/stats.json')) {
 const stats = util.getWatchedObject(_stats, saveStats)
 
 // Init Twitter Data Object
-const tweetWeather = new TwitterManager(config.twitter, logger, stats)
+const twitter = new TwitterManager(config.twitter, logger, stats)
 
 /*
  *  Schedule forecasts to go out every 2 hours.
@@ -210,16 +210,67 @@ const tweetWeather = new TwitterManager(config.twitter, logger, stats)
 
 let retryTimeout = 0
 
-// Tries to fetch forecast data and tweet it
+// Fetch forecast data and tweet it
 //  @param  {boolean} isLate true if the last scheduled forecast was missed otherwise false
-function tryFetchWeather (isLate) {
-  const onFailure = (error) => {
+//  @return {Promise} A promise representing the complete action of
+function tweetWeather (isLate) {
+  return new Promise((resolve, reject) => {
+    weatherFetcher.getForecastPromise().then((forecastData) => {
+      let message = weatherTools.generateForecastMessage(forecastData)
+
+      if (message) {
+        // extra statement
+        let extra
+
+        if (config.extra && !config.extra.disabled) {
+          if (isLate) {
+            message += util.pickRandom(require('./data/jokes.json').late)
+          } else {
+            extra = extraGenerator.getExtra(forecastData)
+            message += extra.statement
+
+            logger.info(`Generated: ${JSON.stringify(extra)}`)
+          }
+
+          twitter.sendTweet(message)
+            .then((tweet) => {
+              stats.lastUpdate = new Date()
+
+              if (!stats[extra.type]) {
+                stats[extra.type] = 0
+              }
+
+              stats[extra.type] += 1
+              resolve()
+            }).catch((error) => {
+              logger.error('Failed to send forecast update')
+              reject(error)
+            })
+        } else {
+          twitter.sendTweet(message)
+            .then((tweet) => {
+              stats.lastUpdate = new Date()
+              resolve()
+            }).catch((error) => {
+              logger.error('Failed to send forecast update')
+              reject(error)
+            })
+        }
+      } else {
+        reject(new Error('Failed to generate status message.'))
+      }
+    }).catch((error) => {
+      logger.error('Failed to fetch forecast data')
+      reject(error)
+    })
+  })
+  .catch((err) => {
     if (retryTimeout <= 262144) {
       logger.warn(error)
-      logger.info(`Retrying fetching weather data in ${retryTimeout}ms. Retry ${(retryTimeout / 131072) + 1} of 3`)
+      logger.info(`Retrying tweeting weather in ${retryTimeout}ms. Retry ${(retryTimeout / 131072) + 1} of 3`)
 
       setTimeout(() => {
-        tryFetchWeather(isLate)
+        tweetWeather(isLate)
       }, retryTimeout)
 
       retryTimeout += 131072
@@ -228,52 +279,12 @@ function tryFetchWeather (isLate) {
 
       const failureMessage = util.pickRandom(require('./data/jokes.json').error)
 
-      tweetWeather.sendTweet(failureMessage)
+      twitter.sendTweet(failureMessage)
         .catch((error) => {
           logger.error('Failed to send failure tweet for forecast')
           logger.error(error)
         })
     }
-  }
-
-  weatherFetcher.getForecastPromise().then((forecastData) => {
-    let message = weatherTools.generateForecastMessage(forecastData)
-
-    if (message) {
-      // extra statement
-      let extra
-
-      if (config.extra && !config.extra.disabled) {
-        if (isLate) {
-          message += util.pickRandom(require('./data/jokes.json').late)
-        } else {
-          extra = extraGenerator.getExtra(forecastData)
-          message += extra.statement
-
-          logger.info(`Generated: ${JSON.stringify(extra)}`)
-        }
-      }
-      tweetWeather.sendTweet(message)
-        .then((tweet) => {
-          stats.lastUpdate = new Date()
-
-          if (extra) {
-            if (!stats[extra.type]) {
-              stats[extra.type] = 0
-            }
-
-            stats[extra.type] += 1
-          }
-        }).catch((error) => {
-          logger.error('Failed to send forecast update')
-          onFailure(error)
-        })
-    } else {
-      throw new Error('Failed to generate status message.')
-    }
-  }).catch((error) => {
-    logger.error('Failed to fetch forecast data')
-    onFailure(error)
   })
 }
 
@@ -295,7 +306,7 @@ if (config.weather.alerts && !config.weather.alerts.disabled) {
         logger.error(new Error('Failed to load weather alert data.'))
         logger.error(error)
 
-        tweetWeather.sendTweet('Failed to fetch weather alert data. There could be a weather alert currently.')
+        twitter.sendTweet('Failed to fetch weather alert data. There could be a weather alert currently.')
           .catch((error) => {
             logger.error('Failed to send weather alert failure message')
             logger.error(error)
@@ -317,7 +328,7 @@ if (config.weather.alerts && !config.weather.alerts.disabled) {
         const alertMessage = weatherTools.getAlertMessage(alertData)
 
         if (alertMessage) {
-          tweetWeather.sendTweet(alertMessage)
+          twitter.sendTweet(alertMessage)
             .then((tweet) => {
               stats.lastAlertUpdate = new Date()
             })
@@ -379,18 +390,18 @@ if (config.weather.alerts && !config.weather.alerts.disabled) {
 if (new Date() - stats.lastUpdate > 7620000) { // 7620000ms = 2 hours 7 minutes
   logger.warn(new Error('Missed scheduled twitter update. Presumably by waking from sleep.'))
 
-  tryFetchWeather(true)
+  tweetWeather(true)
 }
 
 schedule.scheduleJob('0 */2 * * *', function () {
   retryTimeout = 0
 
-  tryFetchWeather()
+  tweetWeather()
 })
 
 if (typeof config.twitter.localStationHandle === 'string') {
   schedule.scheduleJob('30 */1 * * *', function () {
-    tweetWeather.retweetLocalStationTweets()
+    twitter.retweetLocalStationTweets()
   })
 }
 
