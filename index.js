@@ -344,9 +344,9 @@ if (config.weather.alerts && !config.weather.alerts.disabled) {
   // Fetch forecast data and tweet it
   //  @return {Promise} A promise representing the complete action of fetching and tweeting the alerts
   function tweetAlerts () {
-    logger.info('Fetching alerts.')
-
     return new Promise((resolve, reject) => {
+      logger.info('Fetching alerts.')
+
       weatherFetcher.getWeatherAlertsPromise().then((alertData) => {
         const alerts = weatherFetcher.filterAlerts(alertData.features)
 
@@ -409,37 +409,58 @@ if (config.weather.alerts && !config.weather.alerts.disabled) {
           reject(error)
         })
     })
+  }
+
+  // Wait a while before attempting tweetWeather again
+  //  @param  {Object}  error Data representing why tweetWeather failed
+  //  @return {Promise} A promise lasting the length of the timeout
+  const retryAlert = (error) => {
+    return new Promise(function(resolve, reject) {
+      logger.warn(error)
+      logger.info(`Retrying tweeting weather alerts in ${retryAlertTimeout}ms. Retry ${(retryTimeout / 131072) + 1} of 3`)
+
+      setTimeout(reject.bind(null, error), retryTimeout);
+
+      retryTimeout += 131072
+    });
+  }
+
+  // Print an error after all retry attempts have been exhausted
+  //  @param  {Object}  error Data representing why tweetWeather failed
+  const retriesAlertExhausted = (error) => {
+    logger.error(error)
+
+    twitter.sendTweet('Failed to fetch weather alert data. There could be a weather alert currently.')
       .catch((error) => {
-        if (retryAlertTimeout <= 262144) {
-          logger.warn(error)
-          logger.info(`Retrying fetching weather alert data in ${retryAlertTimeout}ms. Retry ${(retryAlertTimeout / 131072) + 1} of 3`)
-
-          setTimeout(() => {
-            tweetAlerts()
-          }, retryAlertTimeout)
-
-          retryAlertTimeout += 131072
-        } else {
-          logger.error(new Error('Failed to load weather alert data.'))
-          logger.error(error)
-
-          twitter.sendTweet('Failed to fetch weather alert data. There could be a weather alert currently.')
-            .catch((error) => {
-              logger.error('Failed to send weather alert failure message')
-              logger.error(error)
-            })
-        }
+        logger.error('Failed to send weather alert failure message')
+        logger.error(error)
       })
   }
 
   if (new Date() - stats.lastAlertUpdate > 22020000) { // 22020000ms = 6 hours 7 minutes
-    tryFetchAlerts()
+    let promiseChain = Promise.reject()
+
+    for(let i = -1; i < maxRetryCount; i++){
+      promiseChain = promiseChain
+        .catch(tweetAlerts)
+        .catch(retryAlert)
+    }
+
+    promiseChain.catch(retriesAlertExhausted)
   }
 
   schedule.scheduleJob('0 */6 * * *', function () {
     retryAlertTimeout = 0
 
-    tryFetchAlerts()
+    let promiseChain = Promise.reject()
+
+    for(let i = -1; i < maxRetryCount; i++){
+      promiseChain = promiseChain
+        .catch(tweetAlerts)
+        .catch(retry)
+    }
+
+    promiseChain.catch(retriesAlertExhausted)
   })
 }
 
