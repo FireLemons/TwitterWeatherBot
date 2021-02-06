@@ -26,11 +26,10 @@ const formatDate = new Intl.DateTimeFormat('en-US', dateFormat).format
 // Makes human readable timestamps
 //  @return {string} A timestamp in the form: FULL_MONTH_NAME DAY HH:MM:SS
 function getCurrentTimeFormatted () {
-  var date = new Date()
-  var formattedDate = formatDate(date)
+  let formattedDate = formatDate(new Date())
 
   if (formattedDate.length < 22) {
-    var spaceIndex = formattedDate.indexOf(' ')
+    const spaceIndex = formattedDate.indexOf(' ')
 
     formattedDate = formattedDate.substr(0, spaceIndex).padEnd(10) + formattedDate.substr(spaceIndex + 1)
   }
@@ -44,11 +43,11 @@ function getCurrentTimeFormatted () {
 function getErrorSource (error) {
   const { stack } = error
 
-  for (var firstNewLineIndex = 0; firstNewLineIndex < stack.length && stack[firstNewLineIndex] !== '\n'; firstNewLineIndex++) {
-  }
+  let firstNewLineIndex,
+    secondNewLineIndex
 
-  for (var secondNewLineIndex = firstNewLineIndex + 1; secondNewLineIndex < stack.length && stack[secondNewLineIndex] !== '\n'; secondNewLineIndex++) {
-  }
+  for (firstNewLineIndex = 0; firstNewLineIndex < stack.length && stack[firstNewLineIndex] !== '\n'; firstNewLineIndex++);
+  for (secondNewLineIndex = firstNewLineIndex + 1; secondNewLineIndex < stack.length && stack[secondNewLineIndex] !== '\n'; secondNewLineIndex++);
 
   const errorSourceData = stack.substr(firstNewLineIndex, secondNewLineIndex - firstNewLineIndex).match(/([\w]+\.js):([\d]+):[\d]+\)$/)
 
@@ -59,7 +58,7 @@ function getErrorSource (error) {
 }
 
 // Create the log directory if it doesn't exist
-var { log: { logDir } } = config
+const { log: { logDir } } = config
 
 if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir)
@@ -152,7 +151,7 @@ const logger = winston.createLogger({
 
 // Logs errors for some process disruptions
 //  @param {string} The name of the signal that triggered the disruption
-var disruptHandler = (signal) => {
+const disruptHandler = (signal) => {
   logger.error(new Error('Weather bot process killed unexpectedly by ' + signal))
   process.exit(1)
 }
@@ -273,14 +272,14 @@ const retryDelayDelta = 131072
 //  @param  {Object}  error Data representing why tweetWeather failed
 //  @return {Promise} A promise lasting the length of the timeout
 const retry = (error) => {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     logger.warn(error)
     logger.info(`Retrying tweeting weather in ${retryTimeout}ms. Retry ${(retryTimeout / 131072) + 1} of 3`)
 
-		setTimeout(reject.bind(null, error), retryTimeout);
+    setTimeout(reject.bind(null, error), retryTimeout)
 
-    retryTimeout += 131072
-	});
+    retryTimeout += retryDelayDelta
+  })
 }
 
 // Print an error after all retry attempts have been exhausted
@@ -303,7 +302,7 @@ if (new Date() - stats.lastUpdate > 7620000) { // 7620000ms = 2 hours 7 minutes
 
   let promiseChain = Promise.reject()
 
-  for(let i = -1; i < maxRetryCount; i++){
+  for (let i = -1; i < maxRetryCount; i++) {
     promiseChain = promiseChain
       .catch(() => {
         return tweetWeather(true)
@@ -319,7 +318,7 @@ schedule.scheduleJob('0 */2 * * *', function () {
 
   let promiseChain = Promise.reject()
 
-  for(let i = -1; i < maxRetryCount; i++){
+  for (let i = -1; i < maxRetryCount; i++) {
     promiseChain = promiseChain
       .catch(tweetWeather)
       .catch(retry)
@@ -415,14 +414,14 @@ if (config.weather.alerts && !config.weather.alerts.disabled) {
   //  @param  {Object}  error Data representing why tweetWeather failed
   //  @return {Promise} A promise lasting the length of the timeout
   const retryAlert = (error) => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       logger.warn(error)
       logger.info(`Retrying tweeting weather alerts in ${retryAlertTimeout}ms. Retry ${(retryTimeout / 131072) + 1} of 3`)
 
-      setTimeout(reject.bind(null, error), retryTimeout);
+      setTimeout(reject.bind(null, error), retryTimeout)
 
-      retryTimeout += 131072
-    });
+      retryTimeout += retryDelayDelta
+    })
   }
 
   // Print an error after all retry attempts have been exhausted
@@ -440,7 +439,7 @@ if (config.weather.alerts && !config.weather.alerts.disabled) {
   if (new Date() - stats.lastAlertUpdate > 22020000) { // 22020000ms = 6 hours 7 minutes
     let promiseChain = Promise.reject()
 
-    for(let i = -1; i < maxRetryCount; i++){
+    for (let i = -1; i < maxRetryCount; i++) {
       promiseChain = promiseChain
         .catch(tweetAlerts)
         .catch(retryAlert)
@@ -454,7 +453,7 @@ if (config.weather.alerts && !config.weather.alerts.disabled) {
 
     let promiseChain = Promise.reject()
 
-    for(let i = -1; i < maxRetryCount; i++){
+    for (let i = -1; i < maxRetryCount; i++) {
       promiseChain = promiseChain
         .catch(tweetAlerts)
         .catch(retry)
