@@ -208,11 +208,9 @@ const twitter = new TwitterManager(config.twitter, logger, stats)
  *  Schedule forecasts to go out every 2 hours.
  */
 
-let retryTimeout = 0
-
 // Fetch forecast data and tweet it
 //  @param  {boolean} isLate true if the last scheduled forecast was missed otherwise false
-//  @return {Promise} A promise representing the complete action of
+//  @return {Promise} A promise representing the complete action of fetching and tweeting the weather
 function tweetWeather (isLate) {
   return new Promise((resolve, reject) => {
     weatherFetcher.getForecastPromise().then((forecastData) => {
@@ -263,28 +261,6 @@ function tweetWeather (isLate) {
       logger.error('Failed to fetch forecast data')
       reject(error)
     })
-  })
-  .catch((err) => {
-    if (retryTimeout <= 262144) {
-      logger.warn(error)
-      logger.info(`Retrying tweeting weather in ${retryTimeout}ms. Retry ${(retryTimeout / 131072) + 1} of 3`)
-
-      setTimeout(() => {
-        tweetWeather(isLate)
-      }, retryTimeout)
-
-      retryTimeout += 131072
-    } else {
-      logger.error(error)
-
-      const failureMessage = util.pickRandom(require('./data/jokes.json').error)
-
-      twitter.sendTweet(failureMessage)
-        .catch((error) => {
-          logger.error('Failed to send failure tweet for forecast')
-          logger.error(error)
-        })
-    }
   })
 }
 
@@ -386,17 +362,67 @@ if (config.weather.alerts && !config.weather.alerts.disabled) {
   })
 }
 
+let retryTimeout = -131072
+const maxRetryCount = 3
+const retryDelayDelta = 131072
+
+// Wait a while before attempting tweetWeather again
+//  @param  {Object}  error Data representing why tweetWeather failed
+//  @return {Promise} A promise lasting the length of the timeout
+const retry = (error) => {
+  return new Promise(function(resolve, reject) {
+    logger.warn(error)
+    logger.info(`Retrying tweeting weather in ${retryTimeout}ms. Retry ${(retryTimeout / 131072) + 1} of 3`)
+
+		setTimeout(reject.bind(null, error), retryTimeout);
+
+    retryTimeout += 131072
+	});
+}
+
+// Print an error after all retry attempts have been exhausted
+//  @param  {Object}  error Data representing why tweetWeather failed
+const retriesExhausted = (error) => {
+  logger.error(error)
+
+  const failureMessage = util.pickRandom(require('./data/jokes.json').error)
+
+  twitter.sendTweet(failureMessage)
+    .catch((error) => {
+      logger.error('Failed to send failure tweet for forecast')
+      logger.error(error)
+    })
+}
+
 // Detect if computer fell asleep
 if (new Date() - stats.lastUpdate > 7620000) { // 7620000ms = 2 hours 7 minutes
   logger.warn(new Error('Missed scheduled twitter update. Presumably by waking from sleep.'))
 
-  tweetWeather(true)
+  let promiseChain = Promise.reject()
+
+  for(let i = -1; i < maxRetryCount; i++){
+    promiseChain = promiseChain
+      .catch(() => {
+        return tweetWeather(true)
+      })
+      .catch(retry)
+  }
+
+  promiseChain.catch(retriesExhausted)
 }
 
 schedule.scheduleJob('0 */2 * * *', function () {
   retryTimeout = 0
 
-  tweetWeather()
+  let promiseChain = Promise.reject()
+
+  for(let i = -1; i < maxRetryCount; i++){
+    promiseChain = promiseChain
+      .catch(tweetWeather)
+      .catch(retry)
+  }
+
+  promiseChain.catch(retriesExhausted)
 })
 
 if (typeof config.twitter.localStationHandle === 'string') {
