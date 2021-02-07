@@ -220,7 +220,7 @@ function tweetWeather (isLate) {
         let extra
 
         if (config.extra && !config.extra.disabled) {
-          if (isLate) {
+          if (isLate === true) {
             message += util.pickRandom(require('./data/jokes.json').late)
           } else {
             extra = extraGenerator.getExtra(forecastData)
