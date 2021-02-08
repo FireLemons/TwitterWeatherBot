@@ -225,13 +225,17 @@ function tweetWeather (isLate) {
 
         if (config.extra && !config.extra.disabled) {
           if (isLate === true) {
-            message += util.pickRandom(require('./data/jokes.json').late)
+           extra = {
+             statement: util.pickRandom(require('./data/jokes.json').late),
+             type: 'late'
+           }
           } else {
             extra = extraGenerator.getExtra(forecastData)
-            message += extra.statement
-
-            logger.info(`Generated: ${JSON.stringify(extra)}`)
           }
+
+          message += extra.statement
+
+          logger.info(`Generated: ${JSON.stringify(extra)}`)
 
           twitter.sendTweet(message)
             .then((tweet) => {
