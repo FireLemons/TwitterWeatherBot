@@ -31,7 +31,7 @@ Geographic Coordinates
 Zip Code  
 `zip: "{zip code},{country code}"`
 
-set `config.weather.openWeatherMap.key` to your openWeatherMap api key  
+set `config.weather.openWeatherMap.key` to the openWeatherMap api key  
   
 Example
 
@@ -40,12 +40,12 @@ Example
         "location": {
           "id": 4381982
         },
-        "key": "YOUR API KEY"
+        "key": "API KEY"
       }
     }
 
 #### Twitter  
-All four values of `config.twitter` shown below will be keys generated from your twitter developer account.
+`config.twitter` contains keys generated from the twitter developer account.
 
     "twitter": {
       "consumer_key": "CONSUMER KEY",
@@ -57,7 +57,7 @@ All four values of `config.twitter` shown below will be keys generated from your
 ### Optional Configuration:  
 #### Alerts  
 Alerts are sent out at midnight, 6:00, noon, and 18:00.  
-In order to receive alert data from the national weather service, a header containing a email to contact you, an app name, an app version, and a website must be included with each request. These are specified in `config.weather.alerts.app`  
+In order to receive alert data from the national weather service, a header containing an email, app name, app version, and a website must be included with each request. These are specified in `config.weather.alerts.app`  
 `weather.alerts.params` will contain get parameters to send to api.weather.gov/alerts in the form of key value pairs. More information about valid get paramters and a request tester can be found [here](https://www.weather.gov/documentation/services-web-api#/default/get_alerts) under the "Specification" tab.
   
 Example:
@@ -80,7 +80,7 @@ Example:
     }
 
 ##### Alert Filters
-If the request sends back too many alerts, filters can be applied.  
+Filters can be applied to narrow which alerts are tweeted.  
   
 Filters are in the form:  
 
@@ -115,8 +115,8 @@ Available filter types:
  Matches alerts with VALUE exactly equal to the value at path  
  value is a primitive value to be compared with using strict equality  
  - matches  
- Matches alerts with strings matching a regular expression  
- value contains a regular expression string  
+ Matches alerts with strings matching a regex pattern  
+ value contains a regex string  
    
 Filters go in an array at config.weather.alerts.filters.  
   
@@ -206,7 +206,7 @@ Extras can be disabled with:
     }
 
 #### Retweets  
-`config.twitter.localStationHandle` cna be set to a local weather station's twitter handle to retweet all their tweets every hour on the 30 minute mark.  
+`config.twitter.localStationHandle` can be set to a local weather station's twitter handle to retweet all their tweets every hour on the 30 minute mark.  
   
 Example:  
 
