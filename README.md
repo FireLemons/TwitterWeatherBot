@@ -8,7 +8,7 @@ Basic features:
 + Retweet all tweets from the local weather station
   
 ## Configuration  
-### Required Configuration:  
+### Required:  
 #### Logging  
 Set the dierctory path where logs will be stored.
 Paths are relative to `index.js`.  
