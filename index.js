@@ -51,10 +51,14 @@ function getErrorSource (error) {
 
   const errorSourceData = stack.substr(firstNewLineIndex, secondNewLineIndex - firstNewLineIndex).match(/([\w]+\.js):([\d]+):[\d]+\)?$/)
 
-  return {
-    fileName: errorSourceData[1],
-    lineNumber: parseInt(errorSourceData[2])
-  }
+  return errorSourceData ?
+    {
+      fileName: errorSourceData[1],
+      lineNumber: parseInt(errorSourceData[2])
+    } :
+    {
+      stack: stack
+    }
 }
 
 // Create the log directory if it doesn't exist
