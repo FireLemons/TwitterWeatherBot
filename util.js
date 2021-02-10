@@ -45,10 +45,8 @@ module.exports = {
   //    @param  {object} elem1 The first element to be compared
   //    @param  {object} elem2 The second element to be compared
   //    @return {number} A negative value if elem1 comes before elem2 otherwise a positive value
-  //  @param  {object} lastComparison Only used in recursive calls
-  //  @param  {number} offset Only used in recursive calls
   //  @return {object} The index of the most similar element in list to elem
-  getClosestIndex (elem, list, compare, lastComparison = { comparison: Infinity, idx: null, offset: 0 }, offset = 0) {
+  getClosestIndex (elem, list, compare) {
     if (!(list instanceof Array)) {
       throw new TypeError('Param list must be an Array')
     }
@@ -61,31 +59,47 @@ module.exports = {
       throw new RangeError('Cannot find closest element from empty list.')
     }
 
-    const midpoint = Math.floor(list.length / 2)
-    const currentComparison = {
-      comparison: compare(elem, list[midpoint]),
-      idx: midpoint,
-      offset: offset
+    let start = 0
+    let end = list.length - 1
+
+    if (compare(elem, list[start]) <= 0) {
+      return start
     }
 
-    if (Math.abs(lastComparison.comparison) < Math.abs(currentComparison.comparison)) {
-      return lastComparison.idx + lastComparison.offset
+    if (compare(elem, list[end]) >= 0) {
+      return end
     }
 
-    let newList
+    let midpoint = -1
+    let comparison = Infinity
 
-    if (currentComparison.comparison < 0) {
-      newList = list.slice(0, midpoint)
-    } else {
-      offset += midpoint + 1
-      newList = list.slice(midpoint + 1, list.length)
+    while (start < end) {
+      midpoint = Math.floor((start + end) / 2)
+      let midpointValue = list[midpoint]
+      comparison = compare(elem, midpointValue)
+
+      if (comparison === 0) {
+        return midpoint
+      } else if (comparison < 0) {
+        let midpointValueLesser = list[midpoint - 1]
+
+        if (midpoint > 0 && compare(elem, midpointValueLesser) > 0) {
+          return Math.abs(compare(elem, midpointValue)) < Math.abs(compare(elem, midpointValueLesser)) ? midpoint : midpoint - 1
+        }
+
+        end = midpoint
+      } else {
+        let midpointValueGreater = list[midpoint + 1]
+
+        if (midpoint < list.length - 1 && compare(elem, midpointValueGreater) < 0) {
+          return Math.abs(compare(elem, midpointValue)) < Math.abs(compare(elem, midpointValueGreater)) ? midpoint : midpoint + 1
+        }
+
+        start = midpoint
+      }
     }
 
-    if (!newList.length) {
-      return midpoint + offset - 1
-    }
-
-    return this.getClosestIndex(elem, newList, compare, currentComparison, offset)
+    return midpoint
   },
 
   // Gets the number of days between 2 dates
