@@ -10,7 +10,7 @@ module.exports = {
   //    @param  {object} obj2 The second object to be compared
   //    @return {number} A negative value if obj1 comes before obj2 0 if obj1 equals obj2 positive otherwise
   //  @return {number} The index of the element in the list if found null otherwise
-  binarySearchIndex(elem, list, compare){
+  binarySearchIndex (elem, list, compare) {
     if (!(list instanceof Array)) {
       throw new TypeError('Param list must be an Array')
     }
@@ -18,26 +18,26 @@ module.exports = {
     if (!(compare instanceof Function)) {
       throw new TypeError('Param compare must be a Function')
     }
-    
+
     let searchIndexStart = 0,
         searchIndexEnd = list.length - 1
 
-    while(searchIndexStart <= searchIndexEnd){
-      let midpoint = searchIndexStart + Math.floor((searchIndexEnd - searchIndexStart) / 2),
+    while (searchIndexStart <= searchIndexEnd) {
+      const midpoint = Math.floor((searchIndexEnd + searchIndexStart) / 2),
       comparison = compare(elem, list[midpoint])
-      
-      if(!comparison){
+
+      if (!comparison) {
         return midpoint
-      } else if(comparison < 0){
+      } else if (comparison < 0) {
         searchIndexEnd = midpoint - 1
       } else {
         searchIndexStart = midpoint + 1
       }
     }
-    
+
     return null
   },
-  
+
   // Gets the element from a sorted list closest to the given element.
   //  @param {object} elem The given object to be compared for similarity against
   //  @param {object[]} list The sorted list to be searched for the most similar element
@@ -75,21 +75,21 @@ module.exports = {
 
     while (start < end) {
       midpoint = Math.floor((start + end) / 2)
-      let midpointValue = list[midpoint]
+      const midpointValue = list[midpoint]
       comparison = compare(elem, midpointValue)
 
       if (comparison === 0) {
         return midpoint
-      } else if (comparison < 0) {
-        let midpointValueLesser = list[midpoint - 1]
+      } else if (comparison < 0) { // elem before midpoint value
+        const midpointValueLesser = list[midpoint - 1]
 
         if (midpoint > 0 && compare(elem, midpointValueLesser) > 0) {
           return Math.abs(compare(elem, midpointValue)) < Math.abs(compare(elem, midpointValueLesser)) ? midpoint : midpoint - 1
         }
 
         end = midpoint
-      } else {
-        let midpointValueGreater = list[midpoint + 1]
+      } else { // elem after midpoint value
+        const midpointValueGreater = list[midpoint + 1]
 
         if (midpoint < list.length - 1 && compare(elem, midpointValueGreater) < 0) {
           return Math.abs(compare(elem, midpointValue)) < Math.abs(compare(elem, midpointValueGreater)) ? midpoint : midpoint + 1
