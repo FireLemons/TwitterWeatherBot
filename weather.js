@@ -94,10 +94,12 @@ module.exports = {
     getWeatherAlertsPromise () {
       this.logger.info('Attempt fetch weather alerts')
 
+      const { contact, name, version, website } = this.alertAppInfo
+
       return promise.getJSONPromiseGet(this.alertURL,
         {
           headers: {
-            'User-Agent': `${this.alertAppInfo.name}/v${this.alertAppInfo.version} (${this.alertAppInfo.website}; ${this.alertAppInfo.contact})`
+            'User-Agent': `${name}/v${version} (${website}; ${contact})`
           }
         })
     }
@@ -212,7 +214,7 @@ module.exports = {
             }
               : (alertElem) => {
                 try {
-                  if(_.get(alertElem, filter.path) === undefined){
+                  if (_.get(alertElem, filter.path) === undefined) {
                     filteredAlerts.push(alertElem)
                   }
                 } catch (e) {
