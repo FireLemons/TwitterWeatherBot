@@ -272,6 +272,7 @@ function tweetWeather (isLate) {
   }) // end return new Promise((resolve, reject) => {
 }
 
+let tweetingWeatherCall = false
 let retryTimeout = -131072
 const maxRetryCount = 3
 const retryDelayDelta = 131072
@@ -322,17 +323,25 @@ if (new Date() - stats.lastUpdate > 7620000) { // 7620000ms = 2 hours 7 minutes
 }
 
 schedule.scheduleJob('0 */2 * * *', function () {
-  retryTimeout = 0
+  if (!tweetingWeatherCall) {
+    tweetingWeatherCall = true
 
-  let promiseChain = Promise.reject()
+    retryTimeout = 0
 
-  for (let i = -1; i < maxRetryCount; i++) {
-    promiseChain = promiseChain
-      .catch(tweetWeather)
-      .catch(retry)
+    let promiseChain = Promise.reject()
+
+    for (let i = -1; i < maxRetryCount; i++) {
+      promiseChain = promiseChain
+        .catch(tweetWeather)
+        .catch(retry)
+    }
+
+    promiseChain
+      .catch(retriesExhausted)
+      .finally(() => {
+        tweetingWeatherCall = false
+      })
   }
-
-  promiseChain.catch(retriesExhausted)
 })
 
 if (typeof config.twitter.localStationHandle === 'string') {
