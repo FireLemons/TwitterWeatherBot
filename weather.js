@@ -35,9 +35,18 @@ function getWindDirectionAsCardinal (azimuth) {
 
 module.exports = {
   DataFetcher: class Weather {
-    //  @param {object} config The "weather" object from config.json
-    //  @param {object} logger A winston logger
+    //  @param  {object}    config The "weather" object from config.json
+    //  @param  {object}    logger A winston logger
+    //  @throws {TypeError} for a parameter of the incorrect type
     constructor (config, logger) {
+      if (!config instanceof Object) {
+        throw new TypeError('Param config must be an object')
+      }
+
+      if (!logger instanceof Object) {
+        throw new TypeError('Param logger must be an object')
+      }
+
       this.logger = logger
 
       // Prepare weather get request URLs from config
@@ -116,8 +125,8 @@ module.exports = {
     }
 
     // Filters weather alerts
-    // @param  {object[]} alerts A list of weather alerts to be filtered
-    // @param  {object[]} filters A list of objects in the form
+    // @param  {object[]}  alerts A list of weather alerts to be filtered
+    // @param  {object[]}  filters A list of objects in the form
     //   {
     //     "path": "", The PATH to the value to filter by
     //     "value": "" The VALUE to be used for filtering
@@ -130,7 +139,8 @@ module.exports = {
     //        "equals"    - PATH leads to a primitive value. Matches alerts with VALUE exactly equal to the value at path
     //        "matches"   - PATH leads to a string. Matches alerts where the string is a match for the regex stored in VALUE
     //   }
-    // @return {object[]} A list of weather alerts matching the specified filters
+    // @return {object[]}  A list of weather alerts matching the specified filters
+    // @throws {TypeError} for a parameter of the incorrect type
     filterAlerts (alerts) {
       if (!Array.isArray(alerts)) {
         throw new TypeError('Param alerts must be an array')
@@ -247,9 +257,14 @@ module.exports = {
   },
 
   // Generates a warning message
-  //  @param  {object} alertData A parsed json object from api.weather.gov/alerts. See https://www.weather.gov/documentation/services-web-api#/default/get_alerts for more information.
-  //  @return {string[]} An array containing messages desribing the nature of each active alert.
+  //  @param  {object}    alertData A parsed json object from api.weather.gov/alerts. See https://www.weather.gov/documentation/services-web-api#/default/get_alerts for more information.
+  //  @return {string[]}  An array containing messages desribing the nature of each active alert.
+  //  @throws {TypeError} for a parameter of the incorrect type
   getAlertMessage (alertData) {
+    if (!(alertData instanceof Object)) {
+      throw new TypeError('Param alertData must be an object')
+    }
+
     const alertEvent = alertData.properties.event
     let message = `ALERT: ${alertEvent}\n`
 
@@ -266,9 +281,14 @@ module.exports = {
   },
 
   // Generates the default forecast message.
-  //  @param  {object} weatherData The weather data Object recieved from OpenWeatherMap
-  //  @return {string} A message describing the condition, temperature, and wind for the next 9 hours. Max 142 characters.
+  //  @param  {object}    weatherData The weather data Object recieved from OpenWeatherMap
+  //  @return {string}    A message describing the condition, temperature, and wind for the next 9 hours. Max 142 characters.
+  //  @throws {TypeError} for a parameter of the incorrect type
   generateForecastMessage (weatherData) {
+    if (!(weatherData instanceof Object)) {
+      throw new TypeError('Param weatherData must be an object')
+    }
+
     const forecastData = weatherData.list.slice(0, 3)
     let defaultForecast = (Math.random() > 0.000228310502) ? 'Forecast' : 'Fourcast'
 
