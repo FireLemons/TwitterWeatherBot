@@ -228,7 +228,7 @@ module.exports = {
         } else {
           previousEvent = {
             days: Math.floor(util.getDaysBetween(new Date(seasonData[currentYear - 1]['winter_solstice']), now)),
-            event: 'winter_solstice'
+            event: 'winter solstice'
           }
           nextEvent = closeEvent
         }
