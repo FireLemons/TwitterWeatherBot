@@ -18,17 +18,17 @@ Paths are relative to `index.js`.
     }
   
 #### Open Weather Map  
-To set the forecast area, set `config.weather.openWeatherMap.location` to one of the key value pair combinations below.  
+The forecast area is set `config.weather.openWeatherMap.location` using one of these combinations.  
 
-City Name  
+ - City Name  
 `q: "{city name},{country code}"`  
-City ID  
+ - City ID  
 A list of city ids can be [downloaded here](http://bulk.openweathermap.org/sample/city.list.json.gz).  
 `id: {city id}`  
-Geographic Coordinates  
+ - Geographic Coordinates  
 `lat: {lat}`  
 `lon: {lon}`  
-Zip Code  
+ - Zip Code  
 `zip: "{zip code},{country code}"`
 
 set `config.weather.openWeatherMap.key` to the openWeatherMap api key  
@@ -57,8 +57,8 @@ Example
 ### Optional Configuration:  
 #### Alerts  
 Alerts are sent out at midnight, 6:00, noon, and 18:00.  
-In order to receive alert data from the national weather service, a header containing an email, app name, app version, and a website must be included with each request. These are specified in `config.weather.alerts.app`  
-`weather.alerts.params` will contain get parameters to send to api.weather.gov/alerts in the form of key value pairs. More information about valid get paramters and a request tester can be found [here](https://www.weather.gov/documentation/services-web-api#/default/get_alerts) under the "Specification" tab.
+Alert requests must contain an email, app name, app version, and a website in the header. These are set in `config.weather.alerts.app`  
+`weather.alerts.params` will contain get parameters to send to api.weather.gov/alerts. The NWS has a request testing tool [here](https://www.weather.gov/documentation/services-web-api#/default/get_alerts) under the "Specification" tab.
   
 Example:
 
@@ -79,8 +79,7 @@ Example:
       }
     }
 
-##### Alert Filters
-Filters can be applied to narrow which alerts are tweeted.  
+##### Alert Filters  
   
 Filters are in the form:  
 
