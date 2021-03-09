@@ -39,11 +39,11 @@ module.exports = {
     //  @param  {object}    logger A winston logger
     //  @throws {TypeError} for a parameter of the incorrect type
     constructor (config, logger) {
-      if (!config instanceof Object) {
+      if (!(config instanceof Object)) {
         throw new TypeError('Param config must be an object')
       }
 
-      if (!logger instanceof Object) {
+      if (!(logger instanceof Object)) {
         throw new TypeError('Param logger must be an object')
       }
 
@@ -275,7 +275,12 @@ module.exports = {
     message += alertData.properties.ends ? `to ${end.toDateString().substr(0, 10)} ${end.getHours()}:00\n\n` : 'indefinitely'
 
     const alertDefintions = require('./data/alertDefinitions.json')
-    message += alertDefintions[alertEvent]
+
+    if (alertDefintions[alertEvent]) {
+      message += alertDefintions[alertEvent]
+    } else {
+      this.logger.warn(`Event ${alertEvent} has no definition`)
+    }
 
     return message
   },
