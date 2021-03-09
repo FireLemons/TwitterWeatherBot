@@ -25,7 +25,8 @@
     "Fire Warning": "A fire is currently burning in the area and evacuation is recommended.",
     "Red Flag Warning": "Conditions favorable for the rapid spread of wildfires",
     "Fire Weather Watch": "Conditions expected to become favorable for the rapid spread of wildfires.",
-    
+
+    "Hydrologic Outlook": "A rise in precipitation may cause flooding in the near future.",
     "River Flood Warning": "Flooding of streams or rivers is occurring, imminent, or highly likely.",
     "Areal Flood Warning": "General or areal flooding of streets, low-lying areas, urban storm drains, creeks, and small streams is occurring, imminent, or highly likely.",
     "River Flood Advisory ": "Streams or rivers reaching action stage is occurring, imminent, or highly likely. During action stage the water surface is near the top of a river's banks.",
