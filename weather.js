@@ -272,7 +272,8 @@ module.exports = {
     const end = new Date(alertData.properties.ends)
 
     message += `Lasting from ${start.toDateString().substr(0, 10)} ${start.getHours()}:00 `
-    message += alertData.properties.ends ? `to ${end.toDateString().substr(0, 10)} ${end.getHours()}:00\n\n` : 'indefinitely'
+    message += alertData.properties.ends ? `to ${end.toDateString().substr(0, 10)} ${end.getHours()}:00` : 'indefinitely'
+    message += '\n\n'
 
     const alertDefintions = require('./data/alertDefinitions.json')
 
